@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>🇩🇪 Netzwerk Neu A1 – Lernkarten</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;
+  --text:#c9d1d9;--text2:#8b949e;--text3:#484f58;--white:#f0f6fc;
+  --red:#e94560;--blue:#3b82f6;--green:#10b981;--amber:#f59e0b;
+  --purple:#a855f7;--cyan:#06b6d4;--pink:#ec4899;--lime:#84cc16;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding-bottom:32px}
+button{cursor:pointer;font-family:inherit}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 14px;position:sticky;top:0;z-index:50}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.logo{width:34px;height:34px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.app-title{font-weight:700;font-size:14px;color:var(--white)}
+.app-sub{font-size:11px;color:var(--text2)}
+.tab-btns{display:flex;gap:4px;margin-left:auto}
+.tab-btn{padding:5px 10px;border-radius:8px;border:none;background:var(--surface2);color:var(--text2);font-size:14px}
+.tab-btn.active{background:var(--red);color:#fff}
+.stats-bar{display:flex;gap:6px}
+.stat-box{flex:1;background:var(--surface2);border-radius:8px;padding:5px 4px;text-align:center}
+.stat-val{font-size:16px;font-weight:700}
+.stat-lbl{font-size:8px;color:var(--text2)}
+
+/* CHAPTER TABS */
+.ch-scroll{overflow-x:auto;display:flex;gap:5px;padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--border);scrollbar-width:none}
+.ch-scroll::-webkit-scrollbar{display:none}
+.ch-btn{padding:5px 9px;border-radius:16px;border:none;white-space:nowrap;background:var(--surface2);color:var(--text2);font-size:9px;font-weight:600}
+.ch-btn.active{background:var(--red);color:#fff}
+
+/* BODY */
+.body{padding:10px 14px}
+
+/* TYPE PILLS */
+.type-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.type-pill{padding:3px 8px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:9px;font-weight:600}
+.type-pill.active{font-weight:700}
+
+/* SEARCH ROW */
+.search-row{display:flex;gap:6px;margin-bottom:8px;align-items:center}
+.search-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-size:12px;outline:none}
+.icon-btn{padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:13px}
+.icon-btn.on{background:#23863622;color:#3fb950;border-color:#238636}
+.icon-btn.due-on{background:#e9456022;color:var(--red);border-color:var(--red)}
+
+/* FLIP TOGGLE */
+.flip-row{display:flex;gap:5px;margin-bottom:8px;justify-content:center}
+.flip-btn{padding:4px 12px;border-radius:16px;border:none;background:var(--surface2);color:var(--text2);font-size:10px;font-weight:600}
+.flip-btn.de{background:var(--red);color:#fff}
+.flip-btn.en{background:var(--blue);color:#fff}
+
+/* PROGRESS */
+.prog-row{display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-bottom:4px}
+.prog-bar{height:3px;background:var(--surface2);border-radius:3px;margin-bottom:10px}
+.prog-fill{height:100%;border-radius:3px;transition:width .3s}
+
+/* CARD */
+.card{border-radius:14px;padding:28px 16px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:230px;position:relative;transition:all .2s;cursor:pointer;margin-bottom:10px;border:1px solid var(--border);background:var(--surface2)}
+.card.flipped{background:var(--surface)}
+.card-badge{position:absolute;bottom:10px;left:12px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px}
+.card-edit{position:absolute;top:10px;right:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:13px;padding:4px 7px}
+.card-note-badge{position:absolute;top:10px;left:10px;background:#84cc1622;border:1px solid #84cc16;border-radius:6px;padding:2px 6px;font-size:9px;color:#84cc16}
+.card-front-word{font-size:24px;font-weight:800;color:var(--white);margin-bottom:8px;line-height:1.3}
+.card-hint{font-size:11px;color:var(--text2);margin-bottom:2px}
+.card-tap{margin-top:10px;font-size:10px;color:var(--text3);letter-spacing:1px}
+.audio-row{display:flex;gap:8px;margin-top:10px}
+.audio-btn{padding:6px 14px;border-radius:20px;border:1px solid;font-size:11px;font-weight:600}
+.card-back-en{font-size:18px;font-weight:700;margin-bottom:6px}
+.card-divider{width:24px;height:1px;background:var(--border);margin:5px 0}
+.card-ex{font-size:13px;font-style:italic;color:var(--text);margin-bottom:3px;line-height:1.5}
+.card-exEn{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:4px}
+
+/* GRAMMAR BOX */
+.gram-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;margin-top:7px;width:100%;text-align:left}
+.gram-label{font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:4px}
+.gram-line{font-size:11px;color:var(--text);margin-bottom:2px}
+.gram-key{font-weight:600}
+
+/* CONJ TABLE */
+.conj-box{border-radius:10px;padding:10px 12px;margin-top:7px;width:100%;text-align:left}
+.conj-label{font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.conj-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 6px}
+.conj-cell{display:flex;gap:6px;align-items:baseline}
+.conj-pron{color:var(--text2);font-size:9px;width:48px;flex-shrink:0}
+.conj-form{color:var(--white);font-weight:700;font-size:12px}
+.conj-sep-hint{margin-top:5px;font-size:9px;font-style:italic}
+.kasus-box{border-radius:10px;padding:8px 12px;margin-top:6px;width:100%;text-align:left}
+.kasus-label{font-size:9px;font-weight:700;letter-spacing:1px;margin-bottom:3px}
+.kasus-val{font-size:12px;font-weight:700;margin-bottom:2px}
+.kasus-tip{font-size:11px;font-style:italic;color:var(--text)}
+
+/* NOTE BOX */
+.note-box{margin-top:8px;background:#84cc1611;border:1px solid #84cc1644;border-radius:8px;padding:7px 10px;width:100%;text-align:left}
+.note-lbl{font-size:9px;color:#84cc16;font-weight:700;margin-bottom:2px}
+.note-txt{font-size:12px;color:var(--text)}
+.next-lbl{margin-top:6px;font-size:10px;font-weight:600}
+
+/* RATING BUTTONS */
+.rating-hint{font-size:10px;color:var(--text2);text-align:center;margin-bottom:6px}
+.rating-row{display:flex;gap:6px;margin-bottom:8px}
+.rate-btn{flex:1;padding:11px 4px;border-radius:10px;font-weight:700;font-size:11px;border:1px solid}
+.nav-row{display:flex;gap:6px;margin-bottom:8px}
+.nav-btn{flex:1;padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;font-weight:600}
+.nav-btn:disabled{color:var(--text3);cursor:not-allowed}
+.flip-action{flex:3;padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;font-weight:600}
+
+/* STATS TAB */
+.stats-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.stats-title{font-size:12px;color:var(--white);font-weight:700;margin-bottom:10px}
+.stat-row{margin-bottom:8px}
+.stat-row-top{display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px}
+.mini-bar{height:4px;background:var(--surface2);border-radius:3px}
+.mini-fill{height:100%;border-radius:3px}
+.type-stat-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.type-stat-bar-wrap{flex:1;height:4px;background:var(--surface2);border-radius:3px}
+.gram-tip-row{display:flex;gap:8px;margin-bottom:5px;align-items:flex-start}
+
+/* SETTINGS TAB */
+.settings-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
+.settings-title{font-size:12px;color:var(--white);font-weight:700;margin-bottom:12px}
+.slider-block{margin-bottom:16px}
+.slider-header{display:flex;justify-content:space-between;margin-bottom:6px;align-items:center}
+.slider-label{font-size:13px;font-weight:700}
+.slider-val{font-size:14px;font-weight:700}
+.slider-sub{font-size:10px;color:var(--text2);margin-left:8px}
+input[type=range]{width:100%;margin:0}
+.slider-scale{display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:2px}
+.preview-box{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-top:12px}
+.preview-lbl{font-size:10px;color:var(--text2);margin-bottom:6px}
+.preview-row{display:flex;gap:8px}
+.preview-cell{flex:1;text-align:center;border-radius:6px;padding:6px 4px;border:1px solid}
+.preview-cell-lbl{font-size:9px;margin-bottom:2px}
+.preview-cell-val{font-size:13px;font-weight:700;color:var(--white)}
+.audio-test-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.audio-test-btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:11px}
+.reset-btn{width:100%;padding:10px;border-radius:8px;border:1px solid #f85149;background:transparent;color:#f85149;font-size:12px}
+
+/* EDIT MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;width:100%;max-width:420px}
+.modal-title{font-weight:700;color:var(--white);font-size:15px;margin-bottom:4px}
+.modal-sub{font-size:11px;color:var(--text2);margin-bottom:12px}
+.modal-preview{border-radius:10px;padding:10px 14px;margin-bottom:12px}
+.modal-preview-word{font-size:16px;font-weight:700;color:var(--white)}
+.modal-preview-en{font-size:13px;margin-top:2px}
+.modal-preview-ex{font-size:11px;color:var(--text2);margin-top:3px;font-style:italic}
+textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;resize:vertical;font-family:inherit}
+.modal-btns{display:flex;gap:8px;margin-top:12px}
+.modal-save{flex:2;padding:10px;border-radius:10px;border:none;background:#238636;color:#fff;font-weight:700;font-size:13px}
+.modal-cancel{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:50px 20px;color:var(--text2)}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+const ALL_WORDS = [
+  {ch:1,type:'N',de:'die Autobahn, -en',en:'highway / motorway',extra:'Pl.: Autobahnen',ex:'Die Autobahn ist sehr lang.',exEn:'The motorway is very long.',gram:'Genus: feminin'},
+  {ch:1,type:'N',de:'das Butterbrot, -e',en:'sandwich',extra:'Pl.: Butterbrote',ex:'Ich esse ein Butterbrot.',exEn:'I am eating a sandwich.',gram:'Genus: neutrum'},
+  {ch:1,type:'N',de:'die Flasche, -n',en:'bottle',extra:'Pl.: Flaschen',ex:'Die Flasche ist leer.',exEn:'The bottle is empty.',gram:'Genus: feminin'},
+  {ch:1,type:'N',de:'das Handtuch, -er',en:'towel',extra:'Pl.: Handtücher',ex:'Das Handtuch ist nass.',exEn:'The towel is wet.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:1,type:'N',de:'der Kindergarten, -',en:'kindergarten',extra:'Pl.: Kindergärten',ex:'Das Kind geht in den Kindergarten.',exEn:'The child goes to kindergarten.',gram:'Genus: maskulin · Akkusativ: den Kindergarten'},
+  {ch:1,type:'N',de:'der Koffer, -',en:'suitcase',extra:'Pl.: Koffer (gleich)',ex:'Mein Koffer ist schwer.',exEn:'My suitcase is heavy.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:1,type:'N',de:'die Nudel, -n',en:'noodle',extra:'Pl.: Nudeln',ex:'Ich esse Nudeln.',exEn:'I am eating noodles.',gram:'Genus: feminin · meist im Plural verwendet'},
+  {ch:1,type:'N',de:'das Würstchen, -',en:'sausage',extra:'Pl.: Würstchen (gleich)',ex:'Das Würstchen ist lecker.',exEn:'The sausage is tasty.',gram:'Genus: neutrum · Pl. = Sg.'},
+  {ch:1,type:'N',de:'die Sprache, -n',en:'language',extra:'Pl.: Sprachen',ex:'Ich lerne eine neue Sprache.',exEn:'I am learning a new language.',gram:'Genus: feminin'},
+  {ch:1,type:'N',de:'das Wort, -er',en:'word',extra:'Pl.: Wörter',ex:'Das Wort ist schwer.',exEn:'The word is difficult.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:1,type:'N',de:'der Name, -n',en:'name',extra:'Pl.: Namen',ex:'Wie ist Ihr Name?',exEn:'What is your name?',gram:'Genus: maskulin · schwaches Nomen: des Namens'},
+  {ch:1,type:'N',de:'der Vorname, -n',en:'first name',extra:'Pl.: Vornamen',ex:'Mein Vorname ist Sohail.',exEn:'My first name is Sohail.',gram:'Genus: maskulin · schwaches Nomen'},
+  {ch:1,type:'N',de:'der Nachname, -n',en:'last name / surname',extra:'Pl.: Nachnamen',ex:'Mein Nachname ist Müller.',exEn:'My last name is Müller.',gram:'Genus: maskulin · auch: der Familienname'},
+  {ch:1,type:'N',de:'das Verb, -en',en:'verb',extra:'Pl.: Verben',ex:'Das Verb \'sein\' ist wichtig.',exEn:'The verb \'to be\' is important.',gram:'Genus: neutrum'},
+  {ch:1,type:'N',de:'die Antwort, -en',en:'answer',extra:'Pl.: Antworten',ex:'Die Antwort ist richtig.',exEn:'The answer is correct.',gram:'Genus: feminin'},
+  {ch:1,type:'N',de:'das Telefon, -e',en:'telephone',extra:'Pl.: Telefone',ex:'Das Telefon klingelt.',exEn:'The telephone is ringing.',gram:'Genus: neutrum'},
+  {ch:1,type:'N',de:'die Zahl, -en',en:'number',extra:'Pl.: Zahlen',ex:'Die Zahl ist groß.',exEn:'The number is large.',gram:'Genus: feminin'},
+  {ch:1,type:'N',de:'der Buchstabe, -n',en:'letter (alphabet)',extra:'Pl.: Buchstaben',ex:'Das Alphabet hat 26 Buchstaben.',exEn:'The alphabet has 26 letters.',gram:'Genus: maskulin · schwaches Nomen'},
+  {ch:1,type:'N',de:'die Handynummer, -n',en:'mobile phone number',extra:'Pl.: Handynummern',ex:'Wie ist deine Handynummer?',exEn:'What is your mobile number?',gram:'Genus: feminin · Kompositum: Handy + Nummer'},
+  {ch:1,type:'N',de:'die Telefonnummer, -n',en:'telephone number',extra:'Pl.: Telefonnummern',ex:'Meine Telefonnummer ist 0177-123.',exEn:'My phone number is 0177-123.',gram:'Genus: feminin'},
+  {ch:1,type:'N',de:'das Alphabet, -e',en:'alphabet',extra:'Pl.: Alphabete',ex:'Das deutsche Alphabet hat Umlaute.',exEn:'The German alphabet has umlauts.',gram:'Genus: neutrum'},
+  {ch:1,type:'N',de:'die E-Mail-Adresse, -n',en:'email address',extra:'Pl.: E-Mail-Adressen',ex:'Meine E-Mail ist info@test.de.',exEn:'My email is info@test.de.',gram:'Genus: feminin · Kompositum'},
+  {ch:1,type:'N',de:'das Gespräch, -e',en:'conversation',extra:'Pl.: Gespräche',ex:'Das Gespräch ist interessant.',exEn:'The conversation is interesting.',gram:'Genus: neutrum · von: sprechen'},
+  {ch:1,type:'N',de:'das Land, -er',en:'country',extra:'Pl.: Länder',ex:'Deutschland ist ein schönes Land.',exEn:'Germany is a beautiful country.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:1,type:'N',de:'die Person, -en',en:'person',extra:'Pl.: Personen',ex:'Wie heißen die Personen?',exEn:'What are the people called?',gram:'Genus: feminin'},
+  {ch:1,type:'N',de:'die Situation, -en',en:'situation',extra:'Pl.: Situationen',ex:'Spielen Sie die Situation.',exEn:'Act out the situation.',gram:'Genus: feminin'},
+  {ch:1,type:'V',de:'heißen',en:'to be called / named',extra:'er heißt · sie/er hieß',ex:'Ich heiße Maria.',exEn:'My name is Maria.',gram:'Prät.: hieß · Perf.: hat geheißen · untrennbar · starkes Verb'},
+  {ch:1,type:'V',de:'sprechen',en:'to speak',extra:'er spricht · sprach',ex:'Ich spreche Deutsch.',exEn:'I speak German.',gram:'Prät.: sprach · Perf.: hat gesprochen · untrennbar · Vokalwechsel e→i'},
+  {ch:1,type:'V',de:'kommen',en:'to come from',extra:'er kommt · kam',ex:'Ich komme aus Deutschland.',exEn:'I come from Germany.',gram:'Prät.: kam · Perf.: ist gekommen · untrennbar · Hilfsverb: sein'},
+  {ch:1,type:'V',de:'wohnen',en:'to live',extra:'er wohnt · wohnte',ex:'Ich wohne in Berlin.',exEn:'I live in Berlin.',gram:'Prät.: wohnte · Perf.: hat gewohnt · untrennbar · schwaches Verb'},
+  {ch:1,type:'V',de:'lernen',en:'to learn',extra:'er lernt · lernte',ex:'Sie lernt Spanisch.',exEn:'She is learning Spanish.',gram:'Prät.: lernte · Perf.: hat gelernt · untrennbar · schwaches Verb'},
+  {ch:1,type:'V',de:'machen',en:'to make / do',extra:'er macht · machte',ex:'Mach ein Kursplakat!',exEn:'Make a course poster!',gram:'Prät.: machte · Perf.: hat gemacht · untrennbar · schwaches Verb'},
+  {ch:1,type:'V',de:'fragen',en:'to ask',extra:'er fragt · fragte',ex:'Sie fragt nach der Telefonnummer.',exEn:'She asks for the phone number.',gram:'Prät.: fragte · Perf.: hat gefragt · untrennbar · schwaches Verb'},
+  {ch:1,type:'V',de:'sagen',en:'to say',extra:'er sagt · sagte',ex:'Er sagt: \'Guten Tag!\'',exEn:'He says: \'Good day!\'',gram:'Prät.: sagte · Perf.: hat gesagt · untrennbar · schwaches Verb'},
+  {ch:1,type:'V',de:'schreiben',en:'to write',extra:'er schreibt · schrieb',ex:'Sie schreibt die E-Mail-Adresse.',exEn:'She writes the email address.',gram:'Prät.: schrieb · Perf.: hat geschrieben · untrennbar · starkes Verb'},
+  {ch:1,type:'V',de:'verstehen',en:'to understand',extra:'er versteht · verstand',ex:'Das verstehe ich nicht.',exEn:'I don\'t understand that.',gram:'Prät.: verstand · Perf.: hat verstanden · untrennbar · starkes Verb'},
+  {ch:1,type:'V',de:'buchstabieren',en:'to spell',extra:'er buchstabiert · buchstabierte',ex:'Bitte buchstabieren Sie Ihren Namen.',exEn:'Please spell your name.',gram:'Prät.: buchstabierte · Perf.: hat buchstabiert · untrennbar · schwaches Verb'},
+  {ch:1,type:'V',de:'hören',en:'to hear / listen',extra:'er hört · hörte',ex:'Hören Sie den Dialog.',exEn:'Listen to the dialogue.',gram:'Prät.: hörte · Perf.: hat gehört · untrennbar · schwaches Verb'},
+  {ch:1,type:'V',de:'lesen',en:'to read',extra:'er liest · las',ex:'Lesen Sie den Text.',exEn:'Read the text.',gram:'Prät.: las · Perf.: hat gelesen · untrennbar · Vokalwechsel e→ie→a'},
+  {ch:1,type:'A',de:'gut',en:'good / well',extra:'Komp.: besser · Sup.: am besten',ex:'Wie geht\'s? – Gut!',exEn:'How are you? – Good!',gram:'unregelmäßiger Komparativ: gut → besser → am besten'},
+  {ch:1,type:'A',de:'international',en:'international',extra:'—',ex:'Die Schule ist international.',exEn:'The school is international.',gram:'keine Steigerung üblich'},
+  {ch:1,type:'A',de:'bekannt',en:'well-known',extra:'Komp.: bekannter',ex:'Der Name ist bekannt.',exEn:'The name is well-known.',gram:'Partizip II von \'bekanntmachen\' als Adjektiv'},
+  {ch:1,type:'ADV',de:'zusammen',en:'together',extra:'—',ex:'Wir lernen zusammen.',exEn:'We learn together.',gram:'Position: Mittelfeld'},
+  {ch:1,type:'ADV',de:'langsam',en:'slowly',extra:'—',ex:'Bitte sprechen Sie langsam.',exEn:'Please speak slowly.',gram:'auch Adjektiv: ein langsamer Zug'},
+  {ch:1,type:'ADV',de:'noch einmal',en:'once more / again',extra:'—',ex:'Bitte sagen Sie das noch einmal.',exEn:'Please say that once more.',gram:'Partikel: betont Wiederholung'},
+  {ch:1,type:'PRO',de:'ich',en:'I',extra:'1. Person Sg. · Nom.',ex:'Ich heiße Maria.',exEn:'My name is Maria.',gram:'Nom.: ich · Akk.: mich · Dat.: mir'},
+  {ch:1,type:'PRO',de:'du',en:'you (informal)',extra:'2. Person Sg. · Nom.',ex:'Wie heißt du?',exEn:'What is your name?',gram:'Nom.: du · Akk.: dich · Dat.: dir · informell'},
+  {ch:1,type:'PRO',de:'er',en:'he',extra:'3. Person Sg. mask. · Nom.',ex:'Er kommt aus Italien.',exEn:'He comes from Italy.',gram:'Nom.: er · Akk.: ihn · Dat.: ihm'},
+  {ch:1,type:'PRO',de:'sie (Sg.)',en:'she',extra:'3. Person Sg. fem. · Nom.',ex:'Sie wohnt in Berlin.',exEn:'She lives in Berlin.',gram:'Nom.: sie · Akk.: sie · Dat.: ihr'},
+  {ch:1,type:'PRO',de:'es',en:'it',extra:'3. Person Sg. neutr. · Nom.',ex:'Es ist ein Würstchen.',exEn:'It is a sausage.',gram:'Nom.: es · Akk.: es · Dat.: ihm'},
+  {ch:1,type:'PRO',de:'wir',en:'we',extra:'1. Person Pl. · Nom.',ex:'Wir lernen Deutsch.',exEn:'We are learning German.',gram:'Nom.: wir · Akk.: uns · Dat.: uns'},
+  {ch:1,type:'PRO',de:'ihr',en:'you (plural informal)',extra:'2. Person Pl. · Nom.',ex:'Woher kommt ihr?',exEn:'Where do you all come from?',gram:'Nom.: ihr · Akk.: euch · Dat.: euch'},
+  {ch:1,type:'PRO',de:'Sie (formal)',en:'you (formal singular/plural)',extra:'Nom. · Höflichkeitsform',ex:'Wie heißen Sie?',exEn:'What is your name? (formal)',gram:'Groß geschrieben! · Verb wie 3. Pl.'},
+  {ch:1,type:'PRO',de:'sie (Pl.)',en:'they',extra:'3. Person Pl. · Nom.',ex:'Sie kommen aus Japan.',exEn:'They come from Japan.',gram:'Nom.: sie · Akk.: sie · Dat.: ihnen'},
+  {ch:1,type:'PHR',de:'Guten Tag!',en:'Good day! / Hello!',extra:'formelle Begrüßung',ex:'Guten Tag, Frau Müller!',exEn:'Good day, Mrs Müller!',gram:'Register: formell · Akkusativ von \'gut + Tag\''},
+  {ch:1,type:'PHR',de:'Auf Wiedersehen!',en:'Goodbye!',extra:'formeller Abschied',ex:'Auf Wiedersehen, bis morgen!',exEn:'Goodbye, see you tomorrow!',gram:'Register: formell · wörtlich: \'until seeing again\''},
+  {ch:1,type:'PHR',de:'Guten Morgen!',en:'Good morning!',extra:'Morgengruß',ex:'Guten Morgen! Wie geht es Ihnen?',exEn:'Good morning! How are you?',gram:'Register: formell & informell · bis ca. 10 Uhr'},
+  {ch:1,type:'PHR',de:'Guten Abend!',en:'Good evening!',extra:'Abendgruß',ex:'Guten Abend! Willkommen!',exEn:'Good evening! Welcome!',gram:'Register: formell & informell · ab ca. 18 Uhr'},
+  {ch:1,type:'PHR',de:'Gute Nacht!',en:'Good night!',extra:'Nachtgruß beim Schlafen',ex:'Gute Nacht! Schlaf gut!',exEn:'Good night! Sleep well!',gram:'Register: informell · beim Schlafengehen'},
+  {ch:1,type:'PHR',de:'Hallo!',en:'Hello! / Hi!',extra:'informelle Begrüßung',ex:'Hallo! Ich bin Julia.',exEn:'Hello! I am Julia.',gram:'Register: informell'},
+  {ch:1,type:'PHR',de:'Tschüs!',en:'Bye! (informal)',extra:'informeller Abschied',ex:'Tschüs! Bis bald!',exEn:'Bye! See you soon!',gram:'Register: informell · auch: Ciao!'},
+  {ch:1,type:'PHR',de:'Wie geht\'s?',en:'How are you? (informal)',extra:'Kurzform von \'Wie geht es dir?\'',ex:'Wie geht\'s? – Gut, danke!',exEn:'How are you? – Good, thanks!',gram:'Register: informell · Antwort: Gut / Es geht / Nicht so gut'},
+  {ch:1,type:'PHR',de:'Wie geht es Ihnen?',en:'How are you? (formal)',extra:'formelle Frage',ex:'Wie geht es Ihnen? – Danke, sehr gut!',exEn:'How are you? – Very well, thank you!',gram:'Register: formell · Dativ: Ihnen'},
+  {ch:1,type:'PHR',de:'Danke!',en:'Thank you!',extra:'Kurzform',ex:'Danke! Das ist sehr nett.',exEn:'Thank you! That is very kind.',gram:'Register: neutral · auch: Danke schön! / Vielen Dank!'},
+  {ch:1,type:'PHR',de:'Bitte!',en:'Please! / You\'re welcome!',extra:'mehrere Bedeutungen',ex:'Ein Wasser, bitte!',exEn:'A water, please!',gram:'Register: neutral · 1) Bitte (please) 2) Bitte! (you\'re welcome) 3) Wie bitte? (pardon?)'},
+  {ch:1,type:'PHR',de:'Entschuldigung!',en:'Excuse me! / Sorry!',extra:'Entschuldigung',ex:'Entschuldigung, wie heißt du?',exEn:'Excuse me, what is your name?',gram:'Register: neutral · auch: Es tut mir leid (stronger apology)'},
+  {ch:1,type:'PHR',de:'Wie bitte?',en:'Pardon? / Could you repeat?',extra:'Rückfrage',ex:'Wie bitte? Ich verstehe nicht.',exEn:'Pardon? I don\'t understand.',gram:'Register: höflich · bei Unverständnis'},
+  {ch:1,type:'PHR',de:'Ich heiße ...',en:'My name is ...',extra:'Vorstellung',ex:'Ich heiße Sohail. Und Sie?',exEn:'My name is Sohail. And you?',gram:'Register: neutral · Verb: heißen (unregelmäßig)'},
+  {ch:2,type:'N',de:'der Freund, -e',en:'friend (male) / boyfriend',extra:'Pl.: Freunde',ex:'Mein Freund kommt aus Berlin.',exEn:'My friend comes from Berlin.',gram:'Genus: maskulin · Akkusativ: den Freund'},
+  {ch:2,type:'N',de:'die Freundin, -nen',en:'friend (female) / girlfriend',extra:'Pl.: Freundinnen',ex:'Meine Freundin lernt Deutsch.',exEn:'My friend is learning German.',gram:'Genus: feminin · weibliche Form von Freund'},
+  {ch:2,type:'N',de:'die Musik (Sg.)',en:'music',extra:'nur Singular',ex:'Ich höre gern Musik.',exEn:'I like listening to music.',gram:'Genus: feminin · kein Plural · mit Verb \'hören\''},
+  {ch:2,type:'N',de:'der Kollege, -n',en:'colleague (male)',extra:'Pl.: Kollegen',ex:'Der Kollege arbeitet im Büro.',exEn:'The colleague works in the office.',gram:'Genus: maskulin · schwaches Nomen: des Kollegen'},
+  {ch:2,type:'N',de:'die Kollegin, -nen',en:'colleague (female)',extra:'Pl.: Kolleginnen',ex:'Meine Kollegin ist nett.',exEn:'My colleague is nice.',gram:'Genus: feminin'},
+  {ch:2,type:'N',de:'das Kino, -s',en:'cinema / movie theater',extra:'Pl.: Kinos',ex:'Wir gehen ins Kino.',exEn:'We are going to the cinema.',gram:'Genus: neutrum · ins = in + das'},
+  {ch:2,type:'N',de:'das Buch, -er',en:'book',extra:'Pl.: Bücher',ex:'Ich lese ein Buch.',exEn:'I am reading a book.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:2,type:'N',de:'das Hobby, -s',en:'hobby',extra:'Pl.: Hobbys',ex:'Mein Hobby ist Lesen.',exEn:'My hobby is reading.',gram:'Genus: neutrum · aus Englisch'},
+  {ch:2,type:'N',de:'das Wochenende, -n',en:'weekend',extra:'Pl.: Wochenenden',ex:'Am Wochenende koche ich.',exEn:'I cook at the weekend.',gram:'Genus: neutrum · am Wochenende (Dativ)'},
+  {ch:2,type:'N',de:'der Montag, -e',en:'Monday',extra:'Pl.: Montage',ex:'Am Montag arbeite ich.',exEn:'I work on Monday.',gram:'Genus: maskulin · am Montag (Dativ) · alle Wochentage: maskulin'},
+  {ch:2,type:'N',de:'der Dienstag, -e',en:'Tuesday',extra:'Pl.: Dienstage',ex:'Am Dienstag habe ich frei.',exEn:'I have a day off on Tuesday.',gram:'Genus: maskulin'},
+  {ch:2,type:'N',de:'der Mittwoch, -e',en:'Wednesday',extra:'Pl.: Mittwoche',ex:'Am Mittwoch gehe ich schwimmen.',exEn:'I go swimming on Wednesday.',gram:'Genus: maskulin'},
+  {ch:2,type:'N',de:'der Donnerstag, -e',en:'Thursday',extra:'Pl.: Donnerstage',ex:'Am Donnerstag jogge ich.',exEn:'I jog on Thursday.',gram:'Genus: maskulin'},
+  {ch:2,type:'N',de:'der Freitag, -e',en:'Friday',extra:'Pl.: Freitage',ex:'Am Freitag gehe ich ins Kino.',exEn:'I go to the cinema on Friday.',gram:'Genus: maskulin'},
+  {ch:2,type:'N',de:'der Samstag, -e',en:'Saturday',extra:'Pl.: Samstage',ex:'Am Samstag koche ich.',exEn:'I cook on Saturday.',gram:'Genus: maskulin · auch: Sonnabend (norddeutsch)'},
+  {ch:2,type:'N',de:'der Sonntag, -e',en:'Sunday',extra:'Pl.: Sonntage',ex:'Am Sonntag besuche ich die Familie.',exEn:'I visit the family on Sunday.',gram:'Genus: maskulin'},
+  {ch:2,type:'N',de:'das Café, -s',en:'café',extra:'Pl.: Cafés',ex:'Wir gehen ins Café.',exEn:'We are going to the café.',gram:'Genus: neutrum · aus Französisch'},
+  {ch:2,type:'N',de:'das Museum, Museen',en:'museum',extra:'Pl.: Museen',ex:'Das Museum ist interessant.',exEn:'The museum is interesting.',gram:'Genus: neutrum · lateinische Pluralform'},
+  {ch:2,type:'N',de:'das Restaurant, -s',en:'restaurant',extra:'Pl.: Restaurants',ex:'Das Restaurant ist gut.',exEn:'The restaurant is good.',gram:'Genus: neutrum · aus Französisch'},
+  {ch:2,type:'N',de:'der Beruf, -e',en:'occupation / job',extra:'Pl.: Berufe',ex:'Was ist Ihr Beruf?',exEn:'What is your occupation?',gram:'Genus: maskulin'},
+  {ch:2,type:'N',de:'der Arzt, -e',en:'doctor (male)',extra:'Pl.: Ärzte',ex:'Der Arzt hilft dem Patienten.',exEn:'The doctor helps the patient.',gram:'Genus: maskulin · Umlaut im Plural · Akkusativ: den Arzt'},
+  {ch:2,type:'N',de:'die Ärztin, -nen',en:'doctor (female)',extra:'Pl.: Ärztinnen',ex:'Die Ärztin kommt bald.',exEn:'The doctor is coming soon.',gram:'Genus: feminin'},
+  {ch:2,type:'N',de:'das Auto, -s',en:'car',extra:'Pl.: Autos',ex:'Das Auto ist neu.',exEn:'The car is new.',gram:'Genus: neutrum · Akkusativ: das Auto (gleich)'},
+  {ch:2,type:'N',de:'der Schlüssel, -',en:'key',extra:'Pl.: Schlüssel (gleich)',ex:'Wir brauchen den Schlüssel.',exEn:'We need the key.',gram:'Genus: maskulin · Pl. = Sg. · Akkusativ: den Schlüssel'},
+  {ch:2,type:'N',de:'das Geld, -er',en:'money',extra:'meist Sg.',ex:'Er hat viel Geld.',exEn:'He has a lot of money.',gram:'Genus: neutrum · meist im Singular · Pl. selten'},
+  {ch:2,type:'N',de:'der Stift, -e',en:'pencil / pen',extra:'Pl.: Stifte',ex:'Ich brauche einen Stift.',exEn:'I need a pen.',gram:'Genus: maskulin'},
+  {ch:2,type:'N',de:'der Student, -en',en:'student (male)',extra:'Pl.: Studenten',ex:'Der Student lernt Deutsch.',exEn:'The student is learning German.',gram:'Genus: maskulin · schwaches Nomen: des Studenten'},
+  {ch:2,type:'N',de:'die Studentin, -nen',en:'student (female)',extra:'Pl.: Studentinnen',ex:'Die Studentin kommt aus Japan.',exEn:'The student comes from Japan.',gram:'Genus: feminin'},
+  {ch:2,type:'N',de:'der Taxifahrer, -',en:'taxi driver (male)',extra:'Pl.: Taxifahrer (gleich)',ex:'Der Taxifahrer kennt die Stadt.',exEn:'The taxi driver knows the city.',gram:'Genus: maskulin · Kompositum: Taxi + Fahrer'},
+  {ch:2,type:'N',de:'das Krankenhaus, -er',en:'hospital',extra:'Pl.: Krankenhäuser',ex:'Der Arzt arbeitet im Krankenhaus.',exEn:'The doctor works at the hospital.',gram:'Genus: neutrum · im Krankenhaus (Dativ)'},
+  {ch:2,type:'N',de:'der Patient, -en',en:'patient (male)',extra:'Pl.: Patienten',ex:'Der Patient wartet.',exEn:'The patient is waiting.',gram:'Genus: maskulin · schwaches Nomen: des Patienten'},
+  {ch:2,type:'N',de:'die Stunde, -n',en:'hour',extra:'Pl.: Stunden',ex:'Ich arbeite acht Stunden.',exEn:'I work eight hours.',gram:'Genus: feminin · Zeitangabe: pro Stunde'},
+  {ch:2,type:'N',de:'die Universität, -en',en:'university',extra:'Pl.: Universitäten',ex:'Sie studiert an der Universität.',exEn:'She studies at the university.',gram:'Genus: feminin · an der Uni (Dativ) · kurzform: die Uni'},
+  {ch:2,type:'N',de:'die Woche, -n',en:'week',extra:'Pl.: Wochen',ex:'Die Woche hat sieben Tage.',exEn:'The week has seven days.',gram:'Genus: feminin · pro Woche · diese Woche'},
+  {ch:2,type:'N',de:'der Lehrer, -',en:'teacher (male)',extra:'Pl.: Lehrer (gleich)',ex:'Der Lehrer erklärt die Grammatik.',exEn:'The teacher explains grammar.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:2,type:'N',de:'der Koch, -e',en:'cook / chef (male)',extra:'Pl.: Köche',ex:'Der Koch kocht Spaghetti.',exEn:'The chef cooks spaghetti.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:2,type:'N',de:'der Mechaniker, -',en:'mechanic (male)',extra:'Pl.: Mechaniker (gleich)',ex:'Der Mechaniker repariert das Auto.',exEn:'The mechanic repairs the car.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:2,type:'N',de:'der Polizist, -en',en:'police officer (male)',extra:'Pl.: Polizisten',ex:'Der Polizist hilft uns.',exEn:'The police officer helps us.',gram:'Genus: maskulin · schwaches Nomen: des Polizisten'},
+  {ch:2,type:'N',de:'der Ingenieur, -e',en:'engineer (male)',extra:'Pl.: Ingenieure',ex:'Der Ingenieur arbeitet viel.',exEn:'The engineer works a lot.',gram:'Genus: maskulin · aus Französisch'},
+  {ch:2,type:'N',de:'die Ingenieurin, -nen',en:'engineer (female)',extra:'Pl.: Ingenieurinnen',ex:'Die Ingenieurin plant das Projekt.',exEn:'The engineer plans the project.',gram:'Genus: feminin'},
+  {ch:2,type:'N',de:'der Architekt, -en',en:'architect (male)',extra:'Pl.: Architekten',ex:'Der Architekt zeichnet das Haus.',exEn:'The architect draws the house.',gram:'Genus: maskulin · schwaches Nomen'},
+  {ch:2,type:'N',de:'der Friseur, -e',en:'hairdresser (male)',extra:'Pl.: Friseure',ex:'Der Friseur schneidet die Haare.',exEn:'The hairdresser cuts the hair.',gram:'Genus: maskulin · auch: der Frisör'},
+  {ch:2,type:'N',de:'der Journalist, -en',en:'journalist (male)',extra:'Pl.: Journalisten',ex:'Der Journalist schreibt den Bericht.',exEn:'The journalist writes the report.',gram:'Genus: maskulin · schwaches Nomen'},
+  {ch:2,type:'N',de:'der Elektriker, -',en:'electrician (male)',extra:'Pl.: Elektriker (gleich)',ex:'Der Elektriker repariert die Lampe.',exEn:'The electrician repairs the lamp.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:2,type:'N',de:'der Verkäufer, -',en:'salesperson (male)',extra:'Pl.: Verkäufer (gleich)',ex:'Der Verkäufer hilft dem Kunden.',exEn:'The salesperson helps the customer.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:2,type:'N',de:'der Kellner, -',en:'waiter',extra:'Pl.: Kellner (gleich)',ex:'Der Kellner bringt die Rechnung.',exEn:'The waiter brings the bill.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:2,type:'N',de:'die Kellnerin, -nen',en:'waitress',extra:'Pl.: Kellnerinnen',ex:'Die Kellnerin ist freundlich.',exEn:'The waitress is friendly.',gram:'Genus: feminin'},
+  {ch:2,type:'N',de:'das Medikament, -e',en:'medicine / medication',extra:'Pl.: Medikamente',ex:'Das Medikament hilft.',exEn:'The medicine helps.',gram:'Genus: neutrum'},
+  {ch:2,type:'N',de:'die Tablette, -n',en:'pill / tablet',extra:'Pl.: Tabletten',ex:'Ich nehme eine Tablette.',exEn:'I am taking a pill.',gram:'Genus: feminin · Akkusativ: eine Tablette'},
+  {ch:2,type:'V',de:'fotografieren',en:'to photograph',extra:'er fotografiert · fotografierte',ex:'Er fotografiert die Stadt.',exEn:'He photographs the city.',gram:'Prät.: fotografierte · Perf.: hat fotografiert · untrennbar · schwaches Verb'},
+  {ch:2,type:'V',de:'joggen',en:'to jog',extra:'er joggt · joggte',ex:'Ich jogge morgen.',exEn:'I am jogging tomorrow.',gram:'Prät.: joggte · Perf.: ist gejoggt · untrennbar · Hilfsverb: sein (Bewegung)'},
+  {ch:2,type:'V',de:'tanzen',en:'to dance',extra:'er tanzt · tanzte',ex:'Sie tanzt gern.',exEn:'She likes to dance.',gram:'Prät.: tanzte · Perf.: hat getanzt · untrennbar · schwaches Verb'},
+  {ch:2,type:'V',de:'singen',en:'to sing',extra:'er singt · sang',ex:'Er singt ein Lied.',exEn:'He sings a song.',gram:'Prät.: sang · Perf.: hat gesungen · untrennbar · starkes Verb: i→a→u'},
+  {ch:2,type:'V',de:'kochen',en:'to cook',extra:'er kocht · kochte',ex:'Wir kochen Spaghetti.',exEn:'We are cooking spaghetti.',gram:'Prät.: kochte · Perf.: hat gekocht · untrennbar · schwaches Verb'},
+  {ch:2,type:'V',de:'reisen',en:'to travel',extra:'er reist · reiste',ex:'Wir reisen nach Japan.',exEn:'We are travelling to Japan.',gram:'Prät.: reiste · Perf.: ist gereist · untrennbar · Hilfsverb: sein'},
+  {ch:2,type:'V',de:'schwimmen',en:'to swim',extra:'er schwimmt · schwamm',ex:'Sie schwimmt gern.',exEn:'She likes to swim.',gram:'Prät.: schwamm · Perf.: ist geschwommen · untrennbar · Hilfsverb: sein'},
+  {ch:2,type:'V',de:'spielen',en:'to play',extra:'er spielt · spielte',ex:'Er spielt Fußball.',exEn:'He plays football.',gram:'Prät.: spielte · Perf.: hat gespielt · untrennbar · schwaches Verb'},
+  {ch:2,type:'V',de:'arbeiten',en:'to work',extra:'er arbeitet · arbeitete',ex:'Ich arbeite bei Taxi-Zentral.',exEn:'I work at Taxi-Zentral.',gram:'Prät.: arbeitete · Perf.: hat gearbeitet · untrennbar · schwaches Verb (-et- Endung)'},
+  {ch:2,type:'V',de:'lieben',en:'to love',extra:'er liebt · liebte',ex:'Er liebt Musik.',exEn:'He loves music.',gram:'Prät.: liebte · Perf.: hat geliebt · untrennbar · schwaches Verb'},
+  {ch:2,type:'V',de:'fahren',en:'to drive / travel by vehicle',extra:'er fährt · fuhr',ex:'Er fährt 68.000 km pro Jahr.',exEn:'He drives 68,000 km per year.',gram:'Prät.: fuhr · Perf.: ist gefahren · untrennbar · Vokalwechsel a→ä (Präs.) · Hilfsverb: sein'},
+  {ch:2,type:'V',de:'vorstellen',en:'to introduce',extra:'er stellt vor · stellte vor',ex:'Stellen Sie Ihren Partner vor.',exEn:'Introduce your partner.',gram:'Prät.: stellte vor · Perf.: hat vorgestellt · TRENNBAR: stellt...vor · Reflexiv: sich vorstellen'},
+  {ch:2,type:'ADV',de:'gern',en:'gladly / like to',extra:'—',ex:'Ich schwimme gern.',exEn:'I like swimming.',gram:'Komparativ: lieber · Superlativ: am liebsten · Position: nach Verb'},
+  {ch:2,type:'ADV',de:'auch',en:'also / too',extra:'—',ex:'Ich lerne auch Englisch.',exEn:'I am also learning English.',gram:'Position: Mittelfeld · betont: ICH auch'},
+  {ch:2,type:'ADV',de:'oft',en:'often',extra:'Komp.: öfter · Sup.: am häufigsten',ex:'Ich gehe oft ins Kino.',exEn:'I often go to the cinema.',gram:'Häufigkeitsadverb: immer > oft > manchmal > selten > nie'},
+  {ch:2,type:'ADV',de:'morgen',en:'tomorrow',extra:'—',ex:'Joggt ihr morgen auch?',exEn:'Are you jogging tomorrow too?',gram:'Zeitadverb · nicht verwechseln mit: der Morgen (morning)'},
+  {ch:2,type:'ADV',de:'heute',en:'today',extra:'—',ex:'Heute arbeite ich nicht.',exEn:'I am not working today.',gram:'Zeitadverb · Gegenteil: gestern'},
+  {ch:2,type:'PRO',de:'mich',en:'me (accusative)',extra:'Akk. von \'ich\'',ex:'Stellen Sie mich vor!',exEn:'Introduce me!',gram:'Kasus: Akkusativ · Nom.: ich · Akk.: mich · Dat.: mir'},
+  {ch:2,type:'PRO',de:'ihn',en:'him (accusative)',extra:'Akk. von \'er\'',ex:'Ich sehe ihn.',exEn:'I see him.',gram:'Kasus: Akkusativ · Nom.: er · Akk.: ihn · Dat.: ihm'},
+  {ch:2,type:'PHR',de:'Bis bald!',en:'See you soon!',extra:'informeller Abschied',ex:'Tschüs! Bis bald!',exEn:'Bye! See you soon!',gram:'Register: informell · bis + Zeitangabe'},
+  {ch:2,type:'PHR',de:'Bis später!',en:'See you later!',extra:'informeller Abschied',ex:'Bis später! Ich gehe jetzt.',exEn:'See you later! I\'m going now.',gram:'Register: informell'},
+  {ch:3,type:'N',de:'der Bahnhof, -e',en:'train station',extra:'Pl.: Bahnhöfe',ex:'Der Bahnhof ist sehr groß.',exEn:'The train station is very large.',gram:'Genus: maskulin · Umlaut im Plural · am Bahnhof (Dativ)'},
+  {ch:3,type:'N',de:'die Kirche, -n',en:'church',extra:'Pl.: Kirchen',ex:'Die Kirche ist sehr alt.',exEn:'The church is very old.',gram:'Genus: feminin · in die Kirche gehen'},
+  {ch:3,type:'N',de:'das Konzert, -e',en:'concert',extra:'Pl.: Konzerte',ex:'Das Konzert beginnt um acht.',exEn:'The concert starts at eight.',gram:'Genus: neutrum · ins Konzert gehen'},
+  {ch:3,type:'N',de:'der Turm, -e',en:'tower',extra:'Pl.: Türme',ex:'Der Turm ist über 100 Jahre alt.',exEn:'The tower is over 100 years old.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:3,type:'N',de:'das Rathaus, -er',en:'town hall',extra:'Pl.: Rathäuser',ex:'Das Rathaus steht im Zentrum.',exEn:'The town hall stands in the centre.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:3,type:'N',de:'der Fluss, -e',en:'river',extra:'Pl.: Flüsse',ex:'Die Schiffe fahren auf dem Fluss.',exEn:'The ships sail on the river.',gram:'Genus: maskulin · auf dem Fluss (Dativ)'},
+  {ch:3,type:'N',de:'der Hafen, -',en:'harbour / port',extra:'Pl.: Häfen',ex:'Hamburg hat einen großen Hafen.',exEn:'Hamburg has a large harbour.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:3,type:'N',de:'das Meer, -e',en:'sea / ocean',extra:'Pl.: Meere',ex:'Das Meer ist wunderschön.',exEn:'The sea is wonderful.',gram:'Genus: neutrum · ans Meer fahren (Akkusativ)'},
+  {ch:3,type:'N',de:'das Schiff, -e',en:'ship',extra:'Pl.: Schiffe',ex:'Das Schiff fährt nach England.',exEn:'The ship goes to England.',gram:'Genus: neutrum'},
+  {ch:3,type:'N',de:'der Zug, -e',en:'train',extra:'Pl.: Züge',ex:'Der Zug fährt nach München.',exEn:'The train goes to Munich.',gram:'Genus: maskulin · Umlaut im Plural · mit dem Zug fahren (Dativ)'},
+  {ch:3,type:'N',de:'die Brücke, -n',en:'bridge',extra:'Pl.: Brücken',ex:'Die Brücke ist sehr lang.',exEn:'The bridge is very long.',gram:'Genus: feminin'},
+  {ch:3,type:'N',de:'das Hotel, -s',en:'hotel',extra:'Pl.: Hotels',ex:'Das Hotel ist direkt am Bahnhof.',exEn:'The hotel is right at the station.',gram:'Genus: neutrum · im Hotel (Dativ)'},
+  {ch:3,type:'N',de:'der Bus, -se',en:'bus',extra:'Pl.: Busse',ex:'Ich fahre mit dem Bus.',exEn:'I travel by bus.',gram:'Genus: maskulin · mit dem Bus fahren (Dativ) · Doppel-s im Plural'},
+  {ch:3,type:'N',de:'das Fahrrad, -er',en:'bicycle',extra:'Pl.: Fahrräder',ex:'Er fährt Fahrrad.',exEn:'He rides a bicycle.',gram:'Genus: neutrum · Fahrrad fahren (kein Artikel!) · Umlaut im Plural'},
+  {ch:3,type:'N',de:'die U-Bahn, -en',en:'subway / underground',extra:'Pl.: U-Bahnen',ex:'Ich fahre mit der U-Bahn.',exEn:'I take the subway.',gram:'Genus: feminin · mit der U-Bahn (Dativ)'},
+  {ch:3,type:'N',de:'die Fahrkarte, -n',en:'ticket (transport)',extra:'Pl.: Fahrkarten',ex:'Ich kaufe eine Fahrkarte.',exEn:'I am buying a ticket.',gram:'Genus: feminin'},
+  {ch:3,type:'N',de:'der Markt, -e',en:'market',extra:'Pl.: Märkte',ex:'Wir gehen auf den Markt.',exEn:'We are going to the market.',gram:'Genus: maskulin · auf den Markt (Akkusativ)'},
+  {ch:3,type:'N',de:'der Park, -s',en:'park',extra:'Pl.: Parks',ex:'Wir gehen durch den Park.',exEn:'We walk through the park.',gram:'Genus: maskulin · im Park (Dativ) · durch den Park (Akkusativ)'},
+  {ch:3,type:'N',de:'die Wegbeschreibung, -en',en:'directions',extra:'Pl.: Wegbeschreibungen',ex:'Die Wegbeschreibung ist einfach.',exEn:'The directions are simple.',gram:'Genus: feminin · Kompositum: Weg + Beschreibung'},
+  {ch:3,type:'N',de:'der See, -n',en:'lake',extra:'Pl.: Seen',ex:'Der See ist sehr schön.',exEn:'The lake is very beautiful.',gram:'Genus: maskulin · ACHTUNG: die See = the sea (feminin!)'},
+  {ch:3,type:'N',de:'der Euro, -s',en:'euro',extra:'Pl.: Euro (od. Euros)',ex:'Das Ticket kostet 10 Euro.',exEn:'The ticket costs 10 euros.',gram:'Genus: maskulin · Pl. oft ohne -s: 10 Euro'},
+  {ch:3,type:'N',de:'der Meter, -',en:'metre',extra:'Pl.: Meter (gleich)',ex:'Der Turm ist 100 Meter hoch.',exEn:'The tower is 100 metres tall.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:3,type:'N',de:'das Zentrum, Zentren',en:'centre / downtown',extra:'Pl.: Zentren',ex:'Das Rathaus steht im Zentrum.',exEn:'The town hall is in the centre.',gram:'Genus: neutrum · lateinische Pluralform'},
+  {ch:3,type:'N',de:'die Ausstellung, -en',en:'exhibition',extra:'Pl.: Ausstellungen',ex:'Die Ausstellung beginnt morgen.',exEn:'The exhibition starts tomorrow.',gram:'Genus: feminin · in der Ausstellung (Dativ)'},
+  {ch:3,type:'V',de:'sehen',en:'to see',extra:'er sieht · sah',ex:'Ich sehe den Turm.',exEn:'I see the tower.',gram:'Prät.: sah · Perf.: hat gesehen · untrennbar · Vokalwechsel e→ie'},
+  {ch:3,type:'V',de:'gehen',en:'to go / walk',extra:'er geht · ging',ex:'Wir gehen in die Stadt.',exEn:'We are going into the city.',gram:'Prät.: ging · Perf.: ist gegangen · untrennbar · Hilfsverb: sein · starkes Verb'},
+  {ch:3,type:'V',de:'zeigen',en:'to show / point to',extra:'er zeigt · zeigte',ex:'Er zeigt auf das Bild.',exEn:'He points at the picture.',gram:'Prät.: zeigte · Perf.: hat gezeigt · untrennbar · schwaches Verb'},
+  {ch:3,type:'A',de:'interessant',en:'interesting',extra:'Komp.: interessanter',ex:'Hamburg ist interessant.',exEn:'Hamburg is interesting.',gram:'keine Umlaut-Steigerung'},
+  {ch:3,type:'A',de:'schön',en:'beautiful / nice',extra:'Komp.: schöner · Sup.: am schönsten',ex:'Die Stadt ist schön.',exEn:'The city is beautiful.',gram:'regelmäßige Steigerung'},
+  {ch:3,type:'A',de:'groß',en:'big / large',extra:'Komp.: größer · Sup.: am größten',ex:'Der Bahnhof ist groß.',exEn:'The train station is large.',gram:'Umlaut im Komparativ: groß → größer'},
+  {ch:3,type:'A',de:'lang',en:'long',extra:'Komp.: länger · Sup.: am längsten',ex:'Die Brücke ist sehr lang.',exEn:'The bridge is very long.',gram:'Umlaut im Komparativ: lang → länger'},
+  {ch:3,type:'ADV',de:'links',en:'(to the) left',extra:'Richtungsangabe',ex:'Gehen Sie links!',exEn:'Turn left!',gram:'Gegenteil: rechts · Position im Satz: Richtungsangabe'},
+  {ch:3,type:'ADV',de:'rechts',en:'(to the) right',extra:'Richtungsangabe',ex:'Gehen Sie rechts!',exEn:'Turn right!',gram:'Gegenteil: links'},
+  {ch:3,type:'ADV',de:'geradeaus',en:'straight ahead',extra:'Richtungsangabe',ex:'Gehen Sie geradeaus!',exEn:'Go straight ahead!',gram:'zusammengesetzt: gerade + aus'},
+  {ch:3,type:'ADV',de:'dort / da',en:'there',extra:'—',ex:'Da ist auch schon das Hotel.',exEn:'There is the hotel already.',gram:'Gegenteil: hier · da = weniger formal'},
+  {ch:3,type:'ADV',de:'hier',en:'here',extra:'—',ex:'Ich bin hier.',exEn:'I am here.',gram:'Gegenteil: dort/da'},
+  {ch:3,type:'PREP',de:'durch (+A.)',en:'through',extra:'+ Akkusativ · Frage: Wo durchhin?',ex:'Wir gehen durch den Park.',exEn:'We walk through the park.',gram:'Kasus: immer Akkusativ · DOGFU-Präposition'},
+  {ch:3,type:'PREP',de:'ohne (+A.)',en:'without',extra:'+ Akkusativ',ex:'Ich komme ohne den Hund.',exEn:'I am coming without the dog.',gram:'Kasus: immer Akkusativ · DOGFU-Präposition · Gegenteil: mit (+Dat.)'},
+  {ch:3,type:'PREP',de:'gegen (+A.)',en:'against',extra:'+ Akkusativ',ex:'Sie spielt gegen den Bruder.',exEn:'She plays against the brother.',gram:'Kasus: immer Akkusativ · DOGFU-Präposition'},
+  {ch:3,type:'PREP',de:'für (+A.)',en:'for',extra:'+ Akkusativ · Frage: Für wen/was?',ex:'Das Geschenk ist für den Vater.',exEn:'The gift is for the father.',gram:'Kasus: immer Akkusativ · DOGFU-Präposition'},
+  {ch:3,type:'PREP',de:'um (+A.)',en:'around / at (time)',extra:'+ Akkusativ',ex:'Das Konzert beginnt um 8 Uhr.',exEn:'The concert starts at 8 o\'clock.',gram:'Kasus: immer Akkusativ · um die Ecke (place) / um 8 Uhr (time)'},
+  {ch:3,type:'PREP',de:'aus (+D.)',en:'from / out of',extra:'+ Dativ · Frage: Woher?',ex:'Ich komme aus Deutschland.',exEn:'I come from Germany.',gram:'Kasus: immer Dativ · Herkunft: aus + Land (kein Artikel bei Ländern)'},
+  {ch:3,type:'PREP',de:'bei (+D.)',en:'at / near / with',extra:'+ Dativ · Frage: Wo?',ex:'Ich arbeite bei Siemens.',exEn:'I work at Siemens.',gram:'Kasus: immer Dativ · Ort bei Person: bei meiner Freundin'},
+  {ch:3,type:'PREP',de:'mit (+D.)',en:'with',extra:'+ Dativ · Frage: Mit wem/was?',ex:'Ich fahre mit dem Bus.',exEn:'I travel by bus.',gram:'Kasus: immer Dativ · Transport: mit dem Zug/Bus/Auto'},
+  {ch:3,type:'PREP',de:'nach (+D.)',en:'after / to (city/country)',extra:'+ Dativ · Frage: Wohin?',ex:'Der Zug fährt nach Berlin.',exEn:'The train goes to Berlin.',gram:'Kasus: immer Dativ · nach + Stadt/Land (ohne Artikel)'},
+  {ch:3,type:'PREP',de:'von (+D.)',en:'from / of / by',extra:'+ Dativ · Frage: Von wem/wo?',ex:'Das Buch ist von Schiller.',exEn:'The book is by Schiller.',gram:'Kasus: immer Dativ · Herkunft / Possessiv / Autor'},
+  {ch:3,type:'PREP',de:'zu (+D.)',en:'to (person/place)',extra:'+ Dativ · Frage: Wohin?',ex:'Ich gehe zu meiner Freundin.',exEn:'I am going to my friend\'s.',gram:'Kasus: immer Dativ · zu + Person/Institution · zum = zu + dem'},
+  {ch:3,type:'PREP',de:'in (+A./D.)',en:'in / into',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Ich gehe in die Schule. / Ich bin in der Schule.',exEn:'I go to school. / I am in school.',gram:'WECHSELPRÄPOSITION · Wohin? → +Akk. · Wo? → +Dat.'},
+  {ch:3,type:'PREP',de:'an (+A./D.)',en:'at / on / to',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Ich hänge das Bild an die Wand. / Das Bild hängt an der Wand.',exEn:'I hang the picture on the wall. / The picture hangs on the wall.',gram:'WECHSELPRÄPOSITION · an der Wand (Dat. = Ort) · an die Wand (Akk. = Richtung)'},
+  {ch:3,type:'PREP',de:'auf (+A./D.)',en:'on / onto',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Das Buch liegt auf dem Tisch.',exEn:'The book is on the table.',gram:'WECHSELPRÄPOSITION · auf dem Tisch (Dat. = Ort) · auf den Tisch (Akk. = Richtung)'},
+  {ch:3,type:'PREP',de:'seit (+D.)',en:'since / for (time)',extra:'+ Dativ · Frage: Seit wann?',ex:'Ich lerne seit zwei Jahren Deutsch.',exEn:'I have been learning German for two years.',gram:'Kasus: immer Dativ · mit Präsens für laufende Handlung!'},
+  {ch:3,type:'PREP',de:'über (+A./D.)',en:'over / about',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Wir reden über das Projekt.',exEn:'We are talking about the project.',gram:'WECHSELPRÄPOSITION · über = more than (quantity) / über + Akk. = about'},
+  {ch:3,type:'PREP',de:'unter (+A./D.)',en:'under / below',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Die Katze sitzt unter dem Tisch.',exEn:'The cat is sitting under the table.',gram:'WECHSELPRÄPOSITION'},
+  {ch:3,type:'PREP',de:'neben (+A./D.)',en:'next to / beside',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Ich sitze neben dem Fenster.',exEn:'I sit next to the window.',gram:'WECHSELPRÄPOSITION'},
+  {ch:3,type:'PREP',de:'zwischen (+A./D.)',en:'between',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Das Café ist zwischen Bahnhof und Bank.',exEn:'The café is between the station and bank.',gram:'WECHSELPRÄPOSITION · immer mit 2 Objekten'},
+  {ch:3,type:'PREP',de:'hinter (+A./D.)',en:'behind',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Der Park ist hinter dem Rathaus.',exEn:'The park is behind the town hall.',gram:'WECHSELPRÄPOSITION'},
+  {ch:3,type:'PREP',de:'vor (+A./D.)',en:'in front of / before',extra:'+ Akk. (Richtung) ODER + Dat. (Ort)',ex:'Ich warte vor dem Bahnhof.',exEn:'I am waiting in front of the station.',gram:'WECHSELPRÄPOSITION · vor = before (time) / in front of (place)'},
+  {ch:4,type:'N',de:'der Apfelsaft, -e',en:'apple juice',extra:'Pl.: Apfelsäfte',ex:'Ich trinke Apfelsaft.',exEn:'I drink apple juice.',gram:'Genus: maskulin · Umlaut im Plural · ohne Artikel bei \'ich trinke Apfelsaft\''},
+  {ch:4,type:'N',de:'die Banane, -n',en:'banana',extra:'Pl.: Bananen',ex:'Die Banane ist gelb.',exEn:'The banana is yellow.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'das Brötchen, -',en:'bread roll',extra:'Pl.: Brötchen (gleich)',ex:'Ich nehme ein Brötchen.',exEn:'I\'ll take a bread roll.',gram:'Genus: neutrum · Diminutiv von: das Brot · Pl. = Sg.'},
+  {ch:4,type:'N',de:'die Butter (Sg.)',en:'butter',extra:'nur Singular',ex:'Brot mit Butter, bitte.',exEn:'Bread with butter, please.',gram:'Genus: feminin · kein Plural · Massennomen'},
+  {ch:4,type:'N',de:'das Ei, -er',en:'egg',extra:'Pl.: Eier',ex:'Ich esse ein Ei.',exEn:'I am eating an egg.',gram:'Genus: neutrum · Pl.: Eier (unregelmäßig)'},
+  {ch:4,type:'N',de:'das Fleisch (Sg.)',en:'meat',extra:'nur Singular',ex:'Ich esse kein Fleisch.',exEn:'I don\'t eat meat.',gram:'Genus: neutrum · kein Plural · Massennomen'},
+  {ch:4,type:'N',de:'das Frühstück, -e',en:'breakfast',extra:'Pl.: Frühstücke',ex:'Das Frühstück ist um acht.',exEn:'Breakfast is at eight.',gram:'Genus: neutrum · zum Frühstück (Dativ) · frühstücken (Verb)'},
+  {ch:4,type:'N',de:'das Gemüse, -',en:'vegetable(s)',extra:'Sg. und Pl. gleich',ex:'Er isst gern Gemüse.',exEn:'He likes eating vegetables.',gram:'Genus: neutrum · Pl. = Sg. · Sammelbegriff (collective noun)'},
+  {ch:4,type:'N',de:'der Joghurt, -s',en:'yogurt',extra:'Pl.: Joghurts',ex:'Ich esse Joghurt zum Frühstück.',exEn:'I eat yogurt for breakfast.',gram:'Genus: maskulin · auch: das Joghurt (österr.)'},
+  {ch:4,type:'N',de:'die Kartoffel, -n',en:'potato',extra:'Pl.: Kartoffeln',ex:'Er kocht Kartoffeln.',exEn:'He is cooking potatoes.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'der Käse (Sg.)',en:'cheese',extra:'meist Singular',ex:'Wir haben keinen Käse mehr.',exEn:'We don\'t have any more cheese.',gram:'Genus: maskulin · meist Singular · Negation: keinen Käse'},
+  {ch:4,type:'N',de:'die Milch (Sg.)',en:'milk',extra:'nur Singular',ex:'Ich kaufe Milch.',exEn:'I am buying milk.',gram:'Genus: feminin · kein Plural · Massennomen'},
+  {ch:4,type:'N',de:'das Mittagessen, -',en:'lunch',extra:'Pl.: Mittagessen (gleich)',ex:'Das Mittagessen ist fertig.',exEn:'Lunch is ready.',gram:'Genus: neutrum · Kompositum: Mittag + Essen · zu Mittag essen'},
+  {ch:4,type:'N',de:'das Müsli, -s',en:'muesli / granola',extra:'Pl.: Müslis',ex:'Ich esse Müsli zum Frühstück.',exEn:'I eat muesli for breakfast.',gram:'Genus: neutrum · aus Schweizer Deutsch'},
+  {ch:4,type:'N',de:'der Orangensaft, -e',en:'orange juice',extra:'Pl.: Orangensäfte',ex:'Ich trinke Orangensaft.',exEn:'I drink orange juice.',gram:'Genus: maskulin · Kompositum · Umlaut im Plural'},
+  {ch:4,type:'N',de:'der Pfeffer, -',en:'pepper (spice)',extra:'Pl.: Pfeffer (gleich)',ex:'Ich nehme Salz und Pfeffer.',exEn:'I take salt and pepper.',gram:'Genus: maskulin · Pl. = Sg. (selten)'},
+  {ch:4,type:'N',de:'das Salz, -e',en:'salt',extra:'Pl.: Salze',ex:'Das Essen braucht Salz.',exEn:'The food needs salt.',gram:'Genus: neutrum · meist im Singular'},
+  {ch:4,type:'N',de:'der Tee, -s',en:'tea',extra:'Pl.: Tees',ex:'Die Frau trinkt gern Tee.',exEn:'The woman likes drinking tea.',gram:'Genus: maskulin'},
+  {ch:4,type:'N',de:'das Wasser, -',en:'water',extra:'Pl.: Wasser (gleich)',ex:'Ich trinke das Wasser.',exEn:'I drink the water.',gram:'Genus: neutrum · Pl. = Sg. · Massennomen'},
+  {ch:4,type:'N',de:'die Bäckerei, -en',en:'bakery',extra:'Pl.: Bäckereien',ex:'Ich kaufe Brot in der Bäckerei.',exEn:'I buy bread at the bakery.',gram:'Genus: feminin · in der Bäckerei (Dativ)'},
+  {ch:4,type:'N',de:'die Metzgerei, -en',en:'butcher\'s shop',extra:'Pl.: Metzgereien',ex:'Wir gehen in die Metzgerei.',exEn:'We are going to the butcher\'s.',gram:'Genus: feminin · auch: die Fleischerei'},
+  {ch:4,type:'N',de:'der Supermarkt, -e',en:'supermarket',extra:'Pl.: Supermärkte',ex:'Wir kaufen im Supermarkt ein.',exEn:'We shop at the supermarket.',gram:'Genus: maskulin · im Supermarkt einkaufen · Umlaut im Plural'},
+  {ch:4,type:'N',de:'das Abendessen, -',en:'dinner / supper',extra:'Pl.: Abendessen (gleich)',ex:'Das Abendessen ist um 19 Uhr.',exEn:'Dinner is at 7 pm.',gram:'Genus: neutrum · zum Abendessen · Pl. = Sg.'},
+  {ch:4,type:'N',de:'das Brot, -e',en:'bread',extra:'Pl.: Brote',ex:'Ich esse Brot.',exEn:'I am eating bread.',gram:'Genus: neutrum'},
+  {ch:4,type:'N',de:'der Kaffee, -s',en:'coffee',extra:'Pl.: Kaffees',ex:'Er trinkt Kaffee.',exEn:'He drinks coffee.',gram:'Genus: maskulin · einen Kaffee trinken (Akkusativ)'},
+  {ch:4,type:'N',de:'der Kuchen, -',en:'cake',extra:'Pl.: Kuchen (gleich)',ex:'Der Kuchen schmeckt süß.',exEn:'The cake tastes sweet.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:4,type:'N',de:'der Salat, -e',en:'salad / lettuce',extra:'Pl.: Salate',ex:'Ich esse einen Salat.',exEn:'I am eating a salad.',gram:'Genus: maskulin'},
+  {ch:4,type:'N',de:'der Schinken, -',en:'ham',extra:'Pl.: Schinken (gleich)',ex:'Das Brötchen hat Schinken.',exEn:'The roll has ham.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:4,type:'N',de:'die Schokolade, -n',en:'chocolate',extra:'Pl.: Schokoladen',ex:'Schokolade schmeckt süß.',exEn:'Chocolate tastes sweet.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'die Suppe, -n',en:'soup',extra:'Pl.: Suppen',ex:'Die Suppe ist heiß.',exEn:'The soup is hot.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'die Tomate, -n',en:'tomato',extra:'Pl.: Tomaten',ex:'Die Tomate ist rot.',exEn:'The tomato is red.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'die Wurst, -e',en:'sausage / cold cuts',extra:'Pl.: Würste',ex:'Ich kaufe Wurst.',exEn:'I am buying sausage.',gram:'Genus: feminin · Umlaut im Plural'},
+  {ch:4,type:'N',de:'der Zucker (Sg.)',en:'sugar',extra:'nur Singular',ex:'Kaffee mit Zucker, bitte.',exEn:'Coffee with sugar, please.',gram:'Genus: maskulin · kein Plural · Massennomen'},
+  {ch:4,type:'N',de:'der Apfel, -',en:'apple',extra:'Pl.: Äpfel',ex:'Der Apfel ist rot.',exEn:'The apple is red.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:4,type:'N',de:'die Birne, -n',en:'pear',extra:'Pl.: Birnen',ex:'Die Birne ist süß.',exEn:'The pear is sweet.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'der Fisch, -e',en:'fish',extra:'Pl.: Fische',ex:'Er isst gern Fisch.',exEn:'He likes eating fish.',gram:'Genus: maskulin'},
+  {ch:4,type:'N',de:'das Hähnchen, -',en:'chicken (food)',extra:'Pl.: Hähnchen (gleich)',ex:'Das Hähnchen ist lecker.',exEn:'The chicken is tasty.',gram:'Genus: neutrum · Pl. = Sg. · Diminutiv von: der Hahn'},
+  {ch:4,type:'N',de:'die Olive, -n',en:'olive',extra:'Pl.: Oliven',ex:'Oliven sind oft teuer.',exEn:'Olives are often expensive.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'die Pommes (frites) (Pl.)',en:'chips / French fries',extra:'nur Plural',ex:'Ich esse gern Pommes.',exEn:'I like eating chips.',gram:'Genus: Plural · aus Französisch pommes frites · immer Plural'},
+  {ch:4,type:'N',de:'der Reis (Sg.)',en:'rice',extra:'nur Singular',ex:'Ich esse Reis mit Gemüse.',exEn:'I eat rice with vegetables.',gram:'Genus: maskulin · kein Plural · Massennomen'},
+  {ch:4,type:'N',de:'die Einladung, -en',en:'invitation',extra:'Pl.: Einladungen',ex:'Danke für die Einladung!',exEn:'Thank you for the invitation!',gram:'Genus: feminin · von: einladen (trennbar)'},
+  {ch:4,type:'N',de:'das Getränk, -e',en:'drink / beverage',extra:'Pl.: Getränke',ex:'Was möchten Sie als Getränk?',exEn:'What would you like to drink?',gram:'Genus: neutrum'},
+  {ch:4,type:'N',de:'der Preis, -e',en:'price',extra:'Pl.: Preise',ex:'Der Preis ist günstig.',exEn:'The price is low.',gram:'Genus: maskulin'},
+  {ch:4,type:'N',de:'der Saft, -e',en:'juice',extra:'Pl.: Säfte',ex:'Ich trinke gerne Saft.',exEn:'I like drinking juice.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:4,type:'N',de:'der Einkaufswagen, -',en:'shopping cart / trolley',extra:'Pl.: Einkaufswagen (gleich)',ex:'Ich nehme einen Einkaufswagen.',exEn:'I take a shopping trolley.',gram:'Genus: maskulin · Pl. = Sg. · Kompositum'},
+  {ch:4,type:'N',de:'das Gramm, -',en:'gram',extra:'Pl.: Gramm (gleich)',ex:'200 Gramm Käse, bitte.',exEn:'200 grams of cheese, please.',gram:'Genus: neutrum · Pl. = Sg. bei Mengenangaben'},
+  {ch:4,type:'N',de:'das Kilo, -s',en:'kilo(gram)',extra:'Pl.: Kilos',ex:'Ein Kilo Äpfel, bitte.',exEn:'One kilo of apples, please.',gram:'Genus: neutrum · kurzform von Kilogramm'},
+  {ch:4,type:'N',de:'die Dose, -n',en:'tin / can / jar',extra:'Pl.: Dosen',ex:'Ich kaufe eine Dose Tomaten.',exEn:'I buy a tin of tomatoes.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'die Packung, -en',en:'packet / pack',extra:'Pl.: Packungen',ex:'Eine Packung Butter, bitte.',exEn:'A packet of butter, please.',gram:'Genus: feminin'},
+  {ch:4,type:'N',de:'der Liter, -',en:'litre',extra:'Pl.: Liter (gleich)',ex:'Einen Liter Milch, bitte.',exEn:'One litre of milk, please.',gram:'Genus: maskulin · Pl. = Sg. bei Mengenangaben'},
+  {ch:4,type:'N',de:'der Einkaufszettel, -',en:'shopping list',extra:'Pl.: Einkaufszettel (gleich)',ex:'Ich schreibe einen Einkaufszettel.',exEn:'I am writing a shopping list.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:4,type:'N',de:'der Nominativ, -e',en:'nominative case',extra:'fragt: Wer? / Was?',ex:'Im Nominativ: Der Mann schläft.',exEn:'In nominative: The man sleeps.',gram:'Funktion: Subjekt des Satzes · der/die/das/die · ein/eine/ein/—'},
+  {ch:4,type:'N',de:'der Akkusativ, -e',en:'accusative case',extra:'fragt: Wen? / Was?',ex:'Im Akkusativ: Ich sehe den Mann.',exEn:'In accusative: I see the man.',gram:'Funktion: direktes Objekt · Änderung nur maskulin: der→den, ein→einen'},
+  {ch:4,type:'V',de:'essen',en:'to eat',extra:'er isst · aß',ex:'Wir essen Spaghetti.',exEn:'We are eating spaghetti.',gram:'Prät.: aß · Perf.: hat gegessen · untrennbar · Vokalwechsel e→i (Präs.) · starkes Verb'},
+  {ch:4,type:'V',de:'trinken',en:'to drink',extra:'er trinkt · trank',ex:'Ich trinke Wasser.',exEn:'I drink water.',gram:'Prät.: trank · Perf.: hat getrunken · untrennbar · starkes Verb: i→a→u'},
+  {ch:4,type:'V',de:'kaufen',en:'to buy',extra:'er kauft · kaufte',ex:'Sie kauft Brot.',exEn:'She is buying bread.',gram:'Prät.: kaufte · Perf.: hat gekauft · untrennbar · schwaches Verb'},
+  {ch:4,type:'V',de:'brauchen',en:'to need',extra:'er braucht · brauchte',ex:'Wir brauchen Milch.',exEn:'We need milk.',gram:'Prät.: brauchte · Perf.: hat gebraucht · untrennbar · schwaches Verb'},
+  {ch:4,type:'V',de:'kosten',en:'to cost',extra:'es kostet · kostete',ex:'Was kostet das?',exEn:'How much does that cost?',gram:'Prät.: kostete · Perf.: hat gekostet · untrennbar · schwaches Verb · Subjekt ist Sache'},
+  {ch:4,type:'V',de:'nehmen',en:'to take',extra:'er nimmt · nahm',ex:'Ich nehme ein Brötchen.',exEn:'I\'ll take a bread roll.',gram:'Prät.: nahm · Perf.: hat genommen · untrennbar · Vokalwechsel e→i (Präs.) · starkes Verb'},
+  {ch:4,type:'V',de:'möchten',en:'would like to / want',extra:'er möchte · wollte',ex:'Ich möchte ein Glas Wasser.',exEn:'I would like a glass of water.',gram:'Prät.: wollte (von wollen) · Perf.: hat gemocht · MODALVERB · höflicher als \'wollen\''},
+  {ch:4,type:'V',de:'grillen',en:'to barbecue / grill',extra:'er grillt · grillte',ex:'Wir grillen heute Abend.',exEn:'We are having a barbecue tonight.',gram:'Prät.: grillte · Perf.: hat gegrillt · untrennbar · schwaches Verb'},
+  {ch:4,type:'V',de:'schmecken',en:'to taste',extra:'es schmeckt · schmeckte',ex:'Schokolade schmeckt süß.',exEn:'Chocolate tastes sweet.',gram:'Prät.: schmeckte · Perf.: hat geschmeckt · untrennbar · + Adjektiv: schmeckt gut/lecker'},
+  {ch:4,type:'V',de:'einkaufen',en:'to shop',extra:'er kauft ein · kaufte ein',ex:'Wir kaufen im Supermarkt ein.',exEn:'We shop at the supermarket.',gram:'Prät.: kaufte ein · Perf.: hat eingekauft · TRENNBAR: kauft...ein'},
+  {ch:4,type:'A',de:'frisch',en:'fresh',extra:'Komp.: frischer',ex:'Das Gemüse ist frisch.',exEn:'The vegetables are fresh.',gram:'Gegenteil: alt / abgestanden'},
+  {ch:4,type:'A',de:'lecker',en:'tasty / delicious',extra:'Komp.: leckerer',ex:'Das Essen ist sehr lecker.',exEn:'The food is very delicious.',gram:'umgangssprachlich · auch: köstlich (formeller)'},
+  {ch:4,type:'A',de:'teuer',en:'expensive',extra:'Komp.: teurer · Sup.: am teuersten',ex:'Das Fleisch ist teuer.',exEn:'The meat is expensive.',gram:'Gegenteil: günstig / billig · Komp.: teurer (unregelmäßig: kein Umlaut)'},
+  {ch:4,type:'A',de:'süß',en:'sweet / cute',extra:'Komp.: süßer',ex:'Der Kuchen ist süß.',exEn:'The cake is sweet.',gram:'2 Bedeutungen: 1) sweet (taste) 2) cute (person/animal)'},
+  {ch:4,type:'ADV',de:'vielleicht',en:'maybe / perhaps',extra:'—',ex:'Vielleicht komme ich morgen.',exEn:'Maybe I\'ll come tomorrow.',gram:'Modaladverb · Unsicherheit · Position: Mittelfeld oder Satzanfang'},
+  {ch:4,type:'ADV',de:'schon',en:'already',extra:'—',ex:'Das Essen ist schon fertig.',exEn:'The food is already ready.',gram:'Modalpartikel · viele Bedeutungen je nach Kontext'},
+  {ch:4,type:'ADV',de:'gleich',en:'shortly / right away',extra:'—',ex:'Das Essen ist gleich fertig.',exEn:'The food is nearly ready.',gram:'Zeitadverb · auch Adjektiv: gleich = same'},
+  {ch:4,type:'PHR',de:'Guten Appetit!',en:'Enjoy your meal!',extra:'beim Essen',ex:'Guten Appetit! – Danke, gleichfalls!',exEn:'Enjoy your meal! – Thanks, likewise!',gram:'Register: neutral · Antwort: Danke, gleichfalls!'},
+  {ch:4,type:'PHR',de:'Prost! / Zum Wohl!',en:'Cheers!',extra:'beim Trinken',ex:'Prost! Auf uns!',exEn:'Cheers! To us!',gram:'Register: informell (Prost) / formeller (Zum Wohl)'},
+  {ch:4,type:'PHR',de:'Zahlen, bitte!',en:'The bill, please!',extra:'im Restaurant',ex:'Zahlen, bitte! – Das macht 12 Euro.',exEn:'The bill, please! – That\'s 12 euros.',gram:'Register: neutral · auch: Die Rechnung, bitte!'},
+  {ch:4,type:'PHR',de:'Sonst noch etwas?',en:'Anything else?',extra:'im Geschäft / Restaurant',ex:'Sonst noch etwas? – Nein, danke.',exEn:'Anything else? – No, thank you.',gram:'Register: neutral'},
+  {ch:4,type:'KON',de:'und',en:'and',extra:'Hauptsatz · Verb bleibt auf Position 2',ex:'Ich kaufe Brot und Butter.',exEn:'I am buying bread and butter.',gram:'Koordinierende Konjunktion · verbindet Hauptsätze und Elemente'},
+  {ch:4,type:'KON',de:'oder',en:'or',extra:'Hauptsatz · Alternative',ex:'Tee oder Kaffee?',exEn:'Tea or coffee?',gram:'Koordinierende Konjunktion · Alternative / Frage'},
+  {ch:4,type:'KON',de:'aber',en:'but',extra:'Hauptsatz · Gegensatz',ex:'Ich esse gern Fleisch, aber kein Fisch.',exEn:'I like meat, but not fish.',gram:'Koordinierende Konjunktion · Gegensatz · kein Einfluss auf Wortstellung'},
+  {ch:5,type:'N',de:'der Alltag (Sg.)',en:'everyday life / daily routine',extra:'nur Singular',ex:'Mein Alltag beginnt um 7 Uhr.',exEn:'My everyday life starts at 7 am.',gram:'Genus: maskulin · kein Plural · im Alltag (Dativ)'},
+  {ch:5,type:'N',de:'die Bibliothek, -en',en:'library',extra:'Pl.: Bibliotheken',ex:'Ich lese in der Bibliothek.',exEn:'I read in the library.',gram:'Genus: feminin · in der Bibliothek (Dativ)'},
+  {ch:5,type:'N',de:'die Familie, -n',en:'family',extra:'Pl.: Familien',ex:'Meine Familie wohnt in Hamburg.',exEn:'My family lives in Hamburg.',gram:'Genus: feminin'},
+  {ch:5,type:'N',de:'die Zeitung, -en',en:'newspaper',extra:'Pl.: Zeitungen',ex:'Er liest die Zeitung.',exEn:'He reads the newspaper.',gram:'Genus: feminin · Zeitung lesen'},
+  {ch:5,type:'N',de:'das Büro, -s',en:'office',extra:'Pl.: Büros',ex:'Sie arbeitet im Büro.',exEn:'She works in the office.',gram:'Genus: neutrum · im Büro (Dativ) · aus Französisch'},
+  {ch:5,type:'N',de:'die Minute, -n',en:'minute',extra:'Pl.: Minuten',ex:'Ich warte fünf Minuten.',exEn:'I wait five minutes.',gram:'Genus: feminin · Zeitangabe: pro Minute'},
+  {ch:5,type:'N',de:'die Sekunde, -n',en:'second',extra:'Pl.: Sekunden',ex:'Warte eine Sekunde!',exEn:'Wait a second!',gram:'Genus: feminin · kleinste Zeiteinheit'},
+  {ch:5,type:'N',de:'der Geburtstag, -e',en:'birthday',extra:'Pl.: Geburtstage',ex:'Heute ist mein Geburtstag.',exEn:'Today is my birthday.',gram:'Genus: maskulin · Herzlichen Glückwunsch zum Geburtstag!'},
+  {ch:5,type:'N',de:'die Geige, -n',en:'violin',extra:'Pl.: Geigen',ex:'Er spielt Geige.',exEn:'He plays the violin.',gram:'Genus: feminin · Geige spielen (kein Artikel)'},
+  {ch:5,type:'N',de:'die Trompete, -n',en:'trumpet',extra:'Pl.: Trompeten',ex:'Sie spielt Trompete.',exEn:'She plays the trumpet.',gram:'Genus: feminin'},
+  {ch:5,type:'N',de:'die Eltern (Pl.)',en:'parents',extra:'nur Plural',ex:'Meine Eltern wohnen in Bonn.',exEn:'My parents live in Bonn.',gram:'nur Plural · Sg. = der Elternteil'},
+  {ch:5,type:'N',de:'das Kind, -er',en:'child',extra:'Pl.: Kinder',ex:'Das Kind geht in die Schule.',exEn:'The child goes to school.',gram:'Genus: neutrum · Akkusativ: das Kind'},
+  {ch:5,type:'N',de:'der Sohn, -e',en:'son',extra:'Pl.: Söhne',ex:'Mein Sohn ist 10 Jahre alt.',exEn:'My son is 10 years old.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:5,type:'N',de:'die Tochter, -',en:'daughter',extra:'Pl.: Töchter',ex:'Meine Tochter lernt Gitarre.',exEn:'My daughter is learning guitar.',gram:'Genus: feminin · Umlaut im Plural'},
+  {ch:5,type:'N',de:'der Vater, -',en:'father',extra:'Pl.: Väter',ex:'Mein Vater arbeitet viel.',exEn:'My father works a lot.',gram:'Genus: maskulin · Umlaut im Plural · kurzform: Vati'},
+  {ch:5,type:'N',de:'die Mutter, -',en:'mother',extra:'Pl.: Mütter',ex:'Meine Mutter kocht gut.',exEn:'My mother cooks well.',gram:'Genus: feminin · Umlaut im Plural · kurzform: Mutti'},
+  {ch:5,type:'N',de:'der Bruder, -',en:'brother',extra:'Pl.: Brüder',ex:'Mein Bruder spielt Fußball.',exEn:'My brother plays football.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:5,type:'N',de:'die Schwester, -n',en:'sister',extra:'Pl.: Schwestern',ex:'Meine Schwester singt gern.',exEn:'My sister likes to sing.',gram:'Genus: feminin'},
+  {ch:5,type:'N',de:'der Opa, -s',en:'grandpa',extra:'Pl.: Opas',ex:'Mein Opa liest gern.',exEn:'My grandpa likes reading.',gram:'Genus: maskulin · informell · formell: der Großvater'},
+  {ch:5,type:'N',de:'die Oma, -s',en:'grandma',extra:'Pl.: Omas',ex:'Meine Oma kocht gut.',exEn:'My grandma cooks well.',gram:'Genus: feminin · informell · formell: die Großmutter'},
+  {ch:5,type:'N',de:'die Großmutter, -',en:'grandmother',extra:'Pl.: Großmütter',ex:'Die Großmutter backt Kuchen.',exEn:'The grandmother bakes cake.',gram:'Genus: feminin · Umlaut im Plural'},
+  {ch:5,type:'N',de:'der Großvater, -',en:'grandfather',extra:'Pl.: Großväter',ex:'Der Großvater liest Zeitung.',exEn:'The grandfather reads the newspaper.',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:5,type:'N',de:'die Geschwister (Pl.)',en:'siblings (brothers and sisters)',extra:'nur Plural',ex:'Ich habe zwei Geschwister.',exEn:'I have two siblings.',gram:'nur Plural · Sg.: das Geschwister (selten)'},
+  {ch:5,type:'N',de:'der Onkel, -',en:'uncle',extra:'Pl.: Onkel (gleich)',ex:'Mein Onkel kommt aus Wien.',exEn:'My uncle comes from Vienna.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:5,type:'N',de:'das Baby, -s',en:'baby',extra:'Pl.: Babys',ex:'Das Baby schläft.',exEn:'The baby is sleeping.',gram:'Genus: neutrum · aus Englisch'},
+  {ch:5,type:'N',de:'der Junge, -n',en:'boy',extra:'Pl.: Jungen',ex:'Der Junge spielt Fußball.',exEn:'The boy plays football.',gram:'Genus: maskulin · schwaches Nomen: des Jungen'},
+  {ch:5,type:'N',de:'das Mädchen, -',en:'girl',extra:'Pl.: Mädchen (gleich)',ex:'Das Mädchen singt.',exEn:'The girl sings.',gram:'Genus: NEUTRUM! · Diminutiv von Magd · Pl. = Sg.'},
+  {ch:5,type:'N',de:'die Party, -s',en:'party',extra:'Pl.: Partys',ex:'Wir machen eine Party.',exEn:'We are having a party.',gram:'Genus: feminin · aus Englisch'},
+  {ch:5,type:'N',de:'der Stress (Sg.)',en:'stress',extra:'nur Singular',ex:'Ich habe viel Stress.',exEn:'I have a lot of stress.',gram:'Genus: maskulin · kein Plural · aus Englisch · gestresst (Adjektiv)'},
+  {ch:5,type:'N',de:'die Verspätung, -en',en:'delay',extra:'Pl.: Verspätungen',ex:'Der Zug hat Verspätung.',exEn:'The train is delayed.',gram:'Genus: feminin · Verspätung haben (feste Wendung)'},
+  {ch:5,type:'N',de:'der Frühling (Sg.)',en:'spring',extra:'meist Singular',ex:'Im Frühling blühen die Blumen.',exEn:'In spring the flowers bloom.',gram:'Genus: maskulin · im Frühling (Dativ)'},
+  {ch:5,type:'N',de:'der Sommer, -',en:'summer',extra:'Pl.: Sommer (gleich)',ex:'Im Sommer ist es warm.',exEn:'In summer it is warm.',gram:'Genus: maskulin · im Sommer (Dativ) · Pl. = Sg.'},
+  {ch:5,type:'N',de:'der Herbst (Sg.)',en:'autumn / fall',extra:'meist Singular',ex:'Im Herbst fallen die Blätter.',exEn:'In autumn the leaves fall.',gram:'Genus: maskulin · im Herbst (Dativ)'},
+  {ch:5,type:'N',de:'der Winter, -',en:'winter',extra:'Pl.: Winter (gleich)',ex:'Im Winter schneit es.',exEn:'In winter it snows.',gram:'Genus: maskulin · im Winter (Dativ) · Pl. = Sg.'},
+  {ch:5,type:'N',de:'die Jahreszeit, -en',en:'season',extra:'Pl.: Jahreszeiten',ex:'Welche Jahreszeit magst du?',exEn:'Which season do you like?',gram:'Genus: feminin · 4 Jahreszeiten: Frühling, Sommer, Herbst, Winter'},
+  {ch:5,type:'N',de:'der Monat, -e',en:'month',extra:'Pl.: Monate',ex:'Der Monat hat 30 Tage.',exEn:'The month has 30 days.',gram:'Genus: maskulin · im Monat (Dativ)'},
+  {ch:5,type:'N',de:'der Januar (Sg.)',en:'January',extra:'kein Plural',ex:'Im Januar ist es kalt.',exEn:'In January it is cold.',gram:'Genus: maskulin · im Januar (Dativ) · alle Monate: maskulin!'},
+  {ch:5,type:'N',de:'der Februar (Sg.)',en:'February',extra:'kein Plural',ex:'Im Februar gibt es Karneval.',exEn:'In February there is carnival.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der März (Sg.)',en:'March',extra:'kein Plural',ex:'Im März beginnt der Frühling.',exEn:'In March spring begins.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der April (Sg.)',en:'April',extra:'kein Plural',ex:'Im April regnet es oft.',exEn:'In April it often rains.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der Mai (Sg.)',en:'May',extra:'kein Plural',ex:'Im Mai ist es schön warm.',exEn:'In May it is pleasantly warm.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der Juni (Sg.)',en:'June',extra:'kein Plural',ex:'Im Juni beginnt der Sommer.',exEn:'In June summer begins.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der Juli (Sg.)',en:'July',extra:'kein Plural',ex:'Im Juli fahre ich in Urlaub.',exEn:'In July I go on holiday.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der August (Sg.)',en:'August',extra:'kein Plural',ex:'Im August ist es sehr heiß.',exEn:'In August it is very hot.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der September (Sg.)',en:'September',extra:'kein Plural',ex:'Im September beginnt die Schule.',exEn:'In September school starts.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der Oktober (Sg.)',en:'October',extra:'kein Plural',ex:'Im Oktober ist Oktoberfest.',exEn:'In October there is Oktoberfest.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der November (Sg.)',en:'November',extra:'kein Plural',ex:'Im November ist es grau.',exEn:'In November it is grey.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der Dezember (Sg.)',en:'December',extra:'kein Plural',ex:'Im Dezember gibt es Weihnachten.',exEn:'In December there is Christmas.',gram:'Genus: maskulin'},
+  {ch:5,type:'N',de:'der Morgen, -',en:'morning',extra:'Pl.: Morgen (gleich)',ex:'Am Morgen frühstücke ich.',exEn:'In the morning I have breakfast.',gram:'Genus: maskulin · am Morgen / morgens (Adverb)'},
+  {ch:5,type:'N',de:'der Mittag, -e',en:'noon / midday',extra:'Pl.: Mittage',ex:'Zu Mittag esse ich.',exEn:'At noon I have lunch.',gram:'Genus: maskulin · zu Mittag essen · mittags (Adverb)'},
+  {ch:5,type:'N',de:'der Nachmittag, -e',en:'afternoon',extra:'Pl.: Nachmittage',ex:'Am Nachmittag lerne ich.',exEn:'In the afternoon I study.',gram:'Genus: maskulin · nachmittags (Adverb)'},
+  {ch:5,type:'N',de:'der Abend, -e',en:'evening',extra:'Pl.: Abende',ex:'Am Abend koche ich.',exEn:'In the evening I cook.',gram:'Genus: maskulin · am Abend · abends (Adverb)'},
+  {ch:5,type:'N',de:'die Nacht, -e',en:'night',extra:'Pl.: Nächte',ex:'In der Nacht schlafe ich.',exEn:'At night I sleep.',gram:'Genus: feminin · Umlaut im Plural · nachts (Adverb)'},
+  {ch:5,type:'N',de:'der Kalender, -',en:'calendar',extra:'Pl.: Kalender (gleich)',ex:'Ich schaue in den Kalender.',exEn:'I look at the calendar.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:5,type:'N',de:'das Training, -s',en:'practice / training session',extra:'Pl.: Trainings',ex:'Das Training beginnt um 18 Uhr.',exEn:'Training starts at 6 pm.',gram:'Genus: neutrum · aus Englisch'},
+  {ch:5,type:'V',de:'besuchen',en:'to visit',extra:'er besucht · besuchte',ex:'Wir besuchen die Oma.',exEn:'We are visiting grandma.',gram:'Prät.: besuchte · Perf.: hat besucht · untrennbar · schwaches Verb · + Akkusativ'},
+  {ch:5,type:'V',de:'duschen',en:'to shower',extra:'er duscht · duschte',ex:'Ich dusche jeden Morgen.',exEn:'I shower every morning.',gram:'Prät.: duschte · Perf.: hat geduscht · untrennbar · auch reflexiv: sich duschen'},
+  {ch:5,type:'V',de:'treffen',en:'to meet',extra:'er trifft · traf',ex:'Ich treffe meine Freundin.',exEn:'I am meeting my friend.',gram:'Prät.: traf · Perf.: hat getroffen · untrennbar · Vokalwechsel e→i · starkes Verb'},
+  {ch:5,type:'V',de:'telefonieren',en:'to talk on the phone',extra:'er telefoniert · telefonierte',ex:'Wir können morgen telefonieren.',exEn:'We can talk on the phone tomorrow.',gram:'Prät.: telefonierte · Perf.: hat telefoniert · untrennbar · mit jemandem telefonieren'},
+  {ch:5,type:'V',de:'können',en:'can / to be able to',extra:'er kann · konnte',ex:'Ich kann Deutsch sprechen.',exEn:'I can speak German.',gram:'Prät.: konnte · Perf.: hat gekonnt · MODALVERB · + Infinitiv ohne \'zu\''},
+  {ch:5,type:'V',de:'müssen',en:'must / to have to',extra:'er muss · musste',ex:'Ich muss heute arbeiten.',exEn:'I have to work today.',gram:'Prät.: musste · Perf.: hat gemusst · MODALVERB · + Infinitiv ohne \'zu\' · starke Notwendigkeit'},
+  {ch:5,type:'V',de:'wollen',en:'to want to',extra:'er will · wollte',ex:'Ich will Deutsch lernen.',exEn:'I want to learn German.',gram:'Prät.: wollte · Perf.: hat gewollt · MODALVERB · + Infinitiv ohne \'zu\' · stärker als möchten'},
+  {ch:5,type:'V',de:'dürfen',en:'may / to be allowed to',extra:'er darf · durfte',ex:'Hier darf man nicht rauchen.',exEn:'Smoking is not allowed here.',gram:'Prät.: durfte · Perf.: hat gedurft · MODALVERB · Erlaubnis / Verbot'},
+  {ch:5,type:'V',de:'sollen',en:'to be supposed to / should',extra:'er soll · sollte',ex:'Du sollst sofort kommen.',exEn:'You are supposed to come immediately.',gram:'Prät.: sollte · Perf.: hat gesollt · MODALVERB · Auftrag von Dritten'},
+  {ch:5,type:'V',de:'bleiben',en:'to stay / remain',extra:'er bleibt · blieb',ex:'Ich bleibe zu Hause.',exEn:'I am staying at home.',gram:'Prät.: blieb · Perf.: ist geblieben · untrennbar · Hilfsverb: sein · starkes Verb'},
+  {ch:5,type:'ADV',de:'manchmal',en:'sometimes',extra:'—',ex:'Manchmal esse ich Pizza.',exEn:'Sometimes I eat pizza.',gram:'Häufigkeitsadverb · immer > oft > manchmal > selten > nie'},
+  {ch:5,type:'ADV',de:'immer',en:'always',extra:'—',ex:'Ich frühstücke immer um 7 Uhr.',exEn:'I always have breakfast at 7.',gram:'Häufigkeitsadverb · stärkste Frequenz'},
+  {ch:5,type:'ADV',de:'nie',en:'never',extra:'—',ex:'Ich trinke nie Alkohol.',exEn:'I never drink alcohol.',gram:'Häufigkeitsadverb · Negation der Häufigkeit'},
+  {ch:5,type:'ADV',de:'meistens',en:'mostly / usually',extra:'—',ex:'Meistens esse ich mittags Salat.',exEn:'I usually eat salad at lunch.',gram:'Häufigkeitsadverb · = in den meisten Fällen'},
+  {ch:5,type:'ADV',de:'gestern',en:'yesterday',extra:'—',ex:'Gestern war ich im Kino.',exEn:'Yesterday I was at the cinema.',gram:'Zeitadverb · gestern → heute → morgen'},
+  {ch:5,type:'ADV',de:'jetzt',en:'now',extra:'—',ex:'Jetzt lerne ich Deutsch.',exEn:'I am learning German now.',gram:'Zeitadverb · Gegenwart · = im Moment'},
+  {ch:5,type:'ADV',de:'dann',en:'then',extra:'—',ex:'Ich dusche, dann frühstücke ich.',exEn:'I shower, then I have breakfast.',gram:'Zeitadverb / Konjunktionaladverb · Reihenfolge · Verb auf Position 1!'},
+  {ch:5,type:'ADV',de:'morgens',en:'in the morning',extra:'—',ex:'Morgens trinke ich Kaffee.',exEn:'In the morning I drink coffee.',gram:'Zeitadverb · von: der Morgen · -s Endung = Tageszeit-Adverb'},
+  {ch:5,type:'ADV',de:'mittags',en:'at noon',extra:'—',ex:'Mittags esse ich warm.',exEn:'At noon I eat hot food.',gram:'Zeitadverb · von: der Mittag'},
+  {ch:5,type:'ADV',de:'abends',en:'in the evening',extra:'—',ex:'Abends lese ich gern.',exEn:'In the evening I like to read.',gram:'Zeitadverb · von: der Abend'},
+  {ch:5,type:'ADV',de:'nachts',en:'at night',extra:'—',ex:'Nachts schlafe ich.',exEn:'At night I sleep.',gram:'Zeitadverb · von: die Nacht'},
+  {ch:5,type:'PRO',de:'man',en:'one / you (general)',extra:'unpersönlich · 3. Person Sg.',ex:'Hier darf man nicht rauchen.',exEn:'One must not smoke here.',gram:'Verb wie \'er\': man ist, man hat · = jede Person allgemein'},
+  {ch:5,type:'PRO',de:'sich',en:'oneself (reflexive)',extra:'Reflexivpronomen',ex:'Er entschuldigt sich.',exEn:'He apologises.',gram:'Reflexivpronomen: Akk./Dat. · sich = 3. Person · mich/dich (1./2. P.)'},
+  {ch:5,type:'PRO',de:'mir',en:'me / to me (dative)',extra:'Dat. von \'ich\'',ex:'Wie geht es mir?',exEn:'How am I?',gram:'Kasus: Dativ · Nom.: ich · Akk.: mich · Dat.: mir'},
+  {ch:5,type:'PRO',de:'dir',en:'you / to you (dative)',extra:'Dat. von \'du\'',ex:'Wie geht es dir?',exEn:'How are you?',gram:'Kasus: Dativ · Nom.: du · Akk.: dich · Dat.: dir'},
+  {ch:5,type:'PHR',de:'Es tut mir leid.',en:'I\'m sorry.',extra:'stärkere Entschuldigung',ex:'Es tut mir leid, ich komme zu spät.',exEn:'I\'m sorry, I am coming late.',gram:'Register: neutral · stärker als \'Entschuldigung\' · Dat.: mir'},
+  {ch:5,type:'PHR',de:'Macht nichts!',en:'Never mind! / It\'s ok!',extra:'Reaktion auf Entschuldigung',ex:'Entschuldigung! – Macht nichts!',exEn:'Sorry! – Never mind!',gram:'Register: informell · auch: Kein Problem! / Schon gut!'},
+  {ch:5,type:'PHR',de:'Kein Problem!',en:'No problem!',extra:'Reaktion',ex:'Danke! – Kein Problem!',exEn:'Thank you! – No problem!',gram:'Register: neutral · Negation mit \'kein\' + Nomen'},
+  {ch:5,type:'KON',de:'weil',en:'because (subordinating)',extra:'Nebensatz → Verb AM ENDE!',ex:'Ich bin müde, weil ich viel gearbeitet habe.',exEn:'I am tired because I worked a lot.',gram:'SUBORDINIERENDE Konjunktion · Verb geht ans SATZENDE · Komma vor \'weil\''},
+  {ch:5,type:'KON',de:'dass',en:'that (subordinating)',extra:'Nebensatz → Verb AM ENDE!',ex:'Ich glaube, dass er kommt.',exEn:'I believe that he is coming.',gram:'SUBORDINIERENDE Konjunktion · Verb geht ans SATZENDE · Komma vor \'dass\''},
+  {ch:5,type:'KON',de:'wenn',en:'when / if (subordinating)',extra:'Nebensatz → Verb AM ENDE!',ex:'Wenn ich müde bin, schlafe ich.',exEn:'When I am tired, I sleep.',gram:'SUBORDINIERENDE Konjunktion · Verb ans SATZENDE · Bedingung oder Zeitpunkt'},
+  {ch:6,type:'N',de:'das Fitness-Studio, -s',en:'gym / fitness studio',extra:'Pl.: Fitness-Studios',ex:'Ich gehe ins Fitness-Studio.',exEn:'I am going to the gym.',gram:'Genus: neutrum · ins = in + das · aus Englisch'},
+  {ch:6,type:'N',de:'die Fahrradtour, -en',en:'bicycle ride / tour',extra:'Pl.: Fahrradtouren',ex:'Wir machen eine Fahrradtour.',exEn:'We are going on a bicycle ride.',gram:'Genus: feminin · Kompositum: Fahrrad + Tour'},
+  {ch:6,type:'N',de:'das Picknick, -s',en:'picnic',extra:'Pl.: Picknicks',ex:'Wir machen ein Picknick.',exEn:'We are having a picnic.',gram:'Genus: neutrum · aus Englisch/Französisch'},
+  {ch:6,type:'N',de:'die Überraschung, -en',en:'surprise',extra:'Pl.: Überraschungen',ex:'Das ist eine Überraschung!',exEn:'That is a surprise!',gram:'Genus: feminin · von: überraschen (untrennbar)'},
+  {ch:6,type:'N',de:'der Ausflug, -e',en:'excursion / day trip',extra:'Pl.: Ausflüge',ex:'Wir machen einen Ausflug.',exEn:'We are going on a day trip.',gram:'Genus: maskulin · Umlaut im Plural · einen Ausflug machen'},
+  {ch:6,type:'N',de:'das Geschenk, -e',en:'gift / present',extra:'Pl.: Geschenke',ex:'Das Geschenk ist für Sofia.',exEn:'The gift is for Sofia.',gram:'Genus: neutrum · von: schenken · ein Geschenk machen'},
+  {ch:6,type:'N',de:'der Treffpunkt, -e',en:'meeting point',extra:'Pl.: Treffpunkte',ex:'Der Treffpunkt ist am Bahnhof.',exEn:'The meeting point is at the station.',gram:'Genus: maskulin · Kompositum: treffen + Punkt'},
+  {ch:6,type:'N',de:'das Schnitzel, -',en:'schnitzel',extra:'Pl.: Schnitzel (gleich)',ex:'Das Schnitzel schmeckt lecker.',exEn:'The schnitzel tastes delicious.',gram:'Genus: neutrum · Pl. = Sg. · aus Österreich'},
+  {ch:6,type:'N',de:'die Speisekarte, -n',en:'menu',extra:'Pl.: Speisekarten',ex:'Die Speisekarte ist auf Deutsch.',exEn:'The menu is in German.',gram:'Genus: feminin · Kompositum: Speise + Karte'},
+  {ch:6,type:'N',de:'die Gabel, -n',en:'fork',extra:'Pl.: Gabeln',ex:'Die Gabel liegt links.',exEn:'The fork is on the left.',gram:'Genus: feminin · links vom Teller'},
+  {ch:6,type:'N',de:'der Löffel, -',en:'spoon',extra:'Pl.: Löffel (gleich)',ex:'Der Löffel ist sauber.',exEn:'The spoon is clean.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:6,type:'N',de:'das Messer, -',en:'knife',extra:'Pl.: Messer (gleich)',ex:'Das Messer liegt rechts.',exEn:'The knife is on the right.',gram:'Genus: neutrum · Pl. = Sg. · rechts vom Teller'},
+  {ch:6,type:'N',de:'die Serviette, -n',en:'napkin',extra:'Pl.: Servietten',ex:'Ich brauche eine Serviette.',exEn:'I need a napkin.',gram:'Genus: feminin · aus Französisch'},
+  {ch:6,type:'N',de:'die Tasse, -n',en:'cup',extra:'Pl.: Tassen',ex:'Eine Tasse Kaffee, bitte.',exEn:'A cup of coffee, please.',gram:'Genus: feminin · eine Tasse + Getränk (kein Artikel beim Inhalt)'},
+  {ch:6,type:'N',de:'der Teller, -',en:'plate',extra:'Pl.: Teller (gleich)',ex:'Der Teller ist leer.',exEn:'The plate is empty.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:6,type:'N',de:'das Trinkgeld, -er',en:'tip (at restaurant)',extra:'Pl.: Trinkgelder',ex:'Sie gibt dem Kellner Trinkgeld.',exEn:'She gives the waiter a tip.',gram:'Genus: neutrum · Trinkgeld geben (Dativ: dem Kellner)'},
+  {ch:6,type:'N',de:'der Durst (Sg.)',en:'thirst',extra:'nur Singular',ex:'Ich habe Durst.',exEn:'I am thirsty.',gram:'Genus: maskulin · Durst haben (feste Wendung) · kein Plural'},
+  {ch:6,type:'N',de:'der Hunger (Sg.)',en:'hunger',extra:'nur Singular',ex:'Ich habe Hunger.',exEn:'I am hungry.',gram:'Genus: maskulin · Hunger haben (feste Wendung) · kein Plural'},
+  {ch:6,type:'N',de:'die Kneipe, -n',en:'bar / pub',extra:'Pl.: Kneipen',ex:'Die Kneipe ist voll.',exEn:'The bar is full.',gram:'Genus: feminin · typisch deutsch'},
+  {ch:6,type:'N',de:'der Biergarten, -',en:'beer garden',extra:'Pl.: Biergärten',ex:'Wir sitzen im Biergarten.',exEn:'We sit in the beer garden.',gram:'Genus: maskulin · Umlaut im Plural · typisch bayerisch'},
+  {ch:6,type:'N',de:'das Wetter, -',en:'weather',extra:'Pl.: Wetter (gleich)',ex:'Das Wetter ist schön.',exEn:'The weather is nice.',gram:'Genus: neutrum · Pl. = Sg. (selten) · Wetterbericht'},
+  {ch:6,type:'N',de:'das Ticket, -s',en:'ticket (event)',extra:'Pl.: Tickets',ex:'Das Ticket kostet 49 Euro.',exEn:'The ticket costs 49 euros.',gram:'Genus: neutrum · aus Englisch · auch: die Karte, -n'},
+  {ch:6,type:'N',de:'das Festival, -s',en:'festival',extra:'Pl.: Festivals',ex:'Das Festival beginnt morgen.',exEn:'The festival starts tomorrow.',gram:'Genus: neutrum · aus Englisch'},
+  {ch:6,type:'N',de:'der Regen (Sg.)',en:'rain',extra:'meist Singular',ex:'Der Regen macht mich nass.',exEn:'The rain makes me wet.',gram:'Genus: maskulin · es regnet (Verb: regnen)'},
+  {ch:6,type:'N',de:'die Sonne (Sg.)',en:'sun',extra:'meist Singular',ex:'Die Sonne scheint.',exEn:'The sun is shining.',gram:'Genus: feminin · es scheint die Sonne (Verb: scheinen)'},
+  {ch:6,type:'N',de:'die Bar, -s',en:'bar / cocktail bar',extra:'Pl.: Bars',ex:'Wir gehen in die Bar.',exEn:'We are going to the bar.',gram:'Genus: feminin · aus Englisch · eleganter als Kneipe'},
+  {ch:6,type:'N',de:'der Gruß, -e',en:'greeting',extra:'Pl.: Grüße',ex:'Herzliche Grüße!',exEn:'Kind regards!',gram:'Genus: maskulin · Umlaut im Plural · Grüße aus Berlin!'},
+  {ch:6,type:'N',de:'der Regisseur, -e',en:'director (film/theatre)',extra:'Pl.: Regisseure',ex:'Der Regisseur präsentiert den Film.',exEn:'The director presents the film.',gram:'Genus: maskulin · aus Französisch'},
+  {ch:6,type:'V',de:'feiern',en:'to celebrate',extra:'er feiert · feierte',ex:'Wir feiern den Geburtstag.',exEn:'We are celebrating the birthday.',gram:'Prät.: feierte · Perf.: hat gefeiert · untrennbar · schwaches Verb'},
+  {ch:6,type:'V',de:'klettern',en:'to climb',extra:'er klettert · kletterte',ex:'Er klettert gern.',exEn:'He likes to climb.',gram:'Prät.: kletterte · Perf.: ist geklettert · untrennbar · Hilfsverb: sein'},
+  {ch:6,type:'V',de:'wandern',en:'to hike',extra:'er wandert · wanderte',ex:'Wir wandern in den Bergen.',exEn:'We hike in the mountains.',gram:'Prät.: wanderte · Perf.: ist gewandert · untrennbar · Hilfsverb: sein'},
+  {ch:6,type:'V',de:'einladen',en:'to invite',extra:'er lädt ein · lud ein',ex:'Er lädt seine Freunde ein.',exEn:'He invites his friends.',gram:'Prät.: lud ein · Perf.: hat eingeladen · TRENNBAR: lädt...ein · starkes Verb'},
+  {ch:6,type:'V',de:'schenken',en:'to give as a gift',extra:'er schenkt · schenkte',ex:'Sie schenkt ihm ein Buch.',exEn:'She gives him a book as a gift.',gram:'Prät.: schenkte · Perf.: hat geschenkt · untrennbar · + Dativ (Person) + Akkusativ (Sache)'},
+  {ch:6,type:'V',de:'bestellen',en:'to order (food/drink)',extra:'er bestellt · bestellte',ex:'Sie bestellt ein Schnitzel.',exEn:'She orders a schnitzel.',gram:'Prät.: bestellte · Perf.: hat bestellt · untrennbar (be- = untrennbares Präfix)'},
+  {ch:6,type:'V',de:'bezahlen',en:'to pay',extra:'er bezahlt · bezahlte',ex:'Zahlen, bitte!',exEn:'The bill, please!',gram:'Prät.: bezahlte · Perf.: hat bezahlt · untrennbar (be- Präfix) · auch: zahlen'},
+  {ch:6,type:'V',de:'bringen',en:'to bring',extra:'er bringt · brachte',ex:'Ich bringe es gleich.',exEn:'I\'ll bring it right away.',gram:'Prät.: brachte · Perf.: hat gebracht · untrennbar · Mischverb (unregelmäßig)'},
+  {ch:6,type:'V',de:'beginnen',en:'to begin / start',extra:'er beginnt · begann',ex:'Das Konzert beginnt um 20 Uhr.',exEn:'The concert starts at 8 pm.',gram:'Prät.: begann · Perf.: hat begonnen · untrennbar (be- Präfix) · starkes Verb'},
+  {ch:6,type:'V',de:'genießen',en:'to enjoy / savour',extra:'er genießt · genoss',ex:'Wir genießen den Abend.',exEn:'We are enjoying the evening.',gram:'Prät.: genoss · Perf.: hat genossen · untrennbar · starkes Verb'},
+  {ch:6,type:'V',de:'ski fahren',en:'to ski',extra:'er fährt Ski · fuhr Ski',ex:'Im Winter fahren wir Ski.',exEn:'In winter we ski.',gram:'Prät.: fuhr Ski · Perf.: ist Ski gefahren · TRENNBAR: fährt...Ski'},
+  {ch:6,type:'ADV',de:'leider',en:'unfortunately',extra:'—',ex:'Leider kann ich nicht kommen.',exEn:'Unfortunately I cannot come.',gram:'Modaladverb · Bedauern · Position: Satzanfang oder Mittelfeld'},
+  {ch:6,type:'ADV',de:'hoffentlich',en:'hopefully',extra:'—',ex:'Hoffentlich ist das Wetter schön.',exEn:'Hopefully the weather will be nice.',gram:'Modaladverb · Hoffnung / Wunsch'},
+  {ch:6,type:'ADV',de:'überall',en:'everywhere',extra:'—',ex:'Es gibt überall Biergärten.',exEn:'There are beer gardens everywhere.',gram:'Ortsadverb · Gegenteil: nirgendwo'},
+  {ch:6,type:'ADV',de:'draußen',en:'outside',extra:'—',ex:'Wir sitzen draußen.',exEn:'We are sitting outside.',gram:'Ortsadverb · Gegenteil: drinnen'},
+  {ch:6,type:'PHR',de:'Alles klar!',en:'All good! / Understood!',extra:'Reaktion',ex:'Kommst du? – Alles klar!',exEn:'Are you coming? – All good!',gram:'Register: informell · Zustimmung / Verständnis'},
+  {ch:6,type:'PHR',de:'Klingt gut!',en:'Sounds good!',extra:'Reaktion',ex:'Machen wir eine Fahrradtour? – Klingt gut!',exEn:'Shall we go cycling? – Sounds good!',gram:'Register: informell · klingen + Adjektiv'},
+  {ch:6,type:'PHR',de:'Schade!',en:'What a pity! / Too bad!',extra:'Reaktion',ex:'Ich kann nicht kommen. – Schade!',exEn:'I can\'t come. – What a pity!',gram:'Register: neutral · Bedauern'},
+  {ch:6,type:'KON',de:'denn',en:'because / for (coordinating)',extra:'Hauptsatz → Verb auf Position 2!',ex:'Ich bin müde, denn ich habe wenig geschlafen.',exEn:'I\'m tired because I slept little.',gram:'KOORDINIERENDE Konjunktion · kein Einfluss auf Wortstellung · ≠ weil (subordinierend)'},
+  {ch:6,type:'KON',de:'also',en:'so / therefore (conjunctional adv.)',extra:'→ Verb auf Position 1 nach \'also\'!',ex:'Kein Bus, also gehe ich zu Fuß.',exEn:'No bus, so I go on foot.',gram:'Konjunktionaladverb · Schlussfolgerung · Verb direkt nach \'also\''},
+  {ch:7,type:'N',de:'die Pause, -n',en:'break',extra:'Pl.: Pausen',ex:'Ich mache eine Pause.',exEn:'I am taking a break.',gram:'Genus: feminin · eine Pause machen (feste Wendung)'},
+  {ch:7,type:'N',de:'das Praktikum, Praktika',en:'internship / placement',extra:'Pl.: Praktika (lateinisch)',ex:'Sie macht ein Praktikum.',exEn:'She is doing an internship.',gram:'Genus: neutrum · lateinische Pluralform · ein Praktikum machen'},
+  {ch:7,type:'N',de:'das Lied, -er',en:'song',extra:'Pl.: Lieder',ex:'Ich lerne ein deutsches Lied.',exEn:'I am learning a German song.',gram:'Genus: neutrum · Umlaut im Plural · ein Lied singen'},
+  {ch:7,type:'N',de:'der Urlaub, -e',en:'holiday / vacation',extra:'Pl.: Urlaube',ex:'Wir machen Urlaub.',exEn:'We are going on holiday.',gram:'Genus: maskulin · Urlaub machen/nehmen · im Urlaub (Dativ)'},
+  {ch:7,type:'N',de:'der Brief, -e',en:'letter (mail)',extra:'Pl.: Briefe',ex:'Ich schreibe einen Brief.',exEn:'I am writing a letter.',gram:'Genus: maskulin · einen Brief schreiben/schicken'},
+  {ch:7,type:'N',de:'die Post (Sg.)',en:'post office / mail',extra:'meist Singular',ex:'Ich gehe zur Post.',exEn:'I am going to the post office.',gram:'Genus: feminin · zur Post (Dativ) · zur = zu + der'},
+  {ch:7,type:'N',de:'der Zahnarzt, -e',en:'dentist (male)',extra:'Pl.: Zahnärzte',ex:'Ich gehe zum Zahnarzt.',exEn:'I am going to the dentist.',gram:'Genus: maskulin · Umlaut im Plural · Kompositum: Zahn + Arzt'},
+  {ch:7,type:'N',de:'die Datei, -en',en:'file (computer)',extra:'Pl.: Dateien',ex:'Ich öffne die Datei.',exEn:'I am opening the file.',gram:'Genus: feminin · eine Datei öffnen/speichern/drucken'},
+  {ch:7,type:'N',de:'das Passwort, -er',en:'password',extra:'Pl.: Passwörter',ex:'Das Passwort ist geheim.',exEn:'The password is secret.',gram:'Genus: neutrum · Umlaut im Plural · Passwort eingeben'},
+  {ch:7,type:'N',de:'das WLAN (Sg.)',en:'Wi-Fi',extra:'Abkürzung · meist Singular',ex:'Ich habe kein WLAN.',exEn:'I have no Wi-Fi.',gram:'Genus: neutrum · Wireless Local Area Network'},
+  {ch:7,type:'N',de:'der Drucker, -',en:'printer',extra:'Pl.: Drucker (gleich)',ex:'Der Drucker funktioniert nicht.',exEn:'The printer is not working.',gram:'Genus: maskulin · Pl. = Sg. · von: drucken'},
+  {ch:7,type:'N',de:'die Mittagspause, -n',en:'lunch break',extra:'Pl.: Mittagspausen',ex:'Die Mittagspause ist um 12 Uhr.',exEn:'Lunch break is at 12 o\'clock.',gram:'Genus: feminin · Kompositum: Mittag + Pause'},
+  {ch:7,type:'N',de:'die Krankheit, -en',en:'illness / disease',extra:'Pl.: Krankheiten',ex:'Die Krankheit ist nicht schlimm.',exEn:'The illness is not serious.',gram:'Genus: feminin · von: krank (Adjektiv)'},
+  {ch:7,type:'N',de:'der Dativ, -e',en:'dative case',extra:'fragt: Wem?',ex:'Nach \'mit\' steht der Dativ.',exEn:'After \'with\' comes the dative.',gram:'Funktion: indirektes Objekt · der→dem, die→der, das→dem, die(Pl.)→den'},
+  {ch:7,type:'N',de:'der Aufzug, -e',en:'elevator / lift',extra:'Pl.: Aufzüge',ex:'Der Aufzug ist kaputt.',exEn:'The elevator is broken.',gram:'Genus: maskulin · Umlaut im Plural · auch: der Fahrstuhl'},
+  {ch:7,type:'N',de:'die Präsentation, -en',en:'presentation',extra:'Pl.: Präsentationen',ex:'Die Präsentation ist fertig.',exEn:'The presentation is ready.',gram:'Genus: feminin'},
+  {ch:7,type:'N',de:'das Blog, -s',en:'blog',extra:'Pl.: Blogs',ex:'Ich schreibe einen Blog.',exEn:'I write a blog.',gram:'Genus: neutrum · aus Englisch'},
+  {ch:7,type:'N',de:'das Leben, -',en:'life',extra:'Pl.: Leben (gleich)',ex:'Das Leben hier ist anders.',exEn:'Life here is different.',gram:'Genus: neutrum · Pl. = Sg. · von: leben (Verb)'},
+  {ch:7,type:'N',de:'der Fehler, -',en:'mistake / error',extra:'Pl.: Fehler (gleich)',ex:'Ich mache einen Fehler.',exEn:'I am making a mistake.',gram:'Genus: maskulin · Pl. = Sg. · einen Fehler machen'},
+  {ch:7,type:'N',de:'der Akku, -s',en:'battery (rechargeable)',extra:'Pl.: Akkus',ex:'Mein Akku ist leer.',exEn:'My battery is empty.',gram:'Genus: maskulin · Kurzform von: Akkumulator'},
+  {ch:7,type:'N',de:'die Kreditkarte, -n',en:'credit card',extra:'Pl.: Kreditkarten',ex:'Ich zahle mit Kreditkarte.',exEn:'I pay by credit card.',gram:'Genus: feminin · mit Kreditkarte zahlen'},
+  {ch:7,type:'N',de:'das Konto, Konten',en:'bank account',extra:'Pl.: Konten',ex:'Ich habe ein Konto bei der Bank.',exEn:'I have an account at the bank.',gram:'Genus: neutrum · Pl.: Konten (unregelmäßig)'},
+  {ch:7,type:'N',de:'der Mitarbeiter, -',en:'colleague / employee (male)',extra:'Pl.: Mitarbeiter (gleich)',ex:'Der Mitarbeiter ist krank.',exEn:'The employee is sick.',gram:'Genus: maskulin · Pl. = Sg. · Kompositum: mit + Arbeiter'},
+  {ch:7,type:'V',de:'erklären',en:'to explain',extra:'er erklärt · erklärte',ex:'Er erklärt die Grammatik.',exEn:'He explains the grammar.',gram:'Prät.: erklärte · Perf.: hat erklärt · untrennbar (er- Präfix) · schwaches Verb'},
+  {ch:7,type:'V',de:'bedeuten',en:'to mean',extra:'es bedeutet · bedeutete',ex:'Was bedeutet das Wort?',exEn:'What does the word mean?',gram:'Prät.: bedeutete · Perf.: hat bedeutet · untrennbar (be- Präfix) · schwaches Verb'},
+  {ch:7,type:'V',de:'öffnen',en:'to open',extra:'er öffnet · öffnete',ex:'Ich öffne eine Datei.',exEn:'I am opening a file.',gram:'Prät.: öffnete · Perf.: hat geöffnet · untrennbar · schwaches Verb · Gegenteil: schließen'},
+  {ch:7,type:'V',de:'speichern',en:'to save (computer)',extra:'er speichert · speicherte',ex:'Bitte speichern Sie die Datei.',exEn:'Please save the file.',gram:'Prät.: speicherte · Perf.: hat gespeichert · untrennbar · schwaches Verb'},
+  {ch:7,type:'V',de:'drucken',en:'to print',extra:'er druckt · druckte',ex:'Ich drucke das Dokument.',exEn:'I am printing the document.',gram:'Prät.: druckte · Perf.: hat gedruckt · untrennbar · schwaches Verb'},
+  {ch:7,type:'V',de:'reden',en:'to talk / speak (informal)',extra:'er redet · redete',ex:'Wir reden über das Wetter.',exEn:'We are talking about the weather.',gram:'Prät.: redete · Perf.: hat geredet · untrennbar · informeller als \'sprechen\''},
+  {ch:7,type:'V',de:'diskutieren',en:'to discuss',extra:'er diskutiert · diskutierte',ex:'Wir diskutieren das Thema.',exEn:'We are discussing the topic.',gram:'Prät.: diskutierte · Perf.: hat diskutiert · untrennbar · über + Akkusativ'},
+  {ch:7,type:'V',de:'anrufen',en:'to call (phone)',extra:'er ruft an · rief an',ex:'Ich rufe morgen an.',exEn:'I will call tomorrow.',gram:'Prät.: rief an · Perf.: hat angerufen · TRENNBAR: ruft...an · starkes Verb'},
+  {ch:7,type:'V',de:'aufmachen',en:'to open (door/window)',extra:'er macht auf · machte auf',ex:'Mach bitte die Tür auf!',exEn:'Please open the door!',gram:'Prät.: machte auf · Perf.: hat aufgemacht · TRENNBAR: macht...auf'},
+  {ch:7,type:'V',de:'zumachen',en:'to close',extra:'er macht zu · machte zu',ex:'Mach das Fenster zu!',exEn:'Close the window!',gram:'Prät.: machte zu · Perf.: hat zugemacht · TRENNBAR: macht...zu · Gegenteil: aufmachen'},
+  {ch:7,type:'ADV',de:'endlich',en:'finally',extra:'—',ex:'Das Projekt ist endlich fertig!',exEn:'The project is finally finished!',gram:'Modaladverb · Erleichterung / lange gewartet'},
+  {ch:7,type:'ADV',de:'sofort',en:'immediately / right away',extra:'—',ex:'Ich komme sofort!',exEn:'I am coming right away!',gram:'Zeitadverb · sehr bald, ohne Verzögerung'},
+  {ch:7,type:'ADV',de:'normalerweise',en:'normally / usually',extra:'—',ex:'Normalerweise arbeite ich bis 17 Uhr.',exEn:'Normally I work until 5 pm.',gram:'Modaladverb · = in der Regel'},
+  {ch:7,type:'PHR',de:'Auf Wiederhören!',en:'Goodbye! (on phone)',extra:'am Telefon',ex:'Auf Wiederhören, Herr Müller!',exEn:'Goodbye, Mr Müller! (on phone)',gram:'Register: formell · NUR am Telefon · hören statt sehen'},
+  {ch:7,type:'PHR',de:'Einen Moment, bitte!',en:'One moment, please!',extra:'am Telefon',ex:'Einen Moment, bitte!',exEn:'One moment, please!',gram:'Register: neutral · Akkusativ: einen Moment'},
+  {ch:7,type:'PHR',de:'Mit freundlichen Grüßen',en:'Yours sincerely',extra:'formeller Briefabschluss',ex:'Mit freundlichen Grüßen, S. Khan',exEn:'Yours sincerely, S. Khan',gram:'Register: formell · immer am Ende formeller E-Mails/Briefe'},
+  {ch:7,type:'PHR',de:'Sehr geehrte Damen und Herren',en:'Dear Sir or Madam',extra:'formelle Briefanrede',ex:'Sehr geehrte Damen und Herren, ...',exEn:'Dear Sir or Madam, ...',gram:'Register: sehr formell · wenn Empfänger unbekannt'},
+  {ch:8,type:'N',de:'der Bauch, -e',en:'stomach / belly',extra:'Pl.: Bäuche',ex:'Mein Bauch tut weh.',exEn:'My stomach hurts.',gram:'Genus: maskulin · Umlaut im Plural · Bauchschmerzen haben'},
+  {ch:8,type:'N',de:'das Bein, -e',en:'leg',extra:'Pl.: Beine',ex:'Mein Bein ist verletzt.',exEn:'My leg is injured.',gram:'Genus: neutrum'},
+  {ch:8,type:'N',de:'der Finger, -',en:'finger',extra:'Pl.: Finger (gleich)',ex:'Der Finger tut weh.',exEn:'The finger hurts.',gram:'Genus: maskulin · Pl. = Sg. · 5 Finger pro Hand'},
+  {ch:8,type:'N',de:'der Fuß, -e',en:'foot',extra:'Pl.: Füße',ex:'Mein Fuß tut weh.',exEn:'My foot hurts.',gram:'Genus: maskulin · Umlaut im Plural · zu Fuß gehen'},
+  {ch:8,type:'N',de:'der Hals, -e',en:'neck / throat',extra:'Pl.: Hälse',ex:'Mein Hals tut weh.',exEn:'My throat hurts.',gram:'Genus: maskulin · Umlaut im Plural · Halsschmerzen haben'},
+  {ch:8,type:'N',de:'die Hand, -e',en:'hand',extra:'Pl.: Hände',ex:'Ich wasche die Hände.',exEn:'I wash my hands.',gram:'Genus: feminin · Umlaut im Plural'},
+  {ch:8,type:'N',de:'das Knie, -',en:'knee',extra:'Pl.: Knie (gleich)',ex:'Mein Knie ist verletzt.',exEn:'My knee is injured.',gram:'Genus: neutrum · Pl. = Sg.'},
+  {ch:8,type:'N',de:'der Kopf, -e',en:'head',extra:'Pl.: Köpfe',ex:'Ich habe Kopfschmerzen.',exEn:'I have a headache.',gram:'Genus: maskulin · Umlaut im Plural · Kopfschmerzen (Pl.)'},
+  {ch:8,type:'N',de:'der Körper, -',en:'body',extra:'Pl.: Körper (gleich)',ex:'Sport ist gut für den Körper.',exEn:'Sport is good for the body.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:8,type:'N',de:'der Rücken, -',en:'back',extra:'Pl.: Rücken (gleich)',ex:'Mein Rücken tut weh.',exEn:'My back hurts.',gram:'Genus: maskulin · Pl. = Sg. · Rückenschmerzen (Pl.)'},
+  {ch:8,type:'N',de:'das Auge, -n',en:'eye',extra:'Pl.: Augen',ex:'Seine Augen sind blau.',exEn:'His eyes are blue.',gram:'Genus: neutrum'},
+  {ch:8,type:'N',de:'das Gesicht, -er',en:'face',extra:'Pl.: Gesichter',ex:'Das Gesicht ist rot.',exEn:'The face is red.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:8,type:'N',de:'das Haar, -e',en:'hair',extra:'Pl.: Haare',ex:'Ihre Haare sind lang.',exEn:'Her hair is long.',gram:'Genus: neutrum · meist im Plural: die Haare'},
+  {ch:8,type:'N',de:'der Mund, -er',en:'mouth',extra:'Pl.: Münder',ex:'Bitte Mund auf!',exEn:'Please open your mouth!',gram:'Genus: maskulin · Umlaut im Plural'},
+  {ch:8,type:'N',de:'die Nase, -n',en:'nose',extra:'Pl.: Nasen',ex:'Meine Nase ist verstopft.',exEn:'My nose is blocked.',gram:'Genus: feminin'},
+  {ch:8,type:'N',de:'das Ohr, -en',en:'ear',extra:'Pl.: Ohren',ex:'Mein Ohr tut weh.',exEn:'My ear hurts.',gram:'Genus: neutrum · Ohrenschmerzen (Pl.)'},
+  {ch:8,type:'N',de:'der Zahn, -e',en:'tooth',extra:'Pl.: Zähne',ex:'Ich habe Zahnschmerzen.',exEn:'I have toothache.',gram:'Genus: maskulin · Umlaut im Plural · Zahnschmerzen (Pl.)'},
+  {ch:8,type:'N',de:'der Unfall, -e',en:'accident',extra:'Pl.: Unfälle',ex:'Er hatte einen Unfall.',exEn:'He had an accident.',gram:'Genus: maskulin · Umlaut im Plural · einen Unfall haben'},
+  {ch:8,type:'N',de:'die Apotheke, -n',en:'pharmacy',extra:'Pl.: Apotheken',ex:'Ich gehe in die Apotheke.',exEn:'I am going to the pharmacy.',gram:'Genus: feminin · in die Apotheke (Akkusativ)'},
+  {ch:8,type:'N',de:'das Rezept, -e',en:'prescription / recipe',extra:'Pl.: Rezepte',ex:'Der Arzt gibt mir ein Rezept.',exEn:'The doctor gives me a prescription.',gram:'Genus: neutrum · 2 Bedeutungen: 1) Rezept (Arzt) 2) Kochrezept'},
+  {ch:8,type:'N',de:'der Schmerz, -en',en:'pain',extra:'Pl.: Schmerzen',ex:'Ich habe starke Schmerzen.',exEn:'I have strong pain.',gram:'Genus: maskulin · meist im Plural: die Schmerzen · Schmerzen haben'},
+  {ch:8,type:'N',de:'das Fieber (Sg.)',en:'fever',extra:'nur Singular',ex:'Ich habe Fieber.',exEn:'I have a fever.',gram:'Genus: neutrum · kein Plural · Fieber haben · Fieber messen'},
+  {ch:8,type:'N',de:'der Hustensaft, -e',en:'cough syrup',extra:'Pl.: Hustensäfte',ex:'Nehmen Sie den Hustensaft.',exEn:'Take the cough syrup.',gram:'Genus: maskulin · Umlaut im Plural · Kompositum: husten + Saft'},
+  {ch:8,type:'N',de:'die Halsschmerzen (Pl.)',en:'sore throat',extra:'nur Plural',ex:'Ich habe Halsschmerzen.',exEn:'I have a sore throat.',gram:'nur Plural · Halsschmerzen haben (feste Wendung)'},
+  {ch:8,type:'N',de:'die Kopfschmerzen (Pl.)',en:'headache',extra:'nur Plural',ex:'Ich habe Kopfschmerzen.',exEn:'I have a headache.',gram:'nur Plural · Kompositum: Kopf + Schmerzen'},
+  {ch:8,type:'N',de:'die Rückenschmerzen (Pl.)',en:'back pain',extra:'nur Plural',ex:'Ich habe Rückenschmerzen.',exEn:'I have back pain.',gram:'nur Plural · Kompositum: Rücken + Schmerzen'},
+  {ch:8,type:'N',de:'die Bauchschmerzen (Pl.)',en:'stomach ache',extra:'nur Plural',ex:'Ich habe Bauchschmerzen.',exEn:'I have stomach ache.',gram:'nur Plural · Kompositum: Bauch + Schmerzen'},
+  {ch:8,type:'N',de:'die Zahnschmerzen (Pl.)',en:'toothache',extra:'nur Plural',ex:'Ich habe Zahnschmerzen.',exEn:'I have toothache.',gram:'nur Plural · Kompositum: Zahn + Schmerzen'},
+  {ch:8,type:'N',de:'der Honig (Sg.)',en:'honey',extra:'meist Singular',ex:'Honig hilft gegen Halsschmerzen.',exEn:'Honey helps with sore throats.',gram:'Genus: maskulin · kein Plural · gegen + Akkusativ'},
+  {ch:8,type:'N',de:'die Hühnersuppe, -n',en:'chicken soup',extra:'Pl.: Hühnersuppen',ex:'Hühnersuppe ist ein Hausmittel.',exEn:'Chicken soup is a home remedy.',gram:'Genus: feminin · Kompositum: Huhn + Suppe'},
+  {ch:8,type:'N',de:'der Schnupfen, -',en:'common cold / runny nose',extra:'Pl.: Schnupfen (gleich)',ex:'Ich habe Schnupfen.',exEn:'I have a cold.',gram:'Genus: maskulin · Pl. = Sg. · Schnupfen haben'},
+  {ch:8,type:'N',de:'das Hausmittel, -',en:'home remedy',extra:'Pl.: Hausmittel (gleich)',ex:'Honig ist ein gutes Hausmittel.',exEn:'Honey is a good home remedy.',gram:'Genus: neutrum · Pl. = Sg. · Kompositum: Haus + Mittel'},
+  {ch:8,type:'N',de:'das Pflaster, -',en:'plaster / band-aid',extra:'Pl.: Pflaster (gleich)',ex:'Ich brauche ein Pflaster.',exEn:'I need a plaster.',gram:'Genus: neutrum · Pl. = Sg. · ein Pflaster kleben'},
+  {ch:8,type:'N',de:'die Salbe, -n',en:'ointment / salve',extra:'Pl.: Salben',ex:'Ich benutze eine Salbe.',exEn:'I am using an ointment.',gram:'Genus: feminin · Salbe auftragen'},
+  {ch:8,type:'N',de:'der Verband, -e',en:'bandage',extra:'Pl.: Verbände',ex:'Der Arzt macht einen Verband.',exEn:'The doctor puts on a bandage.',gram:'Genus: maskulin · Umlaut im Plural · einen Verband anlegen'},
+  {ch:8,type:'N',de:'die Anweisung, -en',en:'instruction / direction',extra:'Pl.: Anweisungen',ex:'Der Arzt gibt Anweisungen.',exEn:'The doctor gives instructions.',gram:'Genus: feminin · Anweisungen geben/befolgen'},
+  {ch:8,type:'N',de:'das Blut (Sg.)',en:'blood',extra:'nur Singular',ex:'Der Arzt nimmt Blut ab.',exEn:'The doctor takes blood.',gram:'Genus: neutrum · kein Plural · Blut abnehmen'},
+  {ch:8,type:'N',de:'die Übung, -en',en:'exercise / practice',extra:'Pl.: Übungen',ex:'Diese Übung ist schwer.',exEn:'This exercise is difficult.',gram:'Genus: feminin · eine Übung machen'},
+  {ch:8,type:'N',de:'der Sportschuh, -e',en:'trainer / sport shoe',extra:'Pl.: Sportschuhe',ex:'Ich kaufe neue Sportschuhe.',exEn:'I am buying new trainers.',gram:'Genus: maskulin · Kompositum: Sport + Schuh'},
+  {ch:8,type:'V',de:'schlafen',en:'to sleep',extra:'er schläft · schlief',ex:'Das Baby schläft.',exEn:'The baby is sleeping.',gram:'Prät.: schlief · Perf.: hat geschlafen · untrennbar · Vokalwechsel a→ä · starkes Verb'},
+  {ch:8,type:'V',de:'weh tun',en:'to hurt / ache',extra:'es tut weh · tat weh',ex:'Mein Kopf tut weh.',exEn:'My head hurts.',gram:'Prät.: tat weh · Perf.: hat wehgetan · TRENNBAR: tut...weh · ACHTUNG: weh=Adverb!'},
+  {ch:8,type:'V',de:'untersuchen',en:'to examine / investigate',extra:'er untersucht · untersuchte',ex:'Der Arzt untersucht den Patienten.',exEn:'The doctor examines the patient.',gram:'Prät.: untersuchte · Perf.: hat untersucht · untrennbar (unter- Präfix)'},
+  {ch:8,type:'V',de:'rauchen',en:'to smoke',extra:'er raucht · rauchte',ex:'Hier darf man nicht rauchen.',exEn:'Smoking is not allowed here.',gram:'Prät.: rauchte · Perf.: hat geraucht · untrennbar · schwaches Verb'},
+  {ch:8,type:'V',de:'bewegen (sich)',en:'to move (oneself)',extra:'er bewegt · bewegte',ex:'Bitte bewegen Sie den Arm.',exEn:'Please move your arm.',gram:'Prät.: bewegte · Perf.: hat bewegt · untrennbar (be- Präfix)'},
+  {ch:8,type:'V',de:'husten',en:'to cough',extra:'er hustet · hustete',ex:'Er hustet die ganze Nacht.',exEn:'He coughs all night.',gram:'Prät.: hustete · Perf.: hat gehustet · untrennbar · schwaches Verb'},
+  {ch:8,type:'A',de:'krank',en:'sick / ill',extra:'Komp.: kränker',ex:'Er ist krank.',exEn:'He is sick.',gram:'Gegenteil: gesund · Umlaut im Komparativ'},
+  {ch:8,type:'A',de:'gesund',en:'healthy',extra:'Komp.: gesünder',ex:'Das Obst ist gesund.',exEn:'Fruit is healthy.',gram:'Gegenteil: krank · Umlaut im Komparativ'},
+  {ch:8,type:'A',de:'müde',en:'tired',extra:'Komp.: müder',ex:'Ich bin müde.',exEn:'I am tired.',gram:'Gegenteil: fit / wach · von Müdigkeit: erschöpft (stärker)'},
+  {ch:8,type:'A',de:'fit',en:'fit / in shape',extra:'Komp.: fitter',ex:'Ich bin sehr fit.',exEn:'I am very fit.',gram:'aus Englisch · Sport treiben = fit bleiben'},
+  {ch:8,type:'ADV',de:'regelmäßig',en:'regularly',extra:'—',ex:'Ich treibe regelmäßig Sport.',exEn:'I do sports regularly.',gram:'Häufigkeitsadverb · = auf regelmäßiger Basis'},
+  {ch:8,type:'ADV',de:'täglich',en:'daily',extra:'—',ex:'Ich lerne täglich Deutsch.',exEn:'I study German daily.',gram:'Zeitadverb · = jeden Tag · von: der Tag'},
+  {ch:8,type:'PHR',de:'Gute Besserung!',en:'Get well soon!',extra:'bei Krankheit',ex:'Du bist krank? Gute Besserung!',exEn:'You\'re sick? Get well soon!',gram:'Register: neutral · häufiger Wunsch bei Krankheit'},
+  {ch:8,type:'PHR',de:'Mir ist schlecht.',en:'I feel sick / nauseous.',extra:'Befinden',ex:'Mir ist schlecht. Ich brauche einen Arzt.',exEn:'I feel sick. I need a doctor.',gram:'Dativ: mir · Adjektiv: schlecht · ≠ Ich bin schlecht (= I am bad)'},
+  {ch:8,type:'PHR',de:'Ich habe Schmerzen.',en:'I am in pain.',extra:'beim Arzt',ex:'Ich habe Schmerzen im Rücken.',exEn:'I have pain in my back.',gram:'Schmerzen haben (feste Wendung) · Schmerzen im + Dativ'},
+  {ch:9,type:'N',de:'das Arbeitszimmer, -',en:'home office / study',extra:'Pl.: Arbeitszimmer (gleich)',ex:'Er arbeitet im Arbeitszimmer.',exEn:'He works in the study.',gram:'Genus: neutrum · Pl. = Sg. · im Arbeitszimmer (Dativ)'},
+  {ch:9,type:'N',de:'das Bad, -er',en:'bathroom',extra:'Pl.: Bäder',ex:'Das Bad ist groß.',exEn:'The bathroom is large.',gram:'Genus: neutrum · Umlaut im Plural · auch: das Badezimmer'},
+  {ch:9,type:'N',de:'der Balkon, -e',en:'balcony',extra:'Pl.: Balkone',ex:'Wir sitzen auf dem Balkon.',exEn:'We are sitting on the balcony.',gram:'Genus: maskulin · auf dem Balkon (Dativ)'},
+  {ch:9,type:'N',de:'der Fernseher, -',en:'television set',extra:'Pl.: Fernseher (gleich)',ex:'Der Fernseher ist neu.',exEn:'The television is new.',gram:'Genus: maskulin · Pl. = Sg. · fernsehen (Verb, trennbar)'},
+  {ch:9,type:'N',de:'der Herd, -e',en:'stove / cooker',extra:'Pl.: Herde',ex:'Der Herd ist in der Küche.',exEn:'The stove is in the kitchen.',gram:'Genus: maskulin · am Herd kochen'},
+  {ch:9,type:'N',de:'die Kaffeemaschine, -n',en:'coffee machine',extra:'Pl.: Kaffeemaschinen',ex:'Die Kaffeemaschine ist neu.',exEn:'The coffee machine is new.',gram:'Genus: feminin · Kompositum'},
+  {ch:9,type:'N',de:'die Küche, -n',en:'kitchen',extra:'Pl.: Küchen',ex:'Die Küche ist modern.',exEn:'The kitchen is modern.',gram:'Genus: feminin · in der Küche (Dativ) · auch: das Kochfeld'},
+  {ch:9,type:'N',de:'der Kühlschrank, -e',en:'refrigerator / fridge',extra:'Pl.: Kühlschränke',ex:'Der Kühlschrank ist leer.',exEn:'The refrigerator is empty.',gram:'Genus: maskulin · Umlaut im Plural · Kompositum: kühlen + Schrank'},
+  {ch:9,type:'N',de:'die Lampe, -n',en:'lamp',extra:'Pl.: Lampen',ex:'Die Lampe ist schön.',exEn:'The lamp is beautiful.',gram:'Genus: feminin'},
+  {ch:9,type:'N',de:'die Möbel (Pl.)',en:'furniture',extra:'nur Plural',ex:'Die Möbel sind neu.',exEn:'The furniture is new.',gram:'nur Plural · Sg.: das Möbelstück (einzelnes Möbel)'},
+  {ch:9,type:'N',de:'das Regal, -e',en:'shelf / shelving unit',extra:'Pl.: Regale',ex:'Das Regal ist voll.',exEn:'The shelf is full.',gram:'Genus: neutrum'},
+  {ch:9,type:'N',de:'das Schlafzimmer, -',en:'bedroom',extra:'Pl.: Schlafzimmer (gleich)',ex:'Das Schlafzimmer ist ruhig.',exEn:'The bedroom is quiet.',gram:'Genus: neutrum · Pl. = Sg. · Kompositum: schlafen + Zimmer'},
+  {ch:9,type:'N',de:'der Schrank, -e',en:'wardrobe / cupboard',extra:'Pl.: Schränke',ex:'Der Schrank ist groß.',exEn:'The wardrobe is large.',gram:'Genus: maskulin · Umlaut im Plural · Kleiderschrank / Bücherschrank'},
+  {ch:9,type:'N',de:'der Schreibtisch, -e',en:'desk',extra:'Pl.: Schreibtische',ex:'Der Schreibtisch steht am Fenster.',exEn:'The desk is by the window.',gram:'Genus: maskulin · Kompositum: schreiben + Tisch'},
+  {ch:9,type:'N',de:'der Sessel, -',en:'armchair',extra:'Pl.: Sessel (gleich)',ex:'Der Sessel ist bequem.',exEn:'The armchair is comfortable.',gram:'Genus: maskulin · Pl. = Sg. · hat Armlehnen (armrests)'},
+  {ch:9,type:'N',de:'das Sofa, -s',en:'sofa / couch',extra:'Pl.: Sofas',ex:'Das Sofa ist rot.',exEn:'The sofa is red.',gram:'Genus: neutrum · aus Arabisch'},
+  {ch:9,type:'N',de:'die Spülmaschine, -n',en:'dishwasher',extra:'Pl.: Spülmaschinen',ex:'Die Spülmaschine ist voll.',exEn:'The dishwasher is full.',gram:'Genus: feminin · Kompositum: spülen + Maschine'},
+  {ch:9,type:'N',de:'der Stuhl, -e',en:'chair',extra:'Pl.: Stühle',ex:'Der Stuhl ist bequem.',exEn:'The chair is comfortable.',gram:'Genus: maskulin · Umlaut im Plural · ohne Armlehnen'},
+  {ch:9,type:'N',de:'der Teppich, -e',en:'carpet / rug',extra:'Pl.: Teppiche',ex:'Der Teppich ist blau.',exEn:'The carpet is blue.',gram:'Genus: maskulin'},
+  {ch:9,type:'N',de:'die Toilette, -n',en:'toilet',extra:'Pl.: Toiletten',ex:'Die Toilette ist links.',exEn:'The toilet is on the left.',gram:'Genus: feminin · auch: das WC, die Klo (informell)'},
+  {ch:9,type:'N',de:'die Waschmaschine, -n',en:'washing machine',extra:'Pl.: Waschmaschinen',ex:'Die Waschmaschine läuft.',exEn:'The washing machine is running.',gram:'Genus: feminin · Kompositum: waschen + Maschine'},
+  {ch:9,type:'N',de:'die Wohnung, -en',en:'flat / apartment',extra:'Pl.: Wohnungen',ex:'Die Wohnung ist schön.',exEn:'The apartment is beautiful.',gram:'Genus: feminin · in der Wohnung (Dativ)'},
+  {ch:9,type:'N',de:'das Wohnzimmer, -',en:'living room',extra:'Pl.: Wohnzimmer (gleich)',ex:'Wir sitzen im Wohnzimmer.',exEn:'We are sitting in the living room.',gram:'Genus: neutrum · Pl. = Sg. · Kompositum: wohnen + Zimmer'},
+  {ch:9,type:'N',de:'die Pflanze, -n',en:'plant',extra:'Pl.: Pflanzen',ex:'Die Pflanze braucht Wasser.',exEn:'The plant needs water.',gram:'Genus: feminin'},
+  {ch:9,type:'N',de:'die Miete, -n',en:'rent',extra:'Pl.: Mieten',ex:'Die Miete ist hoch.',exEn:'The rent is high.',gram:'Genus: feminin · Miete zahlen/bezahlen'},
+  {ch:9,type:'N',de:'die Dusche, -n',en:'shower',extra:'Pl.: Duschen',ex:'Ich dusche jeden Morgen.',exEn:'I shower every morning.',gram:'Genus: feminin · duschen (Verb)'},
+  {ch:9,type:'N',de:'der Vermieter, -',en:'landlord',extra:'Pl.: Vermieter (gleich)',ex:'Der Vermieter ist nett.',exEn:'The landlord is nice.',gram:'Genus: maskulin · Pl. = Sg. · von: vermieten'},
+  {ch:9,type:'N',de:'die Vermieterin, -nen',en:'landlady',extra:'Pl.: Vermieterinnen',ex:'Die Vermieterin ruft an.',exEn:'The landlady calls.',gram:'Genus: feminin'},
+  {ch:9,type:'N',de:'der Vertrag, -e',en:'contract',extra:'Pl.: Verträge',ex:'Ich unterschreibe den Vertrag.',exEn:'I am signing the contract.',gram:'Genus: maskulin · Umlaut im Plural · Vertrag unterschreiben'},
+  {ch:9,type:'N',de:'die Tür, -en',en:'door',extra:'Pl.: Türen',ex:'Die Tür ist offen.',exEn:'The door is open.',gram:'Genus: feminin · die Tür auf/zumachen'},
+  {ch:9,type:'N',de:'der Garten, -',en:'garden',extra:'Pl.: Gärten',ex:'Der Garten ist schön.',exEn:'The garden is beautiful.',gram:'Genus: maskulin · Umlaut im Plural · im Garten (Dativ)'},
+  {ch:9,type:'N',de:'die Treppe, -n',en:'stairs / staircase',extra:'Pl.: Treppen',ex:'Die Treppe ist steil.',exEn:'The staircase is steep.',gram:'Genus: feminin · die Treppe hochgehen'},
+  {ch:9,type:'N',de:'der Raum, -e',en:'room (general)',extra:'Pl.: Räume',ex:'Die Wohnung hat vier Räume.',exEn:'The apartment has four rooms.',gram:'Genus: maskulin · Umlaut im Plural · allgemeiner als Zimmer'},
+  {ch:9,type:'N',de:'die Decke, -n',en:'ceiling',extra:'Pl.: Decken',ex:'Die Decke ist sehr hoch.',exEn:'The ceiling is very high.',gram:'Genus: feminin · 2 Bedeutungen: ceiling + blanket'},
+  {ch:9,type:'N',de:'das Hochhaus, -er',en:'skyscraper / high-rise',extra:'Pl.: Hochhäuser',ex:'Das Hochhaus hat 20 Stockwerke.',exEn:'The skyscraper has 20 floors.',gram:'Genus: neutrum · Umlaut im Plural · Kompositum: hoch + Haus'},
+  {ch:9,type:'N',de:'das Reihenhaus, -er',en:'terraced house',extra:'Pl.: Reihenhäuser',ex:'Sie wohnen in einem Reihenhaus.',exEn:'They live in a terraced house.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:9,type:'N',de:'der Vorteil, -e',en:'advantage',extra:'Pl.: Vorteile',ex:'Ein Vorteil ist der Garten.',exEn:'An advantage is the garden.',gram:'Genus: maskulin · Gegenteil: der Nachteil'},
+  {ch:9,type:'N',de:'der Nachteil, -e',en:'disadvantage',extra:'Pl.: Nachteile',ex:'Ein Nachteil ist die Miete.',exEn:'A disadvantage is the rent.',gram:'Genus: maskulin · Gegenteil: der Vorteil'},
+  {ch:9,type:'V',de:'umziehen',en:'to move (home)',extra:'er zieht um · zog um',ex:'Wir ziehen nach Berlin um.',exEn:'We are moving to Berlin.',gram:'Prät.: zog um · Perf.: ist umgezogen · TRENNBAR: zieht...um · Hilfsverb: sein'},
+  {ch:9,type:'V',de:'vermieten',en:'to rent out',extra:'er vermietet · vermietete',ex:'Er vermietet die Wohnung.',exEn:'He is renting out the apartment.',gram:'Prät.: vermietete · Perf.: hat vermietet · untrennbar (ver- Präfix)'},
+  {ch:9,type:'V',de:'unterschreiben',en:'to sign',extra:'er unterschreibt · unterschrieb',ex:'Ich unterschreibe den Vertrag.',exEn:'I am signing the contract.',gram:'Prät.: unterschrieb · Perf.: hat unterschrieben · untrennbar · starkes Verb'},
+  {ch:9,type:'V',de:'stellen',en:'to put / place (upright)',extra:'er stellt · stellte',ex:'Ich stelle das Buch ins Regal.',exEn:'I put the book on the shelf.',gram:'Prät.: stellte · Perf.: hat gestellt · untrennbar · + Akkusativ + Ortsangabe · RICHTUNG'},
+  {ch:9,type:'V',de:'hängen',en:'to hang (place/position)',extra:'er hängt · hing/hängte',ex:'Ich hänge das Bild an die Wand.',exEn:'I hang the picture on the wall.',gram:'Prät.: hing (sein) / hängte (haben) · starkes (intrans.) / schwaches (trans.) · komplex!'},
+  {ch:9,type:'V',de:'liegen',en:'to lie / be located',extra:'er liegt · lag',ex:'Das Buch liegt auf dem Tisch.',exEn:'The book is on the table.',gram:'Prät.: lag · Perf.: hat gelegen · untrennbar · Lage (Ort, kein Akkusativ) · starkes Verb'},
+  {ch:9,type:'A',de:'hell',en:'bright / light (colour)',extra:'Komp.: heller',ex:'Die Wohnung ist hell.',exEn:'The apartment is bright.',gram:'Gegenteil: dunkel · hell + Farbe: hellblau, hellgrün'},
+  {ch:9,type:'A',de:'dunkel',en:'dark',extra:'Komp.: dunkler',ex:'Das Zimmer ist dunkel.',exEn:'The room is dark.',gram:'Gegenteil: hell · dunkel + Farbe: dunkelblau'},
+  {ch:9,type:'A',de:'günstig',en:'affordable / cheap',extra:'Komp.: günstiger',ex:'Die Miete ist günstig.',exEn:'The rent is affordable.',gram:'auch: preiswert · Gegenteil: teuer'},
+  {ch:9,type:'A',de:'gemütlich',en:'comfortable / cosy',extra:'Komp.: gemütlicher',ex:'Das Sofa ist gemütlich.',exEn:'The sofa is cosy.',gram:'typisch deutsches Konzept · auch: gemütliche Atmosphäre'},
+  {ch:9,type:'A',de:'schwarz',en:'black',extra:'Komp.: schwärzer',ex:'Der Tisch ist schwarz.',exEn:'The table is black.',gram:'Farbadjektiv · keine Großschreibung als Adjektiv'},
+  {ch:9,type:'A',de:'weiß',en:'white',extra:'Komp.: weißer',ex:'Die Wand ist weiß.',exEn:'The wall is white.',gram:'Farbadjektiv'},
+  {ch:9,type:'A',de:'grau',en:'grey',extra:'Komp.: grauer',ex:'Das Sofa ist grau.',exEn:'The sofa is grey.',gram:'Farbadjektiv'},
+  {ch:9,type:'A',de:'gelb',en:'yellow',extra:'Komp.: gelber',ex:'Die Lampe ist gelb.',exEn:'The lamp is yellow.',gram:'Farbadjektiv'},
+  {ch:9,type:'A',de:'braun',en:'brown',extra:'Komp.: brauner',ex:'Der Tisch ist braun.',exEn:'The table is brown.',gram:'Farbadjektiv'},
+  {ch:9,type:'A',de:'lila',en:'purple',extra:'unveränderlich',ex:'Der Teppich ist lila.',exEn:'The carpet is purple.',gram:'Farbadjektiv · UNVERÄNDERLICH: kein -e, -er, -en! · auch: violett'},
+  {ch:9,type:'ADV',de:'oben',en:'above / upstairs',extra:'—',ex:'Das Zimmer ist oben.',exEn:'The room is upstairs.',gram:'Ortsadverb · Gegenteil: unten · nach oben gehen (Richtung)'},
+  {ch:9,type:'ADV',de:'unten',en:'below / downstairs',extra:'—',ex:'Die Küche ist unten.',exEn:'The kitchen is downstairs.',gram:'Ortsadverb · Gegenteil: oben · nach unten (Richtung)'},
+  {ch:9,type:'ADV',de:'zurzeit',en:'currently / at the moment',extra:'—',ex:'Wir suchen zurzeit eine Wohnung.',exEn:'We are currently looking for a flat.',gram:'Zeitadverb · = im Moment · auch: zur Zeit'},
+  {ch:9,type:'PHR',de:'Herzlichen Glückwunsch!',en:'Congratulations!',extra:'Gratulation',ex:'Herzlichen Glückwunsch zur neuen Wohnung!',exEn:'Congratulations on the new flat!',gram:'Register: neutral · + zu + Dativ · Akkusativ: herzlichen (adj.)'},
+  {ch:10,type:'N',de:'das Studium, Studien',en:'studies (at university)',extra:'Pl.: Studien',ex:'Das Studium dauert vier Jahre.',exEn:'The studies last four years.',gram:'Genus: neutrum · unregelmäßiger Plural · studieren (Verb)'},
+  {ch:10,type:'N',de:'die Karriere, -n',en:'career',extra:'Pl.: Karrieren',ex:'Sie hat eine gute Karriere.',exEn:'She has a good career.',gram:'Genus: feminin · aus Französisch'},
+  {ch:10,type:'N',de:'der Arbeitsplatz, -e',en:'workplace / job',extra:'Pl.: Arbeitsplätze',ex:'Mein Arbeitsplatz ist im Büro.',exEn:'My workplace is in the office.',gram:'Genus: maskulin · Umlaut im Plural · Kompositum'},
+  {ch:10,type:'N',de:'der Feierabend, -e',en:'end of working day',extra:'Pl.: Feierabende',ex:'Schönen Feierabend!',exEn:'Have a nice end of the day!',gram:'Genus: maskulin · Feierabend machen = work done for the day'},
+  {ch:10,type:'N',de:'der Professor, -en',en:'professor',extra:'Pl.: Professoren',ex:'Der Professor gibt Unterricht.',exEn:'The professor teaches.',gram:'Genus: maskulin · schwaches Nomen'},
+  {ch:10,type:'N',de:'das Projekt, -e',en:'project',extra:'Pl.: Projekte',ex:'Das Projekt ist fertig.',exEn:'The project is finished.',gram:'Genus: neutrum · aus Lateinisch'},
+  {ch:10,type:'N',de:'das Semester, -',en:'semester',extra:'Pl.: Semester (gleich)',ex:'Das Semester beginnt im Oktober.',exEn:'The semester starts in October.',gram:'Genus: neutrum · Pl. = Sg. · aus Lateinisch'},
+  {ch:10,type:'N',de:'die Prüfung, -en',en:'exam / test',extra:'Pl.: Prüfungen',ex:'Die Prüfung ist schwer.',exEn:'The exam is difficult.',gram:'Genus: feminin · eine Prüfung machen/ablegen'},
+  {ch:10,type:'N',de:'die Bewerbung, -en',en:'job application',extra:'Pl.: Bewerbungen',ex:'Ich schreibe eine Bewerbung.',exEn:'I am writing a job application.',gram:'Genus: feminin · von: sich bewerben (um + Akk.)'},
+  {ch:10,type:'N',de:'der Job, -s',en:'job',extra:'Pl.: Jobs',ex:'Ich suche einen Job.',exEn:'I am looking for a job.',gram:'Genus: maskulin · aus Englisch · informeller als \'die Stelle\''},
+  {ch:10,type:'N',de:'das Internet (Sg.)',en:'internet',extra:'nur Singular',ex:'Ich suche im Internet.',exEn:'I am searching on the internet.',gram:'Genus: neutrum · im Internet (Dativ)'},
+  {ch:10,type:'N',de:'die Stelle, -n',en:'position / job vacancy',extra:'Pl.: Stellen',ex:'Ich habe eine neue Stelle.',exEn:'I have a new position.',gram:'Genus: feminin · formeller als \'Job\''},
+  {ch:10,type:'N',de:'die Oper, -n',en:'opera',extra:'Pl.: Opern',ex:'Wir gehen in die Oper.',exEn:'We are going to the opera.',gram:'Genus: feminin · in die Oper gehen'},
+  {ch:10,type:'N',de:'der Anruf, -e',en:'phone call',extra:'Pl.: Anrufe',ex:'Ich bekomme einen Anruf.',exEn:'I am getting a phone call.',gram:'Genus: maskulin · von: anrufen (TRENNBAR) · einen Anruf bekommen/machen'},
+  {ch:10,type:'N',de:'die Baustelle, -n',en:'construction site',extra:'Pl.: Baustellen',ex:'Auf der Baustelle wird gebaut.',exEn:'On the construction site they are building.',gram:'Genus: feminin · Achtung: Baustelle! (warning sign)'},
+  {ch:10,type:'N',de:'das Kaufhaus, -er',en:'department store',extra:'Pl.: Kaufhäuser',ex:'Ich kaufe im Kaufhaus ein.',exEn:'I shop at the department store.',gram:'Genus: neutrum · Umlaut im Plural · Kompositum: kaufen + Haus'},
+  {ch:10,type:'N',de:'die Werkstatt, -en',en:'workshop / garage',extra:'Pl.: Werkstätten',ex:'Das Auto ist in der Werkstatt.',exEn:'The car is in the garage.',gram:'Genus: feminin · Umlaut im Plural'},
+  {ch:10,type:'N',de:'die Aufgabe, -n',en:'task / assignment / exercise',extra:'Pl.: Aufgaben',ex:'Die Aufgabe ist schwer.',exEn:'The task is difficult.',gram:'Genus: feminin · eine Aufgabe erledigen/machen'},
+  {ch:10,type:'N',de:'die Nachrichten (Pl.)',en:'news',extra:'meist Plural',ex:'Er liest die Nachrichten.',exEn:'He reads the news.',gram:'meist Plural · Sg.: die Nachricht (message)'},
+  {ch:10,type:'N',de:'der Spaziergang, -e',en:'walk',extra:'Pl.: Spaziergänge',ex:'Wir machen einen Spaziergang.',exEn:'We are going for a walk.',gram:'Genus: maskulin · Umlaut im Plural · einen Spaziergang machen'},
+  {ch:10,type:'V',de:'malen',en:'to paint (art)',extra:'er malt · malte',ex:'Er malt ein Bild.',exEn:'He is painting a picture.',gram:'Prät.: malte · Perf.: hat gemalt · untrennbar · schwaches Verb · Kunst'},
+  {ch:10,type:'V',de:'segeln',en:'to sail',extra:'er segelt · segelte',ex:'Wir segeln auf dem See.',exEn:'We are sailing on the lake.',gram:'Prät.: segelte · Perf.: ist gesegelt · untrennbar · Hilfsverb: sein'},
+  {ch:10,type:'V',de:'verdienen',en:'to earn',extra:'er verdient · verdiente',ex:'Er verdient viel Geld.',exEn:'He earns a lot of money.',gram:'Prät.: verdiente · Perf.: hat verdient · untrennbar (ver- Präfix)'},
+  {ch:10,type:'V',de:'trainieren',en:'to train',extra:'er trainiert · trainierte',ex:'Sie trainiert jeden Tag.',exEn:'She trains every day.',gram:'Prät.: trainierte · Perf.: hat trainiert · untrennbar · aus Englisch'},
+  {ch:10,type:'V',de:'verkaufen',en:'to sell',extra:'er verkauft · verkaufte',ex:'Er verkauft Bücher.',exEn:'He sells books.',gram:'Prät.: verkaufte · Perf.: hat verkauft · untrennbar (ver- Präfix) · Gegenteil: kaufen'},
+  {ch:10,type:'V',de:'stattfinden',en:'to take place',extra:'er findet statt · fand statt',ex:'Das Konzert findet morgen statt.',exEn:'The concert takes place tomorrow.',gram:'Prät.: fand statt · Perf.: hat stattgefunden · TRENNBAR: findet...statt'},
+  {ch:10,type:'V',de:'fliegen',en:'to fly',extra:'er fliegt · flog',ex:'Wir fliegen nach Madrid.',exEn:'We are flying to Madrid.',gram:'Prät.: flog · Perf.: ist geflogen · untrennbar · Hilfsverb: sein · starkes Verb'},
+  {ch:10,type:'V',de:'verbinden',en:'to connect',extra:'er verbindet · verband',ex:'Können Sie mich verbinden?',exEn:'Can you connect me?',gram:'Prät.: verband · Perf.: hat verbunden · untrennbar (ver- Präfix) · starkes Verb'},
+  {ch:10,type:'V',de:'studieren',en:'to study (at university)',extra:'er studiert · studierte',ex:'Sie studiert Medizin.',exEn:'She is studying medicine.',gram:'Prät.: studierte · Perf.: hat studiert · untrennbar · kein \'an\' wenn Fach angegeben'},
+  {ch:10,type:'V',de:'spazieren gehen',en:'to go for a walk',extra:'er geht spazieren · ging spazieren',ex:'Wir gehen spazieren.',exEn:'We are going for a walk.',gram:'Prät.: ging spazieren · Perf.: ist spazieren gegangen · TRENNBAR'},
+  {ch:10,type:'ADV',de:'früher',en:'formerly / in the past',extra:'—',ex:'Früher habe ich in Wien gewohnt.',exEn:'I used to live in Vienna.',gram:'Zeitadverb · Vergangenheit (nicht spezifisch) · Komp. von früh'},
+  {ch:10,type:'PHR',de:'Schönen Feierabend!',en:'Have a nice evening! (end of work)',extra:'—',ex:'Tschüs! Schönen Feierabend!',exEn:'Bye! Have a nice evening!',gram:'Register: neutral · typisch im deutschen Büro'},
+  {ch:11,type:'N',de:'die Jacke, -n',en:'jacket',extra:'Pl.: Jacken',ex:'Die Jacke ist schön.',exEn:'The jacket is beautiful.',gram:'Genus: feminin'},
+  {ch:11,type:'N',de:'das Hemd, -en',en:'shirt',extra:'Pl.: Hemden',ex:'Das Hemd ist zu eng.',exEn:'The shirt is too tight.',gram:'Genus: neutrum'},
+  {ch:11,type:'N',de:'die Hose, -n',en:'trousers / pants',extra:'Pl.: Hosen',ex:'Die Hose steht dir gut.',exEn:'The trousers suit you well.',gram:'Genus: feminin · ACHTUNG: eine Hose (Singular auf Deutsch!)'},
+  {ch:11,type:'N',de:'der Rock, -e',en:'skirt',extra:'Pl.: Röcke',ex:'Der Rock ist rot.',exEn:'The skirt is red.',gram:'Genus: maskulin · Umlaut im Plural · ACHTUNG: maskulin!'},
+  {ch:11,type:'N',de:'das T-Shirt, -s',en:'t-shirt',extra:'Pl.: T-Shirts',ex:'Das T-Shirt ist zu weit.',exEn:'The t-shirt is too loose.',gram:'Genus: neutrum · aus Englisch'},
+  {ch:11,type:'N',de:'der Anzug, -e',en:'suit',extra:'Pl.: Anzüge',ex:'Er trägt einen Anzug.',exEn:'He is wearing a suit.',gram:'Genus: maskulin · Umlaut im Plural · Kompositum: an + ziehen'},
+  {ch:11,type:'N',de:'das Kleid, -er',en:'dress',extra:'Pl.: Kleider',ex:'Das Kleid ist elegant.',exEn:'The dress is elegant.',gram:'Genus: neutrum · Umlaut im Plural'},
+  {ch:11,type:'N',de:'die Kleidung (Sg.)',en:'clothing / clothes',extra:'nur Singular',ex:'Die Kleidung ist modern.',exEn:'The clothing is modern.',gram:'Genus: feminin · kein Plural · Sammelbegriff · Einzelstück: das Kleidungsstück'},
+  {ch:11,type:'N',de:'die Krawatte, -n',en:'tie (necktie)',extra:'Pl.: Krawatten',ex:'Er trägt eine Krawatte.',exEn:'He is wearing a tie.',gram:'Genus: feminin'},
+  {ch:11,type:'N',de:'der Pullover, -',en:'jumper / pullover',extra:'Pl.: Pullover (gleich)',ex:'Der Pullover ist warm.',exEn:'The jumper is warm.',gram:'Genus: maskulin · Pl. = Sg. · aus Englisch'},
+  {ch:11,type:'N',de:'die Bluse, -n',en:'blouse',extra:'Pl.: Blusen',ex:'Die Bluse ist weiß.',exEn:'The blouse is white.',gram:'Genus: feminin'},
+  {ch:11,type:'N',de:'die Jeans, -',en:'jeans',extra:'Pl. = Sg.',ex:'Ich trage gern Jeans.',exEn:'I like wearing jeans.',gram:'Genus: feminin · Pl. = Sg. · aus Englisch · eine Jeans (Singular!)'},
+  {ch:11,type:'N',de:'der Mantel, -',en:'coat / overcoat',extra:'Pl.: Mäntel',ex:'Der Mantel ist warm.',exEn:'The coat is warm.',gram:'Genus: maskulin · Umlaut im Plural · für Herbst/Winter'},
+  {ch:11,type:'N',de:'die Mütze, -n',en:'hat / beanie / cap',extra:'Pl.: Mützen',ex:'Die Mütze ist blau.',exEn:'The hat is blue.',gram:'Genus: feminin · Wintermütze ≠ der Hut (formal hat)'},
+  {ch:11,type:'N',de:'der Schuh, -e',en:'shoe',extra:'Pl.: Schuhe',ex:'Die Schuhe sind bequem.',exEn:'The shoes are comfortable.',gram:'Genus: maskulin · meist im Plural: die Schuhe'},
+  {ch:11,type:'N',de:'der Stiefel, -',en:'boot',extra:'Pl.: Stiefel (gleich)',ex:'Die Stiefel sind schwarz.',exEn:'The boots are black.',gram:'Genus: maskulin · Pl. = Sg.'},
+  {ch:11,type:'N',de:'die Tasche, -n',en:'bag / handbag',extra:'Pl.: Taschen',ex:'Die Tasche ist neu.',exEn:'The bag is new.',gram:'Genus: feminin · 2 Bedeutungen: 1) bag 2) pocket'},
+  {ch:11,type:'N',de:'der Schal, -s',en:'scarf',extra:'Pl.: Schals',ex:'Der Schal ist warm.',exEn:'The scarf is warm.',gram:'Genus: maskulin'},
+  {ch:11,type:'N',de:'der Hut, -e',en:'hat (formal)',extra:'Pl.: Hüte',ex:'Der Hut ist alt.',exEn:'The hat is old.',gram:'Genus: maskulin · Umlaut im Plural · formeller als Mütze'},
+  {ch:11,type:'N',de:'die Uhr, -en',en:'clock / watch',extra:'Pl.: Uhren',ex:'Die Uhr ist schön.',exEn:'The watch is beautiful.',gram:'Genus: feminin · Wie viel Uhr ist es? · Armbanduhr / Wanduhr'},
+  {ch:11,type:'N',de:'der Schmuck (Sg.)',en:'jewellery',extra:'meist Singular',ex:'Der Schmuck ist teuer.',exEn:'The jewellery is expensive.',gram:'Genus: maskulin · kein Plural · Schmuckstück (Einzelstück)'},
+  {ch:11,type:'N',de:'die Zeitschrift, -en',en:'magazine',extra:'Pl.: Zeitschriften',ex:'Ich lese eine Zeitschrift.',exEn:'I am reading a magazine.',gram:'Genus: feminin · Kompositum: Zeit + Schrift'},
+  {ch:11,type:'N',de:'die Öffnungszeiten (Pl.)',en:'opening hours',extra:'nur Plural',ex:'Die Öffnungszeiten sind 9-18 Uhr.',exEn:'Opening hours are 9-6 pm.',gram:'nur Plural · Kompositum: öffnen + Zeiten'},
+  {ch:11,type:'N',de:'die Kasse, -n',en:'checkout / cashier / till',extra:'Pl.: Kassen',ex:'An der Kasse bezahle ich.',exEn:'At the checkout I pay.',gram:'Genus: feminin · an der Kasse (Dativ)'},
+  {ch:11,type:'N',de:'das Parfüm, -e',en:'perfume',extra:'Pl.: Parfüme',ex:'Das Parfüm riecht schön.',exEn:'The perfume smells nice.',gram:'Genus: neutrum · aus Französisch'},
+  {ch:11,type:'N',de:'die Sportkleidung (Sg.)',en:'sportswear',extra:'nur Singular',ex:'Ich kaufe Sportkleidung.',exEn:'I am buying sportswear.',gram:'Genus: feminin · kein Plural · Sammelbegriff'},
+  {ch:11,type:'N',de:'die Damenmode, -n',en:'women\'s fashion',extra:'Pl.: Damenmoden',ex:'Die Damenmode ist im 1. Stock.',exEn:'Women\'s fashion is on the 1st floor.',gram:'Genus: feminin · Kompositum: Dame + Mode'},
+  {ch:11,type:'N',de:'die Herrenmode, -n',en:'men\'s fashion',extra:'Pl.: Herrenmoden',ex:'Die Herrenmode ist im Erdgeschoss.',exEn:'Men\'s fashion is on the ground floor.',gram:'Genus: feminin · Kompositum: Herr + Mode'},
+  {ch:11,type:'V',de:'tragen',en:'to wear / carry',extra:'er trägt · trug',ex:'Sie trägt eine rote Jacke.',exEn:'She is wearing a red jacket.',gram:'Prät.: trug · Perf.: hat getragen · untrennbar · Vokalwechsel a→ä · starkes Verb'},
+  {ch:11,type:'V',de:'anprobieren',en:'to try on (clothing)',extra:'er probiert an · probierte an',ex:'Ich probiere die Hose an.',exEn:'I am trying on the trousers.',gram:'Prät.: probierte an · Perf.: hat anprobiert · TRENNBAR: probiert...an'},
+  {ch:11,type:'V',de:'passen',en:'to fit',extra:'es passt · passte',ex:'Die Hose hat nicht gepasst.',exEn:'The trousers didn\'t fit.',gram:'Prät.: passte · Perf.: hat gepasst · untrennbar · + Dativ (Person): Die Hose passt mir'},
+  {ch:11,type:'V',de:'gefallen',en:'to like / to please',extra:'es gefällt · gefiel',ex:'Die Jacke gefällt mir.',exEn:'I like the jacket.',gram:'Prät.: gefiel · Perf.: hat gefallen · untrennbar · + DATIV: gefällt MIR (not: ich mag)'},
+  {ch:11,type:'V',de:'stehen (Kleidung)',en:'to suit (clothing)',extra:'es steht · stand',ex:'Die Hose steht dir gut.',exEn:'The trousers suit you well.',gram:'Prät.: stand · Perf.: hat gestanden · + DATIV: steht DIR'},
+  {ch:11,type:'V',de:'umtauschen',en:'to exchange / swap',extra:'er tauscht um · tauschte um',ex:'Ich möchte das T-Shirt umtauschen.',exEn:'I\'d like to exchange the t-shirt.',gram:'Prät.: tauschte um · Perf.: hat umgetauscht · TRENNBAR: tauscht...um'},
+  {ch:11,type:'V',de:'empfehlen',en:'to recommend',extra:'er empfiehlt · empfahl',ex:'Er empfiehlt das Restaurant.',exEn:'He recommends the restaurant.',gram:'Prät.: empfahl · Perf.: hat empfohlen · untrennbar · Vokalwechsel e→ie · starkes Verb'},
+  {ch:11,type:'A',de:'eng',en:'tight / narrow',extra:'Komp.: enger',ex:'Das T-Shirt ist zu eng.',exEn:'The t-shirt is too tight.',gram:'Gegenteil: weit · zu eng = zu klein'},
+  {ch:11,type:'A',de:'weit',en:'loose / wide',extra:'Komp.: weiter',ex:'Die Hose ist zu weit.',exEn:'The trousers are too loose.',gram:'Gegenteil: eng · 2 Bedeutungen: 1) loose (clothing) 2) far (distance)'},
+  {ch:11,type:'A',de:'bequem',en:'comfortable',extra:'Komp.: bequemer',ex:'Die Schuhe sind bequem.',exEn:'The shoes are comfortable.',gram:'Gegenteil: unbequem'},
+  {ch:11,type:'A',de:'elegant',en:'elegant',extra:'Komp.: eleganter',ex:'Das Kleid ist sehr elegant.',exEn:'The dress is very elegant.',gram:'aus Französisch · keine Umlaut-Steigerung'},
+  {ch:11,type:'ADV',de:'viel zu',en:'much too / far too',extra:'—',ex:'Das T-Shirt ist viel zu eng.',exEn:'The t-shirt is far too tight.',gram:'Verstärker von \'zu\' · viel zu groß/klein/teuer'},
+  {ch:11,type:'PRO',de:'dich',en:'you (accusative, informal)',extra:'Akk. von \'du\'',ex:'Ich sehe dich.',exEn:'I see you.',gram:'Kasus: Akkusativ · Nom.: du · Akk.: dich · Dat.: dir'},
+  {ch:11,type:'PRO',de:'euch',en:'you all (accusative/dative)',extra:'Akk./Dat. von \'ihr\'',ex:'Ich besuche euch morgen.',exEn:'I\'ll visit you all tomorrow.',gram:'Nom.: ihr · Akk.: euch · Dat.: euch'},
+  {ch:11,type:'PRO',de:'uns',en:'us (accusative/dative)',extra:'Akk./Dat. von \'wir\'',ex:'Er sieht uns.',exEn:'He sees us.',gram:'Nom.: wir · Akk.: uns · Dat.: uns'},
+  {ch:11,type:'PHR',de:'Kann ich Ihnen helfen?',en:'Can I help you?',extra:'im Geschäft (formell)',ex:'Kann ich Ihnen helfen? – Ja, gern!',exEn:'Can I help you? – Yes, please!',gram:'Register: formell · Dativ: Ihnen · informell: Kann ich dir helfen?'},
+  {ch:11,type:'PHR',de:'Das gefällt mir (nicht).',en:'I (don\'t) like that.',extra:'Meinung zur Kleidung',ex:'Das gefällt mir sehr! – Wirklich?',exEn:'I really like that! – Really?',gram:'gefallen + Dativ: mir · NICHT: Ich mag das (= Mögen)'},
+  {ch:11,type:'PHR',de:'Haben Sie das in Größe ...?',en:'Do you have that in size ...?',extra:'im Geschäft',ex:'Haben Sie das in Größe 42?',exEn:'Do you have that in size 42?',gram:'Register: formell · in Größe + Zahl (kein Artikel)'},
+  {ch:12,type:'N',de:'der Badeurlaub, -e',en:'beach holiday',extra:'Pl.: Badeurlaube',ex:'Wir machen einen Badeurlaub.',exEn:'We are going on a beach holiday.',gram:'Genus: maskulin · Kompositum: Baden + Urlaub'},
+  {ch:12,type:'N',de:'der Campingurlaub, -e',en:'camping holiday',extra:'Pl.: Campingurlaube',ex:'Der Campingurlaub ist günstig.',exEn:'The camping holiday is affordable.',gram:'Genus: maskulin · Kompositum'},
+  {ch:12,type:'N',de:'der Ski-Urlaub, -e',en:'skiing holiday',extra:'Pl.: Ski-Urlaube',ex:'Ich liebe den Ski-Urlaub.',exEn:'I love the skiing holiday.',gram:'Genus: maskulin · Kompositum'},
+  {ch:12,type:'N',de:'das Gepäck (Sg.)',en:'luggage / baggage',extra:'nur Singular',ex:'Das Gepäck ist schwer.',exEn:'The luggage is heavy.',gram:'Genus: neutrum · kein Plural · Handgepäck (hand luggage)'},
+  {ch:12,type:'N',de:'der Handschuh, -e',en:'glove',extra:'Pl.: Handschuhe',ex:'Ich brauche Handschuhe.',exEn:'I need gloves.',gram:'Genus: maskulin · Kompositum: Hand + Schuh · meist Plural'},
+  {ch:12,type:'N',de:'der Helm, -e',en:'helmet',extra:'Pl.: Helme',ex:'Er trägt einen Helm.',exEn:'He is wearing a helmet.',gram:'Genus: maskulin · Fahrradhelm / Skihelm'},
+  {ch:12,type:'N',de:'die Regenjacke, -n',en:'rain jacket',extra:'Pl.: Regenjacken',ex:'Ich nehme eine Regenjacke mit.',exEn:'I am taking a rain jacket with me.',gram:'Genus: feminin · Kompositum: Regen + Jacke'},
+  {ch:12,type:'N',de:'der Regenschirm, -e',en:'umbrella',extra:'Pl.: Regenschirme',ex:'Ich brauche einen Regenschirm.',exEn:'I need an umbrella.',gram:'Genus: maskulin · Kompositum: Regen + Schirm'},
+  {ch:12,type:'N',de:'die Reisetasche, -n',en:'travel bag / holdall',extra:'Pl.: Reisetaschen',ex:'Die Reisetasche ist voll.',exEn:'The travel bag is full.',gram:'Genus: feminin · Kompositum: Reise + Tasche'},
+  {ch:12,type:'N',de:'der Schlafsack, -e',en:'sleeping bag',extra:'Pl.: Schlafsäcke',ex:'Der Schlafsack ist warm.',exEn:'The sleeping bag is warm.',gram:'Genus: maskulin · Umlaut im Plural · Kompositum: schlafen + Sack'},
+  {ch:12,type:'N',de:'die Seife, -n',en:'soap',extra:'Pl.: Seifen',ex:'Ich brauche Seife.',exEn:'I need soap.',gram:'Genus: feminin'},
+  {ch:12,type:'N',de:'die Sonnenbrille, -n',en:'sunglasses',extra:'Pl.: Sonnenbrillen',ex:'Ich nehme die Sonnenbrille mit.',exEn:'I am taking my sunglasses.',gram:'Genus: feminin · Kompositum · meist Plural: die Sonnenbrillen'},
+  {ch:12,type:'N',de:'die Sonnencreme, -s',en:'sunscreen',extra:'Pl.: Sonnencremes',ex:'Ich brauche Sonnencreme.',exEn:'I need sunscreen.',gram:'Genus: feminin · Kompositum: Sonne + Creme'},
+  {ch:12,type:'N',de:'die Winterjacke, -n',en:'winter coat / jacket',extra:'Pl.: Winterjacken',ex:'Ich nehme die Winterjacke.',exEn:'I am taking the winter jacket.',gram:'Genus: feminin · Kompositum: Winter + Jacke'},
+  {ch:12,type:'N',de:'das Zelt, -e',en:'tent',extra:'Pl.: Zelte',ex:'Wir schlafen im Zelt.',exEn:'We sleep in the tent.',gram:'Genus: neutrum · im Zelt (Dativ) · ein Zelt aufschlagen'},
+  {ch:12,type:'N',de:'der Ausweis, -e',en:'ID card',extra:'Pl.: Ausweise',ex:'Ich brauche meinen Ausweis.',exEn:'I need my ID card.',gram:'Genus: maskulin · Personalausweis (national ID) · von: ausweisen'},
+  {ch:12,type:'N',de:'das Doppelzimmer, -',en:'twin / double room',extra:'Pl.: Doppelzimmer (gleich)',ex:'Wir haben ein Doppelzimmer.',exEn:'We have a twin room.',gram:'Genus: neutrum · Pl. = Sg. · Kompositum: doppelt + Zimmer'},
+  {ch:12,type:'N',de:'das Einzelzimmer, -',en:'single room',extra:'Pl.: Einzelzimmer (gleich)',ex:'Ich möchte ein Einzelzimmer.',exEn:'I would like a single room.',gram:'Genus: neutrum · Pl. = Sg. · Kompositum: einzeln + Zimmer'},
+  {ch:12,type:'N',de:'der Pass, -e',en:'passport',extra:'Pl.: Pässe',ex:'Ich brauche meinen Pass.',exEn:'I need my passport.',gram:'Genus: maskulin · Umlaut im Plural · Reisepass (voller Name)'},
+  {ch:12,type:'N',de:'die Rezeption, -en',en:'reception (hotel)',extra:'Pl.: Rezeptionen',ex:'Fragen Sie an der Rezeption.',exEn:'Ask at the reception.',gram:'Genus: feminin · an der Rezeption (Dativ)'},
+  {ch:12,type:'N',de:'die Postkarte, -n',en:'postcard',extra:'Pl.: Postkarten',ex:'Ich schreibe eine Postkarte.',exEn:'I am writing a postcard.',gram:'Genus: feminin · Kompositum: Post + Karte'},
+  {ch:12,type:'N',de:'die Sehenswürdigkeit,-en',en:'tourist attraction / sight',extra:'Pl.: Sehenswürdigkeiten',ex:'Hamburg hat viele Sehenswürdigkeiten.',exEn:'Hamburg has many tourist attractions.',gram:'Genus: feminin · langes Wort! · Sehenswürdigkeiten besichtigen'},
+  {ch:12,type:'N',de:'der Norden (Sg.)',en:'North',extra:'keine Pluralform',ex:'Hamburg liegt im Norden.',exEn:'Hamburg is in the north.',gram:'Genus: maskulin · im Norden (Dativ) · N / S / O / W'},
+  {ch:12,type:'N',de:'der Süden (Sg.)',en:'South',extra:'keine Pluralform',ex:'München liegt im Süden.',exEn:'Munich is in the south.',gram:'Genus: maskulin · im Süden (Dativ)'},
+  {ch:12,type:'N',de:'der Osten (Sg.)',en:'East',extra:'keine Pluralform',ex:'Berlin liegt im Osten.',exEn:'Berlin is in the east.',gram:'Genus: maskulin · im Osten (Dativ)'},
+  {ch:12,type:'N',de:'der Westen (Sg.)',en:'West',extra:'keine Pluralform',ex:'Köln liegt im Westen.',exEn:'Cologne is in the west.',gram:'Genus: maskulin · im Westen (Dativ)'},
+  {ch:12,type:'N',de:'der Berg, -e',en:'mountain',extra:'Pl.: Berge',ex:'Die Berge sind hoch.',exEn:'The mountains are high.',gram:'Genus: maskulin · in die Berge fahren (Akkusativ)'},
+  {ch:12,type:'N',de:'der Strand, -e',en:'beach',extra:'Pl.: Strände',ex:'Der Strand ist schön.',exEn:'The beach is beautiful.',gram:'Genus: maskulin · Umlaut im Plural · an den Strand (Akkusativ)'},
+  {ch:12,type:'N',de:'die Insel, -n',en:'island',extra:'Pl.: Inseln',ex:'Die Insel ist klein.',exEn:'The island is small.',gram:'Genus: feminin · auf der Insel (Dativ)'},
+  {ch:12,type:'N',de:'das Dorf, -er',en:'village',extra:'Pl.: Dörfer',ex:'Das Dorf ist ruhig.',exEn:'The village is quiet.',gram:'Genus: neutrum · Umlaut im Plural · kleiner als Stadt'},
+  {ch:12,type:'N',de:'die Landschaft, -en',en:'landscape / scenery',extra:'Pl.: Landschaften',ex:'Die Landschaft ist wunderschön.',exEn:'The scenery is wonderful.',gram:'Genus: feminin · Kompositum: Land + Schaft'},
+  {ch:12,type:'N',de:'der Schnee (Sg.)',en:'snow',extra:'nur Singular',ex:'Es liegt viel Schnee.',exEn:'There is a lot of snow.',gram:'Genus: maskulin · kein Plural · es schneit (Verb)'},
+  {ch:12,type:'N',de:'der Wind, -e',en:'wind',extra:'Pl.: Winde',ex:'Der Wind ist stark.',exEn:'The wind is strong.',gram:'Genus: maskulin · es ist windig (Adj.) · der Wind weht'},
+  {ch:12,type:'N',de:'die Wolke, -n',en:'cloud',extra:'Pl.: Wolken',ex:'Die Wolken sind grau.',exEn:'The clouds are grey.',gram:'Genus: feminin'},
+  {ch:12,type:'N',de:'der Wetterbericht, -e',en:'weather forecast',extra:'Pl.: Wetterberichte',ex:'Der Wetterbericht sagt Regen.',exEn:'The weather forecast says rain.',gram:'Genus: maskulin · Kompositum: Wetter + Bericht'},
+  {ch:12,type:'N',de:'der Flughafen, -',en:'airport',extra:'Pl.: Flughäfen',ex:'Ich fahre zum Flughafen.',exEn:'I am going to the airport.',gram:'Genus: maskulin · Umlaut im Plural · auf dem Flughafen'},
+  {ch:12,type:'N',de:'das Gleis, -e',en:'track / platform (rail)',extra:'Pl.: Gleise',ex:'Der Zug fährt auf Gleis 3.',exEn:'The train goes on track 3.',gram:'Genus: neutrum · auf Gleis + Nummer'},
+  {ch:12,type:'N',de:'der Bahnsteig, -e',en:'train platform',extra:'Pl.: Bahnsteige',ex:'Wir warten auf dem Bahnsteig.',exEn:'We are waiting on the platform.',gram:'Genus: maskulin · Kompositum: Bahn + Steig'},
+  {ch:12,type:'N',de:'die Abfahrt, -en',en:'departure',extra:'Pl.: Abfahrten',ex:'Die Abfahrt ist um 14:30 Uhr.',exEn:'Departure is at 2:30 pm.',gram:'Genus: feminin · Gegenteil: die Ankunft'},
+  {ch:12,type:'N',de:'die Ankunft, -e',en:'arrival',extra:'Pl.: Ankünfte',ex:'Die Ankunft ist um 16 Uhr.',exEn:'Arrival is at 4 pm.',gram:'Genus: feminin · Umlaut im Plural · Gegenteil: die Abfahrt'},
+  {ch:12,type:'N',de:'der Ausgang, -e',en:'exit',extra:'Pl.: Ausgänge',ex:'Wo ist der Ausgang?',exEn:'Where is the exit?',gram:'Genus: maskulin · Umlaut im Plural · Gegenteil: der Eingang'},
+  {ch:12,type:'N',de:'die Haltestelle, -n',en:'stop (bus/tram)',extra:'Pl.: Haltestellen',ex:'Die Haltestelle ist hier.',exEn:'The stop is here.',gram:'Genus: feminin · Kompositum: halten + Stelle'},
+  {ch:12,type:'N',de:'die Route, -n',en:'route',extra:'Pl.: Routen',ex:'Welche Route nehmen wir?',exEn:'Which route do we take?',gram:'Genus: feminin · aus Französisch'},
+  {ch:12,type:'N',de:'die Jugendherberge, -n',en:'youth hostel',extra:'Pl.: Jugendherbergen',ex:'Wir übernachten in der Jugendherberge.',exEn:'We are staying at the youth hostel.',gram:'Genus: feminin · günstige Unterkunft'},
+  {ch:12,type:'N',de:'die Pension, -en',en:'guesthouse / B&B',extra:'Pl.: Pensionen',ex:'Wir wohnen in einer Pension.',exEn:'We are staying at a guesthouse.',gram:'Genus: feminin · günstiger als Hotel'},
+  {ch:12,type:'N',de:'die Stadtführung, -en',en:'city tour / guided tour',extra:'Pl.: Stadtführungen',ex:'Wir machen eine Stadtführung.',exEn:'We are doing a city tour.',gram:'Genus: feminin · Kompositum: Stadt + Führung'},
+  {ch:12,type:'N',de:'der Grad, -e',en:'degree (temperature)',extra:'Pl.: Grade',ex:'Es sind 25 Grad.',exEn:'It is 25 degrees.',gram:'Genus: maskulin · Grad Celsius (°C) · kein \'es ist 25 Graden\'!'},
+  {ch:12,type:'V',de:'einpacken',en:'to pack',extra:'er packt ein · packte ein',ex:'Ich packe den Koffer ein.',exEn:'I am packing the suitcase.',gram:'Prät.: packte ein · Perf.: hat eingepackt · TRENNBAR: packt...ein'},
+  {ch:12,type:'V',de:'reservieren',en:'to book / reserve',extra:'er reserviert · reservierte',ex:'Ich reserviere ein Zimmer.',exEn:'I am booking a room.',gram:'Prät.: reservierte · Perf.: hat reserviert · untrennbar · schwaches Verb'},
+  {ch:12,type:'V',de:'übernachten',en:'to stay overnight',extra:'er übernachtet · übernachtete',ex:'Wir übernachten im Hotel.',exEn:'We are staying at the hotel.',gram:'Prät.: übernachtete · Perf.: hat übernachtet · untrennbar (über- Präfix)'},
+  {ch:12,type:'V',de:'einsteigen',en:'to board / get on',extra:'er steigt ein · stieg ein',ex:'Wir steigen in den Zug ein.',exEn:'We are boarding the train.',gram:'Prät.: stieg ein · Perf.: ist eingestiegen · TRENNBAR · Hilfsverb: sein'},
+  {ch:12,type:'V',de:'umsteigen',en:'to change (transport)',extra:'er steigt um · stieg um',ex:'Wir steigen in Frankfurt um.',exEn:'We change trains in Frankfurt.',gram:'Prät.: stieg um · Perf.: ist umgestiegen · TRENNBAR · Hilfsverb: sein'},
+  {ch:12,type:'V',de:'aussteigen',en:'to get off',extra:'er steigt aus · stieg aus',ex:'Wir steigen am Bahnhof aus.',exEn:'We get off at the station.',gram:'Prät.: stieg aus · Perf.: ist ausgestiegen · TRENNBAR · Hilfsverb: sein'},
+  {ch:12,type:'V',de:'schneien',en:'to snow',extra:'es schneit · schneite',ex:'Es schneit!',exEn:'It\'s snowing!',gram:'Prät.: schneite · Perf.: hat geschneit · untrennbar · unpersönliches Verb: nur \'es\''},
+  {ch:12,type:'V',de:'abfahren',en:'to depart / leave',extra:'er fährt ab · fuhr ab',ex:'Der Zug fährt um 14 Uhr ab.',exEn:'The train departs at 2 pm.',gram:'Prät.: fuhr ab · Perf.: ist abgefahren · TRENNBAR: fährt...ab · Hilfsverb: sein'},
+  {ch:12,type:'V',de:'ankommen',en:'to arrive',extra:'er kommt an · kam an',ex:'Wir kommen um 16 Uhr an.',exEn:'We arrive at 4 pm.',gram:'Prät.: kam an · Perf.: ist angekommen · TRENNBAR: kommt...an · Hilfsverb: sein'},
+  {ch:12,type:'A',de:'sonnig',en:'sunny',extra:'Komp.: sonniger',ex:'Das Wetter ist sonnig.',exEn:'The weather is sunny.',gram:'Gegenteil: bewölkt · die Sonne + -ig Suffix'},
+  {ch:12,type:'A',de:'bewölkt',en:'cloudy',extra:'Komp.: stärker bewölkt',ex:'Es ist bewölkt.',exEn:'It is cloudy.',gram:'Partizip II von: bewölken · teilweise bewölkt (partly cloudy)'},
+  {ch:12,type:'A',de:'windig',en:'windy',extra:'Komp.: windiger',ex:'Es ist sehr windig.',exEn:'It is very windy.',gram:'der Wind + -ig Suffix · ein windiger Tag'},
+  {ch:12,type:'A',de:'wunderschön',en:'wonderful / gorgeous',extra:'Komp.: wunderschöner',ex:'Die Landschaft ist wunderschön.',exEn:'The scenery is gorgeous.',gram:'Verstärkung von \'schön\' durch \'wunder-\' · = sehr sehr schön'},
+  {ch:12,type:'ADV',de:'bald',en:'soon',extra:'Komp.: eher',ex:'Bis bald! Ich komme bald.',exEn:'See you soon! I\'m coming soon.',gram:'Zeitadverb · in naher Zukunft'},
+  {ch:12,type:'ADV',de:'pünktlich',en:'on time / punctual',extra:'—',ex:'Der Zug kommt pünktlich an.',exEn:'The train arrives on time.',gram:'auch Adjektiv: ein pünktlicher Zug · Pünktlichkeit ist wichtig in Deutschland!'},
+  {ch:12,type:'ADV',de:'zurück',en:'back',extra:'—',ex:'Ich fahre morgen zurück.',exEn:'I am going back tomorrow.',gram:'Richtungsadverb · zurückfahren (TRENNBAR: fährt...zurück)'},
+  {ch:12,type:'PHR',de:'Ich hätte gern ...',en:'I would like ...',extra:'höfliche Bitte (Konjunktiv II)',ex:'Ich hätte gern ein Einzelzimmer.',exEn:'I would like a single room.',gram:'Register: höflich · Konjunktiv II von \'haben\' · formeller als \'Ich möchte\''},
+  {ch:12,type:'PHR',de:'Haben Sie noch Zimmer frei?',en:'Do you have rooms available?',extra:'im Hotel',ex:'Haben Sie noch Zimmer frei?',exEn:'Do you have rooms available?',gram:'Register: formell · frei = available · noch = still/anymore'},
+  {ch:12,type:'PHR',de:'Wie war der Urlaub?',en:'How was the holiday?',extra:'nach Rückkehr',ex:'Wie war der Urlaub? – Wunderschön!',exEn:'How was the holiday? – Wonderful!',gram:'Register: neutral · Präteritum: war (von sein)'},
+  {ch:12,type:'KON',de:'weil (Reise)',en:'because (subordinating)',extra:'Nebensatz → Verb AM ENDE!',ex:'Ich fahre nach Hamburg, weil ich den Hafen sehen möchte.',exEn:'I\'m going to Hamburg because I want to see the harbour.',gram:'SUBORDINIERENDE Konjunktion · Verb geht ans SATZENDE · Komma vor \'weil\''},
+  {ch:12,type:'KON',de:'denn (Reise)',en:'because / for (coordinating)',extra:'Hauptsatz → Verb auf Position 2',ex:'Ich nehme eine Jacke, denn es ist kalt.',exEn:'I\'m taking a jacket because it\'s cold.',gram:'KOORDINIERENDE Konjunktion · kein Einfluss auf Wortstellung'},
+];
+
+
+const TYPES = {
+  N:   {label:'Nomen',       emoji:'🏷️',color:'#3b82f6'},
+  V:   {label:'Verb',        emoji:'⚡', color:'#e94560'},
+  A:   {label:'Adjektiv',    emoji:'🎨',color:'#10b981'},
+  ADV: {label:'Adverb',      emoji:'🔄',color:'#f59e0b'},
+  PRO: {label:'Pronomen',    emoji:'👤',color:'#a855f7'},
+  PREP:{label:'Präposition', emoji:'📍',color:'#06b6d4'},
+  KON: {label:'Konjunktion', emoji:'🔗',color:'#ec4899'},
+  PHR: {label:'Ausdruck',    emoji:'💬',color:'#84cc16'},
+};
+
+const CHAPTERS = [
+  {id:0,label:'Alle'},
+  {id:1,label:'K1·Guten Tag'},{id:2,label:'K2·Freunde'},
+  {id:3,label:'K3·Hamburg'},{id:4,label:'K4·Appetit'},
+  {id:5,label:'K5·Familie'},{id:6,label:'K6·Freunden'},
+  {id:7,label:'K7·Arbeit'},{id:8,label:'K8·Gesund'},
+  {id:9,label:'K9·Wohnung'},{id:10,label:'K10·Beruf'},
+  {id:11,label:'K11·Jacke'},{id:12,label:'K12·Urlaub'},
+];
+
+// ── SRS ──────────────────────────────────────────────────────────
+function cKey(w){return w.ch+'_'+w.de.replace(/\W/g,'').slice(0,12);}
+function calcSRS(q,{interval=0,ef=2.5,reps=0}={},s={}){
+  const sd=s.schwerDays??1, od=s.okDays??6, lm=s.leichtMult??1.3;
+  let newEF,newReps,newInt;
+  if(q<3){newReps=0;newInt=sd;newEF=Math.max(1.3,ef-0.2);}
+  else{
+    newReps=reps+1;
+    newEF=Math.max(1.3,ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));
+    if(newReps===1)newInt=1;
+    else if(newReps===2)newInt=od;
+    else newInt=Math.round(interval*newEF);
+    if(q===5)newInt=Math.round(newInt*lm);
+  }
+  const d=new Date();d.setDate(d.getDate()+newInt);
+  return{interval:newInt,ef:newEF,reps:newReps,nextReview:d.toISOString().slice(0,10)};
+}
+function nextLabel(s){
+  if(!s)return{text:'Neu',color:'#8b949e'};
+  const diff=Math.round((new Date(s.nextReview)-new Date())/86400000);
+  if(diff<=0)return{text:'⏰ Heute!',color:'#e94560'};
+  if(diff===1)return{text:'Morgen',color:'#f59e0b'};
+  if(diff<7)return{text:'In '+diff+' Tagen',color:'#f59e0b'};
+  if(diff<30)return{text:'In '+Math.round(diff/7)+' Wo.',color:'#10b981'};
+  return{text:'In '+Math.round(diff/30)+' Mo.',color:'#3b82f6'};
+}
+function isDue(s){return!s||new Date(s.nextReview)<=new Date();}
+
+// ── STORAGE ───────────────────────────────────────────────────────
+const LS = {
+  get(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+};
+
+// ── BACKUP / RESTORE ───────────────────────────────────────────────
+function exportProgressBackup(){
+  const payload={
+    app:'Netzwerk Neu A1 Lernkarten',
+    backupVersion:1,
+    exportedAt:new Date().toISOString(),
+    srs:LS.get('srs_v1',{}),
+    notes:LS.get('notes_v1',{}),
+    settings:LS.get('srs_cfg_v1',{schwerDays:1,okDays:6,leichtMult:1.3})
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='Netzwerk_Neu_A1_Progress_Backup_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  alert('Backup downloaded. Keep this JSON file safe so you can restore your progress later.');
+}
+function restoreProgressBackup(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      if(!data || typeof data!=='object' || !data.srs || !data.notes || !data.settings) throw new Error('Invalid backup');
+      if(!confirm('Restore this backup? Your current progress, notes, and settings will be replaced by the backup.')) return;
+      LS.set('srs_v1',data.srs);LS.set('notes_v1',data.notes);LS.set('srs_cfg_v1',data.settings);
+      state.srs=data.srs;state.notes=data.notes;state.settings=data.settings;state.idx=0;state.flipped=false;
+      render();
+      alert('Backup restored successfully!');
+    }catch(e){alert('This file is not a valid Netzwerk Neu A1 progress backup. Please choose a backup JSON file created by this app.');}
+  };
+  reader.onerror=()=>alert('Could not read this file. Please try again.');
+  reader.readAsText(file);
+}
+
+// ── AUDIO ─────────────────────────────────────────────────────────
+function speak(text,rate=0.82){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text.split(',')[0].split('(')[0].trim());
+  u.lang='de-DE';u.rate=rate;speechSynthesis.speak(u);
+}
+function speakEx(text){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='de-DE';u.rate=0.78;speechSynthesis.speak(u);
+}
+
+// ── CONJUGATION (simplified) ─────────────────────────────────────
+const VERB_DB = {
+  'heißen':{du:'heißt',er:'heißt',kasus:'kein Objekt',tip:'Ich heiße Sohail.'},
+  'sprechen':{du:'sprichst',er:'spricht',kasus:'+Akkusativ',tip:'Ich spreche Deutsch. (Akk.)'},
+  'lesen':{du:'liest',er:'liest',kasus:'+Akkusativ',tip:'Ich lese ein Buch. (Akk.)'},
+  'essen':{du:'isst',er:'isst',kasus:'+Akkusativ',tip:'Ich esse einen Apfel. (Akk. → einen!)'},
+  'fahren':{du:'fährst',er:'fährt',kasus:'kein Objekt',tip:'Er fährt nach Berlin. (a→ä)'},
+  'sehen':{du:'siehst',er:'sieht',kasus:'+Akkusativ',tip:'Ich sehe den Turm. (Akk. → den!)'},
+  'nehmen':{du:'nimmst',er:'nimmt',kasus:'+Akkusativ',tip:'Ich nehme ein Brötchen.'},
+  'schlafen':{du:'schläfst',er:'schläft',kasus:'kein Objekt',tip:'Das Baby schläft.'},
+  'tragen':{du:'trägst',er:'trägt',kasus:'+Akkusativ',tip:'Sie trägt eine rote Jacke.'},
+  'treffen':{du:'triffst',er:'trifft',kasus:'+Akkusativ',tip:'Ich treffe meine Freundin.'},
+  'gefallen':{du:'gefällst',er:'gefällt',kasus:'+Dativ (Person)',tip:'Die Jacke gefällt MIR. (Dat.!)'},
+  'empfehlen':{du:'empfiehlst',er:'empfiehlt',kasus:'+Dat.+Akk.',tip:'Ich empfehle IHM das Restaurant.'},
+  'können':{ich:'kann',du:'kannst',er:'kann',wir:'können',ihr:'könnt',sie:'können',kasus:'+Infinitiv (ohne zu)',tip:'Ich kann Deutsch sprechen.'},
+  'müssen':{ich:'muss',du:'musst',er:'muss',wir:'müssen',ihr:'müsst',sie:'müssen',kasus:'+Infinitiv (ohne zu)',tip:'Ich muss heute arbeiten.'},
+  'wollen':{ich:'will',du:'willst',er:'will',wir:'wollen',ihr:'wollt',sie:'wollen',kasus:'+Infinitiv (ohne zu)',tip:'Ich will Deutsch lernen.'},
+  'dürfen':{ich:'darf',du:'darfst',er:'darf',wir:'dürfen',ihr:'dürft',sie:'dürfen',kasus:'+Infinitiv (ohne zu)',tip:'Hier darf man nicht rauchen.'},
+  'sollen':{ich:'soll',du:'sollst',er:'soll',wir:'sollen',ihr:'sollt',sie:'sollen',kasus:'+Infinitiv (ohne zu)',tip:'Du sollst sofort kommen.'},
+  'möchten':{ich:'möchte',du:'möchtest',er:'möchte',wir:'möchten',ihr:'möchtet',sie:'möchten',kasus:'+Akkusativ / Infinitiv',tip:'Ich möchte ein Glas Wasser.'},
+  'arbeiten':{du:'arbeitest',er:'arbeitet',kasus:'kein Objekt',tip:'Ich arbeite bei Siemens. (-et Endung bei -t Stamm!)'},
+  'passen':{du:'passt',er:'passt',kasus:'+Dativ (Person)',tip:'Die Hose passt MIR. (Dat.!)'},
+  'schmecken':{kasus:'+Dativ (Person)',tip:'Das Essen schmeckt MIR gut. (Dat.!)'},
+  'stehen':{kasus:'+Dativ (Person)',tip:'Die Hose steht DIR gut. (Dat.!)'},
+  'schenken':{kasus:'+Dat.(Person)+Akk.(Sache)',tip:'Ich schenke IHM ein Buch.'},
+  'bringen':{kasus:'+Dat.(Person)+Akk.(Sache)',tip:'Ich bringe IHM das Essen.'},
+  'zeigen':{kasus:'+Dat.(Person)+Akk.(Sache)',tip:'Ich zeige DIR den Weg.'},
+  'erklären':{kasus:'+Akkusativ',tip:'Er erklärt die Grammatik. (Akk.)'},
+};
+
+function getConj(de,vd){
+  const inf=de.split(',')[0].split('(')[0].trim().toLowerCase();
+  if(vd.ich!==undefined){
+    return{ich:vd.ich,du:vd.du,er:vd.er,wir:vd.wir,ihr:vd.ihr,sie:vd.sie};
+  }
+  let stem=inf.endsWith('en')?inf.slice(0,-2):inf.endsWith('n')?inf.slice(0,-1):inf;
+  let ich=stem+'e', du=stem+'st', er=stem+'t', wir=inf.includes('en')?inf:inf+'en', ihr=stem+'t', sie=wir;
+  if(/[td]$/.test(stem)){du=stem+'est';er=stem+'et';ihr=stem+'et';}
+  if(/[sßzx]$/.test(stem)){du=stem+'t';}
+  if(vd.du)du=vd.du; if(vd.er)er=vd.er;
+  return{ich,du,er,wir,ihr,sie};
+}
+
+// ── STATE ─────────────────────────────────────────────────────────
+let state = {
+  tab:'study', selCh:0, selType:'ALL',
+  search:'', isShuf:false, dueOnly:false,
+  idx:0, flipped:false, showDE:true,
+  srs: LS.get('srs_v1',{}),
+  notes: LS.get('notes_v1',{}),
+  settings: LS.get('srs_cfg_v1',{schwerDays:1,okDays:6,leichtMult:1.3}),
+  editCard: null,
+  filteredCards: [],
+};
+
+function setState(patch){Object.assign(state,patch);render();}
+
+// ── FILTER + SORT ─────────────────────────────────────────────────
+function buildCards(){
+  let list=[...ALL_WORDS];
+  if(state.selCh!==0)list=list.filter(w=>w.ch===state.selCh);
+  if(state.selType!=='ALL')list=list.filter(w=>w.type===state.selType);
+  if(state.search.trim()){
+    const q=state.search.toLowerCase();
+    list=list.filter(w=>w.de.toLowerCase().includes(q)||w.en.toLowerCase().includes(q)||w.gram.toLowerCase().includes(q));
+  }
+  if(state.dueOnly)list=list.filter(w=>isDue(state.srs[cKey(w)]));
+  list.sort((a,b)=>{
+    const sa=state.srs[cKey(a)],sb=state.srs[cKey(b)];
+    if(!sa&&!sb)return 0;if(!sa)return -1;if(!sb)return 1;
+    return new Date(sa.nextReview)-new Date(sb.nextReview);
+  });
+  if(state.isShuf){
+    for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]];}
+  }
+  return list;
+}
+
+// ── STATS ─────────────────────────────────────────────────────────
+function getDue(){return ALL_WORDS.filter(w=>isDue(state.srs[cKey(w)])).length;}
+function getRated(){return Object.values(state.srs).filter(s=>s.reps>0).length;}
+function getMastered(){return Object.values(state.srs).filter(s=>s.interval>=21).length;}
+
+// ── ACTIONS ──────────────────────────────────────────────────────
+function rate(q){
+  const cards=buildCards();
+  const si=Math.min(state.idx,cards.length-1);
+  const card=cards[si];
+  if(!card)return;
+  const k=cKey(card);
+  const cur=state.srs[k]||{interval:0,ef:2.5,reps:0};
+  const newSRS=calcSRS(q,cur,state.settings);
+  const srs={...state.srs,[k]:newSRS};
+  LS.set('srs_v1',srs);
+  const nextIdx=si<cards.length-1?si+1:si;
+  setState({srs,idx:nextIdx,flipped:false});
+}
+
+function saveNote(text){
+  const cards=buildCards();
+  const card=cards[Math.min(state.idx,cards.length-1)];
+  if(!card)return;
+  const notes={...state.notes,[cKey(card)]:text.trim()};
+  LS.set('notes_v1',notes);
+  setState({notes,editCard:null});
+}
+
+function saveSetting(field,val){
+  const settings={...state.settings,[field]:val};
+  LS.set('srs_cfg_v1',settings);
+  setState({settings});
+}
+
+function resetAll(){
+  if(!confirm('Gesamten Fortschritt löschen?'))return;
+  LS.set('srs_v1',{});LS.set('notes_v1',{});
+  setState({srs:{},notes:{},idx:0,flipped:false});
+}
+
+// ── RENDER HELPERS ───────────────────────────────────────────────
+function h(tag,attrs,...children){
+  const el=document.createElement(tag);
+  if(attrs)Object.entries(attrs).forEach(([k,v])=>{
+    if(k==='class')el.className=v;
+    else if(k==='style'&&typeof v==='object')Object.assign(el.style,v);
+    else if(k.startsWith('on'))el.addEventListener(k.slice(2).toLowerCase(),v);
+    else if(k==='disabled')el.disabled=v;
+    else if(k==='placeholder')el.placeholder=v;
+    else if(k==='type')el.type=v;
+    else if(k==='min')el.min=v;
+    else if(k==='max')el.max=v;
+    else if(k==='step')el.step=v;
+    else if(k==='value')el.value=v;
+    else if(k==='rows')el.rows=v;
+    else if(k==='html')el.innerHTML=v;
+    else el.setAttribute(k,v);
+  });
+  children.flat().forEach(c=>{
+    if(c===null||c===undefined)return;
+    el.appendChild(typeof c==='string'?document.createTextNode(c):c);
+  });
+  return el;
+}
+
+function renderGramBox(gram,color){
+  if(!gram||gram==='—')return null;
+  const parts=gram.split(' · ');
+  const box=h('div',{class:'gram-box',style:{borderColor:color+'33',background:color+'11'}});
+  const lbl=h('div',{class:'gram-label',style:{color}});lbl.textContent='📚 GRAMMATIK';
+  box.appendChild(lbl);
+  parts.forEach(p=>{
+    const [key,...rest]=p.split(':');
+    const line=h('div',{class:'gram-line'});
+    if(rest.length){
+      const ks=h('span',{class:'gram-key',style:{color}});ks.textContent=key+':';
+      line.appendChild(ks);
+      line.appendChild(document.createTextNode(rest.join(':')));
+    } else {
+      line.textContent=p;
+    }
+    box.appendChild(line);
+  });
+  return box;
+}
+
+function renderConjTable(card,color){
+  const inf=card.de.split(',')[0].split('(')[0].trim().toLowerCase();
+  const vd=VERB_DB[inf]||{};
+  const conj=getConj(card.de,vd);
+  const isSep=card.gram&&card.gram.includes('TRENNBAR');
+  const isModal=['können','müssen','wollen','dürfen','sollen','möchten'].includes(inf);
+
+  const box=h('div',{class:'conj-box',style:{background:color+'11',border:'1px solid '+color+'55'}});
+  const lbl=h('div',{class:'conj-label',style:{color}});
+  lbl.textContent='🔤 KONJUGATION (Präsens)'+(isSep?' · TRENNBAR ✂️':'')+(isModal?' · Modalverb':'');
+  box.appendChild(lbl);
+
+  const grid=h('div',{class:'conj-grid'});
+  [['ich',conj.ich],['wir',conj.wir],['du',conj.du],['ihr',conj.ihr],['er/sie/es',conj.er],['sie/Sie',conj.sie]].forEach(([p,f])=>{
+    const cell=h('div',{class:'conj-cell'});
+    const pron=h('span',{class:'conj-pron'});pron.textContent=p;
+    const form=h('span',{class:'conj-form'});form.textContent=f||'—';
+    cell.append(pron,form);grid.appendChild(cell);
+  });
+  box.appendChild(grid);
+  if(isSep){
+    const hint=h('div',{class:'conj-sep-hint',style:{color}});
+    hint.textContent='✂️ Präfix ans Satzende!';box.appendChild(hint);
+  }
+
+  const result=h('div',{});result.appendChild(box);
+
+  if(vd.kasus){
+    const kasusColors={'+Akkusativ':'#f59e0b','+Dativ (Person)':'#06b6d4','+Dativ':'#06b6d4',
+      '+Dat.(Person)+Akk.(Sache)':'#a855f7','+Dat.+Akk.':'#a855f7',
+      'kein Objekt':'#8b949e','+Infinitiv (ohne zu)':'#ec4899','+Akkusativ / Infinitiv':'#ec4899'};
+    const kc=kasusColors[vd.kasus]||color;
+    const kb=h('div',{class:'kasus-box',style:{background:kc+'11',border:'1px solid '+kc+'55'}});
+    const kl=h('div',{class:'kasus-label',style:{color:kc}});kl.textContent='🎯 KASUS';
+    const kv=h('div',{class:'kasus-val',style:{color:kc}});kv.textContent=vd.kasus;
+    kb.append(kl,kv);
+    if(vd.tip){const kt=h('div',{class:'kasus-tip'});kt.textContent=vd.tip;kb.appendChild(kt);}
+    result.appendChild(kb);
+  }
+  return result;
+}
+
+// ── MAIN RENDER ───────────────────────────────────────────────────
+function render(){
+  const cards=buildCards();
+  const si=Math.min(state.idx,Math.max(0,cards.length-1));
+  const card=cards[si];
+  const key=card?cKey(card):null;
+  const cardSRS=key?state.srs[key]:null;
+  const cardNote=key?(state.notes[key]||''):'';
+  const tc=card?TYPES[card.type]:null;
+  const color=tc?.color||'#e94560';
+  const nl=nextLabel(cardSRS);
+  const due=getDue(),rated=getRated(),mastered=getMastered();
+  const total=ALL_WORDS.length;
+  const counts={ALL:ALL_WORDS.filter(w=>state.selCh===0||w.ch===state.selCh).length};
+  Object.keys(TYPES).forEach(t=>{counts[t]=ALL_WORDS.filter(w=>(state.selCh===0||w.ch===state.selCh)&&w.type===t).length;});
+
+  const app=document.getElementById('app');
+  app.innerHTML='';
+
+  // ── HEADER ──
+  const header=h('div',{class:'header'});
+  const htop=h('div',{class:'header-top'});
+  const logo=h('div',{class:'logo'});logo.textContent='🇩🇪';
+  const titles=h('div',{});
+  const at=h('div',{class:'app-title'});at.textContent='Netzwerk Neu A1 · Lernkarten';
+  const as=h('div',{class:'app-sub'});as.textContent='Deutsch A1 · Wortschatz & Grammatik';
+  titles.append(at,as);
+  const tabs=h('div',{class:'tab-btns'});
+  [['study','📚'],['stats','📊'],['settings','⚙️']].forEach(([t,e])=>{
+    const b=h('button',{class:'tab-btn'+(state.tab===t?' active':''),onClick:()=>setState({tab:t})});
+    b.textContent=e;tabs.appendChild(b);
+  });
+  htop.append(logo,titles,tabs);
+  const sb=h('div',{class:'stats-bar'});
+  [{label:'Fällig',val:due,color:'#e94560'},{label:'Gelernt',val:rated,color:'#f59e0b'},
+   {label:'Gemeistert',val:mastered,color:'#10b981'},{label:'Gesamt',val:total,color:'#8b949e'}].forEach(s=>{
+    const box=h('div',{class:'stat-box'});
+    const sv=h('div',{class:'stat-val',style:{color:s.color}});sv.textContent=s.val;
+    const sl=h('div',{class:'stat-lbl'});sl.textContent=s.label;
+    box.append(sv,sl);sb.appendChild(box);
+  });
+  header.append(htop,sb);
+  // Backup tools: export progress to a portable JSON file and restore it later.
+  const backupRow=h('div',{style:{display:'flex',gap:'8px;padding:'+'8px 12px 10px',alignItems:'center',flexWrap:'wrap'}});
+  const backupBtn=h('button',{class:'tab-btn',style:{background:'#238636',color:'#fff',fontSize:'11px',padding:'8px 10px'},onClick:exportProgressBackup});
+  backupBtn.textContent='⬇️ Backup progress';
+  const restoreBtn=h('button',{class:'tab-btn',style:{background:'var(--surface2)',color:'var(--text)',fontSize:'11px',padding:'8px 10px'},onClick:()=>backupInput.click()});
+  restoreBtn.textContent='⬆️ Restore backup';
+  const backupInput=h('input',{type:'file',accept:'.json,application/json',style:{display:'none'},onChange:e=>{restoreProgressBackup(e.target.files&&e.target.files[0]);e.target.value='';}});
+  backupRow.append(backupBtn,restoreBtn,backupInput);
+  header.appendChild(backupRow);
+  app.appendChild(header);
+
+  // ── SETTINGS TAB ──
+  if(state.tab==='settings'){
+    const body=h('div',{class:'body'});
+    const title=h('div',{style:{fontWeight:'700',color:'var(--white)',marginBottom:'4px',fontSize:'15px'}});
+    title.textContent='⚙️ Einstellungen';
+    const sub=h('div',{style:{fontSize:'11px',color:'var(--text2)',marginBottom:'14px'}});
+    sub.textContent='Passe Wiederholungsabstände und Audio an.';
+    body.append(title,sub);
+
+    // SRS Settings
+    const sec=h('div',{class:'settings-section'});
+    const stitle=h('div',{class:'settings-title'});stitle.textContent='🔁 Wiederholungsabstände (SRS)';
+    sec.appendChild(stitle);
+
+    const sliders=[
+      {field:'schwerDays',label:'😓 Schwer',sub:'Vergessen → zurück in X Tagen',min:1,max:7,step:1,
+        val:state.settings.schwerDays,fmt:v=>v+' Tag'+(v>1?'e':''),color:'#f85149',
+        ticks:['1 Tag','3 Tage','7 Tage']},
+      {field:'okDays',label:'😐 Ok',sub:'Erster Wiederholungsabstand',min:3,max:14,step:1,
+        val:state.settings.okDays,fmt:v=>v+' Tage',color:'#f59e0b',
+        ticks:['3 Tage','7 Tage','14 Tage']},
+      {field:'leichtMult',label:'😊 Leicht',sub:'Intervall-Multiplikator',min:1.1,max:2.5,step:0.1,
+        val:state.settings.leichtMult,fmt:v=>'×'+parseFloat(v).toFixed(1),color:'#10b981',
+        ticks:['×1.1','×1.5','×2.5']},
+    ];
+
+    sliders.forEach(sl=>{
+      const block=h('div',{class:'slider-block'});
+      const shead=h('div',{class:'slider-header'});
+      const slabel=h('div',{});
+      const ll=h('span',{class:'slider-label',style:{color:sl.color}});ll.textContent=sl.label;
+      const ls=h('span',{class:'slider-sub'});ls.textContent=sl.sub;
+      slabel.append(ll,ls);
+      const valEl=h('span',{class:'slider-val',style:{color:sl.color}});valEl.textContent=sl.fmt(sl.val);
+      shead.append(slabel,valEl);
+
+      const inp=h('input',{type:'range',min:sl.min,max:sl.max,step:sl.step,value:sl.val,
+        style:{accentColor:sl.color},
+        onInput:e=>{saveSetting(sl.field,sl.field==='leichtMult'?parseFloat(e.target.value):Number(e.target.value));}});
+
+      const scale=h('div',{class:'slider-scale'});
+      sl.ticks.forEach(t=>{const s=h('span',{});s.textContent=t;scale.appendChild(s);});
+      block.append(shead,inp,scale);sec.appendChild(block);
+    });
+
+    // Preview
+    const prev=h('div',{class:'preview-box'});
+    const pl=h('div',{class:'preview-lbl'});pl.textContent='📋 Vorschau — nach 10-Tage-Intervall:';
+    const pr=h('div',{class:'preview-row'});
+    [{label:'😓 Schwer',days:state.settings.schwerDays,color:'#f85149'},
+     {label:'😐 Ok',days:Math.round(10*2.5),color:'#f59e0b'},
+     {label:'😊 Leicht',days:Math.round(10*state.settings.leichtMult),color:'#10b981'}].forEach(r=>{
+      const cell=h('div',{class:'preview-cell',style:{color:r.color,borderColor:r.color+'33',background:r.color+'11'}});
+      const cl=h('div',{class:'preview-cell-lbl',style:{color:r.color}});cl.textContent=r.label;
+      const cv=h('div',{class:'preview-cell-val'});cv.textContent=r.days+'d';
+      cell.append(cl,cv);pr.appendChild(cell);
+    });
+    prev.append(pl,pr);sec.appendChild(prev);
+    body.appendChild(sec);
+
+    // Audio test
+    const asec=h('div',{class:'settings-section'});
+    const at2=h('div',{class:'settings-title'});at2.textContent='🔊 Audio-Test';
+    const ad=h('div',{style:{fontSize:'11px',color:'var(--text2)',marginBottom:'10px'}});
+    ad.textContent='Tippe auf eine Phrase, um die deutsche Aussprache zu testen.';
+    asec.append(at2,ad);
+    const arow=h('div',{class:'audio-test-row'});
+    ['Guten Tag!','Wie heißen Sie?','Ich komme aus Deutschland.','Auf Wiedersehen!'].forEach(p=>{
+      const b=h('button',{class:'audio-test-btn',onClick:()=>speakEx(p)});b.textContent='🔊 '+p;
+      arow.appendChild(b);
+    });
+    asec.appendChild(arow);body.appendChild(asec);
+
+    // Reset
+    const rsec=h('div',{class:'settings-section'});
+    const rt=h('div',{class:'settings-title'});rt.textContent='⚠️ Fortschritt zurücksetzen';
+    const rb=h('button',{class:'reset-btn',onClick:resetAll});rb.textContent='🗑️ Gesamten Fortschritt löschen';
+    rsec.append(rt,rb);body.appendChild(rsec);
+    app.appendChild(body);
+    return;
+  }
+
+  // ── STATS TAB ──
+  if(state.tab==='stats'){
+    const body=h('div',{class:'body'});
+    const title=h('div',{style:{fontWeight:'700',color:'var(--white)',marginBottom:'12px',fontSize:'15px'}});
+    title.textContent='📊 Fortschritt';body.appendChild(title);
+
+    const sec=h('div',{class:'stats-section'});
+    const st=h('div',{class:'stats-title'});st.textContent='Lernstatus';sec.appendChild(st);
+    [{label:'⏰ Heute fällig / Neu',count:due,color:'#e94560'},
+     {label:'📖 In Wiederholung',count:Math.max(0,rated-mastered),color:'#f59e0b'},
+     {label:'✅ Gemeistert (21+ Tage)',count:mastered,color:'#10b981'},
+     {label:'👁️ Noch nicht gesehen',count:Math.max(0,total-rated),color:'#8b949e'}].forEach(r=>{
+      const row=h('div',{class:'stat-row'});
+      const top=h('div',{class:'stat-row-top'});
+      const l=h('span',{style:{color:r.color}});l.textContent=r.label;
+      const v=h('span',{style:{color:'var(--white)',fontWeight:'600'}});v.textContent=Math.max(0,r.count);
+      top.append(l,v);
+      const bar=h('div',{class:'mini-bar'});
+      const fill=h('div',{class:'mini-fill',style:{width:Math.round(Math.max(0,r.count)/total*100)+'%',background:r.color}});
+      bar.appendChild(fill);row.append(top,bar);sec.appendChild(row);
+    });
+    body.appendChild(sec);
+
+    const sec2=h('div',{class:'stats-section'});
+    const st2=h('div',{class:'stats-title'});st2.textContent='Wortarten';sec2.appendChild(st2);
+    Object.entries(TYPES).forEach(([t,cfg])=>{
+      const tot=ALL_WORDS.filter(w=>w.type===t).length;
+      const r=ALL_WORDS.filter(w=>w.type===t&&state.srs[cKey(w)]?.reps>0).length;
+      const row=h('div',{class:'type-stat-row'});
+      const em=h('span',{style:{fontSize:'13px',width:'18px'}});em.textContent=cfg.emoji;
+      const lbl=h('span',{style:{fontSize:'10px',color:cfg.color,width:'90px',flexShrink:'0'}});lbl.textContent=cfg.label;
+      const bwrap=h('div',{class:'type-stat-bar-wrap'});
+      const bf=h('div',{style:{height:'4px',width:(r/tot*100)+'%',background:cfg.color,borderRadius:'3px'}});
+      bwrap.appendChild(bf);
+      const cnt=h('span',{style:{fontSize:'10px',color:'var(--text2)',width:'38px',textAlign:'right'}});
+      cnt.textContent=r+'/'+tot;
+      row.append(em,lbl,bwrap,cnt);sec2.appendChild(row);
+    });
+    body.appendChild(sec2);
+
+    const sec3=h('div',{class:'stats-section'});
+    const st3=h('div',{class:'stats-title'});st3.textContent='📚 Grammatik-Schnellreferenz';sec3.appendChild(st3);
+    [{t:'PREP',tip:'+Akk. immer: durch, ohne, gegen, für, um (DOGFU)'},
+     {t:'PREP',tip:'+Dat. immer: aus, bei, mit, nach, seit, von, zu'},
+     {t:'PREP',tip:'Wechselpräp.: in, an, auf, über, unter, neben, zwischen, hinter, vor'},
+     {t:'V',tip:'Hilfsverb sein: Bewegung/Zustand (gehen, kommen, fahren…)'},
+     {t:'V',tip:'Trennbare Verben: Präfix geht ans Satzende!'},
+     {t:'KON',tip:'Subordinierend (Verb am Ende!): weil, dass, wenn, ob…'},
+     {t:'KON',tip:'Koordinierend (V2): und, aber, oder, denn, sondern'},
+    ].forEach(item=>{
+      const row=h('div',{class:'gram-tip-row'});
+      const em=h('span',{style:{fontSize:'12px',color:TYPES[item.t].color,flexShrink:'0'}});em.textContent=TYPES[item.t].emoji;
+      const tip=h('span',{style:{fontSize:'11px',color:'var(--text)',lineHeight:'1.4'}});tip.textContent=item.tip;
+      row.append(em,tip);sec3.appendChild(row);
+    });
+    body.appendChild(sec3);
+    app.appendChild(body);
+    return;
+  }
+
+  // ── STUDY TAB ──
+  // Chapter tabs
+  const chscroll=h('div',{class:'ch-scroll'});
+  CHAPTERS.forEach(c=>{
+    const b=h('button',{class:'ch-btn'+(state.selCh===c.id?' active':''),
+      onClick:()=>setState({selCh:c.id,idx:0,flipped:false})});
+    b.textContent=c.label;chscroll.appendChild(b);
+  });
+  app.appendChild(chscroll);
+
+  const body=h('div',{class:'body'});
+
+  // Type pills
+  const pills=h('div',{class:'type-pills'});
+  [['ALL','Alle'],...Object.entries(TYPES).map(([k,v])=>[k,v.emoji+' '+v.label])].forEach(([t,label])=>{
+    const tc2=TYPES[t];const isActive=state.selType===t;
+    const b=h('button',{class:'type-pill'+(isActive?' active':''),
+      style:isActive?{color:tc2?.color||'#e94560',borderColor:tc2?.color||'#e94560',background:(tc2?.color||'#e94560')+'22'}:{},
+      onClick:()=>setState({selType:t,idx:0,flipped:false})});
+    b.textContent=label+' ('+counts[t]+')';pills.appendChild(b);
+  });
+  body.appendChild(pills);
+
+  // Search row
+  const srow=h('div',{class:'search-row'});
+  const sinp=h('input',{class:'search-input',type:'text',placeholder:'🔍 Suchen… DE, EN, Grammatik',value:state.search,
+    onInput:e=>setState({search:e.target.value,idx:0,flipped:false})});
+  const shuffBtn=h('button',{class:'icon-btn'+(state.isShuf?' on':''),
+    onClick:()=>setState({isShuf:!state.isShuf,idx:0,flipped:false})});shuffBtn.textContent='🔀';
+  const dueBtn=h('button',{class:'icon-btn'+(state.dueOnly?' due-on':''),
+    onClick:()=>setState({dueOnly:!state.dueOnly,idx:0,flipped:false})});dueBtn.textContent='⏰';
+  srow.append(sinp,shuffBtn,dueBtn);body.appendChild(srow);
+
+  // Flip direction
+  const frow=h('div',{class:'flip-row'});
+  ['DE → EN','EN → DE'].forEach((l,i)=>{
+    const isDE=i===0;
+    const b=h('button',{class:'flip-btn'+(state.showDE===isDE?(isDE?' de':' en'):''),
+      onClick:()=>setState({showDE:isDE})});b.textContent=l;frow.appendChild(b);
+  });
+  body.appendChild(frow);
+
+  if(cards.length===0){
+    const empty=h('div',{class:'empty'});empty.textContent='Keine Karten gefunden.';
+    body.appendChild(empty);app.appendChild(body);return;
+  }
+
+  // Progress bar
+  const prow=h('div',{class:'prog-row'});
+  const pi=h('span',{});pi.textContent=(si+1)+' / '+cards.length;
+  const pnl=h('span',{style:{color:nl.color,fontWeight:'600'}});pnl.textContent=nl.text;
+  prow.append(pi,pnl);
+  const pbar=h('div',{class:'prog-bar'});
+  const pfill=h('div',{class:'prog-fill',style:{width:Math.round(((si+1)/cards.length)*100)+'%',background:color}});
+  pbar.appendChild(pfill);
+  body.append(prow,pbar);
+
+  // Card
+  if(card){
+    const cardEl=h('div',{class:'card'+(state.flipped?' flipped':''),
+      style:{borderColor:state.flipped?color+'88':'var(--border)'},
+      onClick:()=>setState({flipped:!state.flipped})});
+
+    // Edit button
+    const editBtn=h('button',{class:'card-edit',onClick:e=>{e.stopPropagation();setState({editCard:card});}});
+    editBtn.textContent='✏️';cardEl.appendChild(editBtn);
+    if(cardNote){const nb=h('div',{class:'card-note-badge'});nb.textContent='📝';cardEl.appendChild(nb);}
+
+    // Type badge
+    if(tc){
+      const badge=h('div',{class:'card-badge',style:{color,background:color+'22'}});
+      badge.textContent=tc.emoji+' '+tc.label+' · K'+card.ch;cardEl.appendChild(badge);
+    }
+
+    if(!state.flipped){
+      // FRONT
+      const word=h('div',{class:'card-front-word'});word.textContent=state.showDE?card.de:card.en;cardEl.appendChild(word);
+      if(state.showDE&&card.type==='V'){const hint=h('div',{class:'card-hint'});hint.textContent='er/sie/es: '+card.extra.split(' · ')[0];cardEl.appendChild(hint);}
+      if(state.showDE&&card.type==='N'){const hint=h('div',{class:'card-hint'});hint.textContent=card.extra;cardEl.appendChild(hint);}
+      if(state.showDE&&card.type==='PREP'){const hint=h('div',{class:'card-hint',style:{color:'#06b6d4'}});hint.textContent=card.extra;cardEl.appendChild(hint);}
+      if(state.showDE&&card.type==='KON'){const hint=h('div',{class:'card-hint',style:{color:'#ec4899'}});hint.textContent='⚠️ '+card.extra;cardEl.appendChild(hint);}
+
+      // Audio buttons
+      const arow=h('div',{class:'audio-row'});
+      const aw=h('button',{class:'audio-btn',
+        style:{color,borderColor:color+'44',background:color+'22'},
+        onClick:e=>{e.stopPropagation();speak(state.showDE?card.de:card.en);}});aw.textContent='🔊 Wort';
+      const ae=h('button',{class:'audio-btn',
+        style:{color:'var(--text2)',borderColor:'var(--border)',background:'var(--surface2)'},
+        onClick:e=>{e.stopPropagation();speakEx(card.ex);}});ae.textContent='🔊 Beispiel';
+      arow.append(aw,ae);cardEl.appendChild(arow);
+
+      const tap=h('div',{class:'card-tap'});tap.textContent='TIPPEN → UMDREHEN';cardEl.appendChild(tap);
+    } else {
+      // BACK
+      const en=h('div',{class:'card-back-en',style:{color}});en.textContent=state.showDE?card.en:card.de;cardEl.appendChild(en);
+      const div=h('div',{class:'card-divider'});cardEl.appendChild(div);
+      const ex=h('div',{class:'card-ex'});ex.textContent='„'+card.ex+'"';cardEl.appendChild(ex);
+      const exEn=h('div',{class:'card-exEn'});exEn.textContent=card.exEn;cardEl.appendChild(exEn);
+
+      // Verb: conjugation + kasus
+      if(card.type==='V'){
+        const ct=renderConjTable(card,color);if(ct)cardEl.appendChild(ct);
+      }
+      // Grammar box (all types)
+      const gb=renderGramBox(card.gram,color);if(gb)cardEl.appendChild(gb);
+
+      // Personal note
+      if(cardNote){
+        const nb2=h('div',{class:'note-box'});
+        const nl2=h('div',{class:'note-lbl'});nl2.textContent='📝 MEINE NOTIZ';
+        const nt=h('div',{class:'note-txt'});nt.textContent=cardNote;
+        nb2.append(nl2,nt);cardEl.appendChild(nb2);
+      }
+      const nxtlbl=h('div',{class:'next-lbl',style:{color:nl.color}});nxtlbl.textContent=nl.text;cardEl.appendChild(nxtlbl);
+    }
+    body.appendChild(cardEl);
+  }
+
+  // Buttons
+  if(state.flipped){
+    const rhint=h('div',{class:'rating-hint'});rhint.textContent='Wie sicher bist du? → Bewertung wählen:';
+    body.appendChild(rhint);
+    const rrow=h('div',{class:'rating-row'});
+    const s=state.settings;
+    const curInt=cardSRS?.interval||1; const curEF=cardSRS?.ef||2.5; const curReps=cardSRS?.reps||0;
+    const okPreview=curReps>=2?Math.round(curInt*curEF)+'d':s.okDays+' T.';
+    [{q:1,label:'😓 Schwer',sub:'→ '+s.schwerDays+' Tag'+(s.schwerDays>1?'e':''),color:'#f85149'},
+     {q:3,label:'😐 Ok',sub:'→ '+okPreview,color:'#f59e0b'},
+     {q:5,label:'😊 Leicht',sub:'→ ×'+s.leichtMult.toFixed(1),color:'#10b981'},
+    ].forEach(r=>{
+      const b=h('button',{class:'rate-btn',
+        style:{color:r.color,borderColor:r.color,background:r.color+'22'},
+        onClick:()=>rate(r.q)});
+      b.innerHTML=r.label+'<br><span style="font-size:8px">'+r.sub+'</span>';
+      rrow.appendChild(b);
+    });
+    body.appendChild(rrow);
+  } else {
+    const nrow=h('div',{class:'nav-row'});
+    const pb=h('button',{class:'nav-btn',disabled:si===0,onClick:()=>setState({idx:si-1,flipped:false})});pb.textContent='◀';
+    const fb=h('button',{class:'flip-action',onClick:()=>setState({flipped:true})});fb.textContent='Umdrehen →';
+    const nb=h('button',{class:'nav-btn',disabled:si===cards.length-1,onClick:()=>setState({idx:si+1,flipped:false})});nb.textContent='▶';
+    nrow.append(pb,fb,nb);body.appendChild(nrow);
+  }
+
+  app.appendChild(body);
+
+  // ── EDIT MODAL ──
+  if(state.editCard){
+    const ec=state.editCard;const etc=TYPES[ec.type];
+    const overlay=h('div',{class:'modal-overlay',onClick:()=>setState({editCard:null})});
+    const modal=h('div',{class:'modal',onClick:e=>e.stopPropagation()});
+    const mt=h('div',{class:'modal-title'});mt.textContent='✏️ Meine Notiz';
+    const ms=h('div',{class:'modal-sub'});ms.textContent='Eselsbrücke, Extra-Beispiel, persönliche Notiz…';
+    const mp=h('div',{class:'modal-preview',style:{borderLeft:'3px solid '+(etc?.color||'#e94560')}});
+    const mw=h('div',{class:'modal-preview-word'});mw.textContent=ec.de;
+    const me=h('div',{class:'modal-preview-en',style:{color:etc?.color||'#e94560'}});me.textContent=ec.en;
+    const mx=h('div',{class:'modal-preview-ex'});mx.textContent='„'+ec.ex+'"';
+    mp.append(mw,me,mx);
+    const ta=h('textarea',{rows:4,placeholder:'z.B. Eselsbrücke: der MAN-n → denk an English man 💡',
+      value:state.notes[cKey(ec)]||''});
+    const mbtns=h('div',{class:'modal-btns'});
+    const msave=h('button',{class:'modal-save',onClick:()=>saveNote(ta.value)});msave.textContent='💾 Speichern';
+    const mcancel=h('button',{class:'modal-cancel',onClick:()=>setState({editCard:null})});mcancel.textContent='✕ Abbrechen';
+    mbtns.append(msave,mcancel);
+    modal.append(mt,ms,mp,ta,mbtns);overlay.appendChild(modal);app.appendChild(overlay);
+  }
+}
+
+render();
+</script>
+</body>
+</html>
